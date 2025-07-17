@@ -15,7 +15,7 @@ const [showPanet,setPanel] = useState(false)
  const HoverCard = () =>{
     
     return(
-      <div>
+      <div className='fixed'>
         
         {
             showPanet ?  <motion.div initial={{ opacity: 0, y: -40 }}            // Start below, invisible

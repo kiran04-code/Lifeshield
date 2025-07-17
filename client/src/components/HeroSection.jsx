@@ -31,10 +31,10 @@ const HeroSection = () => {
                 </p>
 
                 <div className='flex px-4'>
-                    <div className='  flex gap-5 bg-[#8f8dd5ab] p-5 items-center justify-evenly py-2 rounded-full md:w-100 w-80  '>
+                    <div className='  flex gap-5 bg-[#322bff7a] p-5 items-center justify-evenly py-2 rounded-full md:w-100 w-80  '>
                         <div className='flex justify-between items-center flex-col'>
                             <div className='md:w-10 md:h-10 md:bg-[#E0EAFF] md:rounded-full md:flex  p-2 rounded-full   border-2 border-[#6552E3] justify-center items-center'>
-                                <CiHospital1 className='text-2xl  text-[#6552E3]' />
+                                <CiHospital1 className='text-2xl  text-[#5039e2]' />
                             </div>
                             <p>Hostpitals & Doctors</p>
                         </div>
