@@ -1,12 +1,27 @@
 import React from 'react'
 import { CiHospital1 } from "react-icons/ci";
 import { RiParentFill } from "react-icons/ri";
+import { FaHeartCirclePlus } from "react-icons/fa6";
+import { motion } from 'motion/react';
 const HeroSection = () => {
     return (
         <div className='w-full bg-[#E0EAFF] h-screen md:flex'>
             <div>
-                <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-6xl font-bold text-[#6552E3] p-5 sm:p-6 md:p-8 lg:p-10 max-w-4xl leading-snug">
+                <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-6xl font-bold text-[#1057EC] p-5 sm:p-6 md:p-8 lg:p-10 max-w-4xl leading-snug">
                     One small shot for you, one giant leap for Community health.
+                    <motion.span
+                        className="inline-block mx-2"
+                        animate={{ y: [0, 10, 0] }}
+                        transition={{
+                            duration: 1,
+                            delay: 1,
+                            repeat: Infinity,
+                            repeatType: "loop",
+                            ease: "easeInOut"
+                        }}
+                    >
+                        <FaHeartCirclePlus className="inline text-[#1057EC]" />
+                    </motion.span>
                     Get vaccinated!
                 </h1>
 
@@ -33,14 +48,14 @@ const HeroSection = () => {
                 </div>
             </div>
             <div className="">
-  <div className='flex justify-center mt-10'>
-    <img 
-    src="/Blue Lets Get Vaccinated Instagram Post.png" 
-    alt="Get Vaccinated" 
-    className="w-full h-sc max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
-  />
-  </div>
-</div>
+                <div className='flex justify-center mt-10'>
+                    <img
+                        src="/Blue Lets Get Vaccinated Instagram Post.png"
+                        alt="Get Vaccinated"
+                        className="w-full h-sc max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
+                    />
+                </div>
+            </div>
 
         </div>
     )

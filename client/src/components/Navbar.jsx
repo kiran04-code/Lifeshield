@@ -42,9 +42,9 @@ const [showPanet,setPanel] = useState(false)
          <div className='w-full flex  bg-[#E0EAFF] md:justify-between justify-between'>
             
             <div className=''>
-                 <img src="/2-removebg-preview.png" alt="" className='w-55 h-15' />
+                 <img src="/02logo.png" alt="" className='w-55 h-15' />
             </div>
-            <div className='md:flex md:gap-10 p-5 md:mr-30 text-[#6354E3] hidden '>
+            <div className='md:flex md:gap-10 p-5 md:mr-30 text-[#1057EC] hidden '>
                  <Link to={"/"} onMouseEnter={()=>setPanel(true)} onMouseLeave={()=>setPanel(false)} className=' relative flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl'>
                     Home  <motion.span whileHover={{
                         y:5
@@ -93,7 +93,7 @@ const [showPanet,setPanel] = useState(false)
                  </Link>
             </div>
           <div className='md:hidden flex justify-center items-center p-3'>
-             <FaBars className='text-2xl text-[#6655E4]'/>
+             <FaBars className='text-2xl text-[#1057EC]'/>
           </div>
         </div>
        </div>
