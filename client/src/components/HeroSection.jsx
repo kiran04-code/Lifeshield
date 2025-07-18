@@ -7,7 +7,7 @@ const HeroSection = () => {
     return (
         <div className='w-full bg-[#E0EAFF] h-screen md:flex'>
             <div>
-                <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-6xl font-bold text-[#1057EC] p-5 sm:p-6 md:p-8 lg:p-10 max-w-4xl leading-snug">
+                <h1 className="text-[30px] sm:text-2xl md:text-4xl lg:text-6xl font-bold text-[#1057EC] p-5 sm:p-6 md:p-8 lg:p-10 max-w-4xl leading-snug">
                     One small shot for you, one giant leap for Community health.
                     <motion.span
                         className="inline-block mx-2"
@@ -25,12 +25,12 @@ const HeroSection = () => {
                     Get vaccinated!
                 </h1>
 
-                <p className="text-base sm:text-lg md:text-xl text-gray-600 px-4 sm:px-6 md:px-8 lg:px-10 py-4 leading-relaxed max-w-3xl">
+                <p className="text-base sm:text-lg md:text-xl text-gray-600 px-4 sm:px-6 md:px-8 lg:px-10 py-4 leading-relaxed max-w-3xl ">
                     Your Health, Your Responsibility: Stay Updated with Vaccination Tracker. <br />
                     Track, Protect, and Empower Yourself — Ensure You're Up-to-Date on Your Vaccines!
                 </p>
 
-                <div className='flex px-8  py-2'>
+                <div className='flex md:px-8  px-3 py-2'>
                     <div className='  flex gap-5 bg-[#322bff7a] p-6 items-center justify-centere py-2  rounded-full md:w-70 w-80  '>
                         <div className='flex justify-between items-center flex-col'>
                             <div className='md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex  p-2 rounded-full   border-2 border-[#6552E3] justify-center items-center'>
@@ -39,7 +39,7 @@ const HeroSection = () => {
                          <p>Hospitals & Doctors</p>
                         </div>
                         <div className='flex justify-between items-center flex-col'>
-                            <div className='md:w-10 md:h-10 md:bg-[#E0EAFF] md:rounded-full md:flex p-2 rounded-full  border-2 border-[#6552E3] justify-center items-center'>
+                            <div className='md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex p-2 rounded-full  border-2 border-[#6552E3] justify-center items-center'>
                                 <RiParentFill className='text-2xl  text-[#6552E3]' />
                             </div>
                             <p>Parents</p>
