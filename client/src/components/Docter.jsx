@@ -1,7 +1,9 @@
 import React from 'react';
 import { CiHospital1 } from "react-icons/ci";
+import Loader from '../utils/Loader';
 
 const Docter = () => {
+    const [loader,setLoading] = useState(false)
   return (
     <div className="w-full bg-[#E0EAFF] md:rounded-tr-full md:p-16 p-4">
       {/* Hospital Tag */}
@@ -22,7 +24,9 @@ const Docter = () => {
             Hospitals can manage appointments, availability, and reports through a dedicated Docker-powered dashboard.
           </p>
           <button className="bg-[#1057EC] hover:bg-[#0c45c4] transition text-white px-5 py-2 rounded-2xl">
-            Learn More
+           {
+              loader ? <Loader/> : "Learn More"
+             }
           </button>
         </div>
 

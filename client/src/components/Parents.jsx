@@ -1,8 +1,11 @@
+import { useState } from "react";
 import React from 'react';
 import { CiHospital1 } from "react-icons/ci";
 import { RiParentFill } from "react-icons/ri";
+import Loader from "../utils/Loader";
 
 const Parents = () => {
+  const [loader,setLoading] = useState(false)
   return (
     <div className="w-full md:p-16 p-4 md:rounded-tl-full bg-[#E0EAFF] mt-20 overflow-hidden">
       {/* Tag Header */}
@@ -35,8 +38,10 @@ const Parents = () => {
             Hospitals can manage appointments, availability, and reports through a dedicated Docker-powered dashboard.
           </p>
           <div className="flex justify-start">
-            <button className="bg-[#1057EC] hover:bg-[#0c45c4] transition text-white px-5 py-2 rounded-2xl">
-              Learn More
+            <button  onClick={()=>setLoading(!loader)} className="bg-[#1057EC] hover:bg-[#0c45c4] transition text-white px-5 py-2 rounded-2xl">
+             {
+              loader ? <Loader/> : "Learn More"
+             }
             </button>
           </div>
         </div>
