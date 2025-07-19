@@ -29,7 +29,7 @@ const Navbar = () => {
                         }}
                         className=' absolute top-20 left-95 w-[200px] h-[150px] ml-170 z-50 rounded-[15px] bg-[#ffffff] text-black flex flex-col justify-center items-center  gap-5 p-5'>
 
-                        <motion.div className='w-full flex gap-4 justify-center items-center hover:bg-[#d2e1ff] transition py-2 rounded-xl cursor-pointer '>
+                        <motion.div onClick={()=>{naviaget("/parent");setPanel(false)}}   className='w-full flex gap-4 justify-center items-center hover:bg-[#d2e1ff] transition py-2 rounded-xl cursor-pointer '>
                             <RiParentFill className=' text-3xl bg-[#dad9f8] text-[#1057EC] p-1 rounded-[5px] ' /> For  Parents
                         </motion.div>
                         <div   onClick={()=>{naviaget("/docter");setPanel(false)}}  className='w-full flex gap-4 justify-center items-center hover:bg-[#d2e1ff] transition py-2 rounded-xl cursor-pointer '>
@@ -219,7 +219,7 @@ const Navbar = () => {
                                     y:[-7,0]
                                 }} className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
-                          <div className='flex gap-2 mb-5'  >
+                          <div className='flex gap-2 mb-5'onClick={()=>{setfirsdrop4(false);naviaget("/parent");isopne(false)}}  >
                               <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
                           </div>
                  

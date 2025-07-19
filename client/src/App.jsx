@@ -7,6 +7,7 @@ import HomaPage from './pages/HomaPage'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import DocterPage from './pages/DocterPage'
+import ParentPage from './pages/ParentPage'
 function App() {
 
   return (
@@ -16,6 +17,7 @@ function App() {
 
     <Route path='/' element={<HomaPage/>}/>
     <Route path='/docter' element={<DocterPage/>}/>
+    <Route path='/parent' element={<ParentPage/>}/>
   </Routes>
   <Footer/>
   </BrowserRouter>
