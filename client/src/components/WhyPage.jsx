@@ -20,5 +20,6 @@ const WhyPage = () => {
     </div>
   );
 };
+//GET https://[CDC runtime REST URL]/vaccines?codeType=CVX
 
 export default WhyPage;

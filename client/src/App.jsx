@@ -8,6 +8,9 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import DocterPage from './pages/DocterPage'
 import ParentPage from './pages/ParentPage'
+import FeatureLayout from './components/parent/FeatureLayout'
+import NearCenterInfo from './components/parent/NearCenterInfo'
+import NeareByVideoClles from './components/parent/VideoCallConsultationInfo'
 function App() {
 
   return (
@@ -17,8 +20,12 @@ function App() {
 
     <Route path='/' element={<HomaPage/>}/>
     <Route path='/docter' element={<DocterPage/>}/>
-    <Route path='/parent' element={<ParentPage/>}/>
-  </Routes>
+    <Route path='/parent' element={<ParentPage/>}>
+   <Route index element={<NearCenterInfo/>}/>
+   <Route path="DocterCalls" element={<NeareByVideoClles/>}/>
+   <Route path='h3' element={"h3"}/>
+  </Route>
+   </Routes>
   <Footer/>
   </BrowserRouter>
   )
