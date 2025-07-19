@@ -47,12 +47,12 @@ const HeroSection = () => {
                     </div>
                 </div>
             </div>
-            <div className="py-5">
+            <div className="py-5 h-screen">
                 <div className='flex justify-center mt-5 '>
                     <img
                         src="/Blue Lets Get Vaccinated Instagram Post.png"
                         alt="Get Vaccinated"
-                        className="w-full h-sc max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-b-[70px]  "
+                        className="w-full  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg rounded-b-[70px]  "
                     />
                 </div>
             </div>
