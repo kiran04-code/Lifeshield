@@ -4,10 +4,12 @@ import DocterHroSection from '../components/DocterHroSection'
 import ParentHreoSection from '../components/ParentHreoSection'
 import Card from '../components/parent/Card'
 import FeatureLayout from '../components/parent/FeatureLayout'
+import { useAuth } from '../context/auth'
 
 const ParentPage = () => {
+    const {isLogin,setIsLOG} = useAuth()
   return (
-    <div>
+    <div >
       <ParentHreoSection/>
       <FeatureLayout/>
       <Card/>     

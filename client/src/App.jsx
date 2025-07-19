@@ -11,8 +11,11 @@ import ParentPage from './pages/ParentPage'
 import FeatureLayout from './components/parent/FeatureLayout'
 import NearCenterInfo from './components/parent/NearCenterInfo'
 import NeareByVideoClles from './components/parent/VideoCallConsultationInfo'
-function App() {
+import { useAuth } from './context/auth'
+import Login from './components/Login'
 
+function App() {
+  const {isLogin,setIsLOG} = useAuth()
   return (
   <BrowserRouter>
       <Navbar/>
@@ -27,6 +30,9 @@ function App() {
   </Route>
    </Routes>
   <Footer/>
+  {
+          isLogin ? <Login/>:<></>
+        }
   </BrowserRouter>
   )
 }
