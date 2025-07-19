@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import HomaPage from './pages/HomaPage'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
+import DocterPage from './pages/DocterPage'
 function App() {
 
   return (
@@ -14,6 +15,7 @@ function App() {
   <Routes>
 
     <Route path='/' element={<HomaPage/>}/>
+    <Route path='/docter' element={<DocterPage/>}/>
   </Routes>
   <Footer/>
   </BrowserRouter>

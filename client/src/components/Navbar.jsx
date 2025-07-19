@@ -6,7 +6,7 @@ import { motion } from "motion/react"
 import { useState } from 'react';
 import { CiHospital1 } from "react-icons/ci";
 import { RiParentFill } from "react-icons/ri";
-
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
     const [opne, isopne] = useState(false)
@@ -15,7 +15,7 @@ const Navbar = () => {
     const [driop2, setfirsdrop2] = useState(false)
     const [driop3, setfirsdrop3] = useState(false)
     const [driop4, setfirsdrop4] = useState(false)
-
+    const naviaget = useNavigate()
     const HoverCard = () => {
 
         return (
@@ -29,11 +29,12 @@ const Navbar = () => {
                         }}
                         className=' absolute top-20 left-95 w-[200px] h-[150px] ml-170 z-50 rounded-[15px] bg-[#ffffff] text-black flex flex-col justify-center items-center  gap-5 p-5'>
 
-                        <motion.div className='w-full flex gap-4 justify-center items-center '>
+                        <motion.div className='w-full flex gap-4 justify-center items-center hover:bg-[#d2e1ff] transition py-2 rounded-xl cursor-pointer '>
                             <RiParentFill className=' text-3xl bg-[#dad9f8] text-[#1057EC] p-1 rounded-[5px] ' /> For  Parents
                         </motion.div>
-                        <div className='w-full flex gap-4 justify-center items-center  '>
-                            <CiHospital1 className=' text-3xl bg-[#dad9f8] text-[#1057EC] p-1 rounded-[5px] ' /> For  Parents
+                        <div   onClick={()=>{naviaget("/docter");setPanel(false)}}  className='w-full flex gap-4 justify-center items-center hover:bg-[#d2e1ff] transition py-2 rounded-xl cursor-pointer '>
+                            <CiHospital1 className=' text-3xl bg-[#dad9f8] text-[#1057EC] p-1 rounded-[5px] '
+                            /> For  Hospital
                         </div>
                     </motion.div> : null
                 }
@@ -218,7 +219,7 @@ const Navbar = () => {
                                     y:[-7,0]
                                 }} className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
-                          <div className='flex gap-2 mb-5'>
+                          <div className='flex gap-2 mb-5'  onClick={()=>{setfirsdrop4(false);naviaget("/docter");isopne(false)}}>
                               <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
                           </div>
                  
