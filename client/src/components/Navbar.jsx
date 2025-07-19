@@ -27,13 +27,13 @@ const Navbar = () => {
                         transition={{
                             duration: 0.4,
                         }}
-                        className=' absolute top-20  w-[200px] h-[150px] ml-170 z-50 rounded-[15px] bg-[#ffffff] text-black flex flex-col justify-center items-center  gap-5 p-5'>
+                        className=' absolute top-20 left-95 w-[200px] h-[150px] ml-170 z-50 rounded-[15px] bg-[#ffffff] text-black flex flex-col justify-center items-center  gap-5 p-5'>
 
-                        <motion.div className='w-full flex gap-1 '>
-                            <RiParentFill className=' text-2xl text-[#908DD5] ' /> For  Parents
+                        <motion.div className='w-full flex gap-4 justify-center items-center '>
+                            <RiParentFill className=' text-3xl bg-[#dad9f8] text-[#1057EC] p-1 rounded-[5px] ' /> For  Parents
                         </motion.div>
-                        <div className='w-full flex gap-1 '>
-                            <CiHospital1 className=' text-2xl  text-[#908DD5] ' /> For  Parents
+                        <div className='w-full flex gap-4 justify-center items-center  '>
+                            <CiHospital1 className=' text-3xl bg-[#dad9f8] text-[#1057EC] p-1 rounded-[5px] ' /> For  Parents
                         </div>
                     </motion.div> : null
                 }
@@ -49,7 +49,7 @@ const Navbar = () => {
                     <img src="/02logo.png" alt="" className='w-55 h-17' />
                 </div>
                 <div className='md:flex md:gap-10 p-5 md:mr-30 text-[#1057EC] hidden '>
-                    <Link to={"/"} onMouseEnter={() => setPanel(true)} onMouseLeave={() => setPanel(false)} className=' relative flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl'>
+                    <Link to={"/"} onMouseEnter={()=>setPanel(false)}  className='  flex justify-center items-center gap-2 hover:bg-[#1057EC]  hover:text-white py-2 px-2 transition rounded-2xl'>
                         Home  <motion.span whileHover={{
                             y: 5
                         }}
@@ -61,7 +61,7 @@ const Navbar = () => {
                             <IoIosArrowDown className='text-xl' />
                         </motion.span>
                     </Link>
-                    <Link to={""} onMouseEnter={() => setPanel(true)} onMouseLeave={() => setPanel(false)} className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl' >
+                    <Link to={""} onMouseEnter={() => setPanel(false)} onClick={{}} className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl' >
                         About <motion.span whileHover={{
                             y: 5
                         }}
@@ -73,7 +73,7 @@ const Navbar = () => {
                         </motion.span>
 
                     </Link>
-                    <Link to={""} onMouseEnter={() => setPanel(true)} onMouseLeave={() => setPanel(false)} className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl'>
+                    <Link to={""} onMouseEnter={() => setPanel(false)}className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl'>
                         Contact  <motion.span whileHover={{
                             y: 5
                         }}
@@ -84,7 +84,7 @@ const Navbar = () => {
                             <IoIosArrowDown className='text-xl' />
                         </motion.span>
                     </Link>
-                    <Link to={""} onMouseEnter={() => setPanel(true)} onMouseLeave={() => setPanel(false)} className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl'>
+                    <Link to={""} onClick={()=>setPanel(!showPanet)}  className=' relative flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl'>
                         Service  <motion.span whileHover={{
                             y: 5
                         }}
@@ -129,14 +129,14 @@ const Navbar = () => {
                             {
                                 driop1 ?<motion.div animate={{
                                     y:[-7,0]
-                                }}  className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
+                                }}  className='w-full  rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
                           <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5]  ' /> For  Parents
+                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Parents
                           </div>
                  
                             <div className='flex gap-2'>
-                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5] ' /> For  Parents
+                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
                             </div>
                       
                             </motion.div>:null
@@ -161,11 +161,11 @@ const Navbar = () => {
                                 }}   className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
                           <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5]  ' /> For  Parents
+                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Parents
                           </div>
                  
                             <div className='flex gap-2'>
-                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5] ' /> For  Parents
+                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
                             </div>
                       
                             </motion.div>:null
@@ -190,11 +190,11 @@ const Navbar = () => {
                                 }}  className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
                           <div className='flex gap-2 mb-5 '>
-                              <RiParentFill className='  rounded-[5px] bg-white p-1 text-3xl text-[#908DD5] ' /> For  Parents
+                              <RiParentFill className='  rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
                           </div>
                  
                             <div className='flex gap-2'>
-                                <CiHospital1 className='   rounded-[5px] bg-white p-1 text-3xl text-[#908DD5]  ' /> For  Parents
+                                <CiHospital1 className='   rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Parents
                             </div>
                       
                             </motion.div>:null
@@ -219,11 +219,11 @@ const Navbar = () => {
                                 }} className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
                           <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5] ' /> For  Parents
+                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
                           </div>
                  
                             <div className='flex gap-2'>
-                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5]  ' /> For  Parents
+                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Parents
                             </div>
                       
                             </motion.div>:null
