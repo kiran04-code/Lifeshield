@@ -202,7 +202,7 @@ const Navbar = () => {
                         </div>
                         <div className=''>
                             <div className='flex justify-between'>
-                                <Link>Services</Link> <motion.span  onClick={()=>setfirsdrop(!driop4)}   onMouseEnter={()=>(setfirsdrop4(true))} onMouseLeave={()=>setfirsdrop4(false)} whileHover={{
+                                <Link>Services</Link> <motion.span  onClick={()=>setfirsdrop4(!driop4)}   onMouseEnter={()=>(setfirsdrop4(true))} onMouseLeave={()=>setfirsdrop4(false)} whileHover={{
                                 y: 5
                             }}
                                 transition={{
