@@ -97,7 +97,7 @@ const Navbar = () => {
                     </Link>
                 </div>
                 <div className='md:hidden flex justify-center items-center p-3'>
-                    <FaBars onClick={() => isopne(!opne)} className={` ${opne ? "bg-[#4575dbcc] text-white" : null}  rounded-sm transition  p-1  text-3xl  text-[#1057EC] `} />
+                    <FaBars onClick={() => isopne(!opne)} className={` ${opne ? "bg-[#4575dbcc] text-white" : null}  rounded-sm transition  p-1  text-4xl  text-[#1057EC] `} />
                 </div>
 
             </div>
