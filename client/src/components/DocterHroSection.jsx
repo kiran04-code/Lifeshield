@@ -6,8 +6,8 @@ import { FaHeartCirclePlus } from "react-icons/fa6";
 import { FaUserDoctor } from "react-icons/fa6";
 const DocterHroSection = () => {
   return (
-    <div>
-       <div className='w-full bg-[#E0EAFF] md:flex'>
+    <div id="hostpital">
+       <div className='w-full bg-[#E0EAFF] md:flex' >
                   <div>
                       <h1 className="text-[30px] sm:text-2xl md:text-4xl lg:text-6xl font-bold text-[#1057EC] p-5 sm:p-6 md:p-8 lg:p-10 max-w-4xl leading-snug">
                           A trusted space for doctors committed to community health
