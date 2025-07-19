@@ -102,7 +102,7 @@ const Navbar = () => {
 
             </div>
             {
-                opne ? <motion.div animate={{
+                opne ? <motion.div   animate={{
                     y: [-250, 0]
                 }}
 
@@ -127,14 +127,16 @@ const Navbar = () => {
                             </motion.span>
                             </div>
                             {
-                                driop1 ?<motion.div className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
+                                driop1 ?<motion.div animate={{
+                                    y:[-7,0]
+                                }}  className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
                           <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' text-2xl text-[#908DD5] ' /> For  Parents
+                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5]  ' /> For  Parents
                           </div>
                  
                             <div className='flex gap-2'>
-                                <CiHospital1 className=' text-2xl  text-[#908DD5] ' /> For  Parents
+                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5] ' /> For  Parents
                             </div>
                       
                             </motion.div>:null
@@ -154,14 +156,16 @@ const Navbar = () => {
                             </motion.span>
                             </div>
                             {
-                                driop2 ?<motion.div className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
+                                driop2 ?<motion.div animate={{
+                                    y:[-7,0]
+                                }}   className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
                           <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' text-2xl text-[#908DD5] ' /> For  Parents
+                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5]  ' /> For  Parents
                           </div>
                  
                             <div className='flex gap-2'>
-                                <CiHospital1 className=' text-2xl  text-[#908DD5] ' /> For  Parents
+                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5] ' /> For  Parents
                             </div>
                       
                             </motion.div>:null
@@ -181,14 +185,16 @@ const Navbar = () => {
                             </motion.span>
                             </div>
                             {
-                                driop3 ?<motion.div className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
+                                driop3 ?<motion.div animate={{
+                                    y:[-7,0]
+                                }}  className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
-                          <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' text-2xl text-[#908DD5] ' /> For  Parents
+                          <div className='flex gap-2 mb-5 '>
+                              <RiParentFill className='  rounded-[5px] bg-white p-1 text-3xl text-[#908DD5] ' /> For  Parents
                           </div>
                  
                             <div className='flex gap-2'>
-                                <CiHospital1 className=' text-2xl  text-[#908DD5] ' /> For  Parents
+                                <CiHospital1 className='   rounded-[5px] bg-white p-1 text-3xl text-[#908DD5]  ' /> For  Parents
                             </div>
                       
                             </motion.div>:null
@@ -208,14 +214,16 @@ const Navbar = () => {
                             </motion.span>
                             </div>
                             {
-                                driop4 ?<motion.div className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
+                                driop4 ?<motion.div animate={{
+                                    y:[-7,0]
+                                }} className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
                           <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' text-2xl text-[#908DD5] ' /> For  Parents
+                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5] ' /> For  Parents
                           </div>
                  
                             <div className='flex gap-2'>
-                                <CiHospital1 className=' text-2xl  text-[#908DD5] ' /> For  Parents
+                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#908DD5]  ' /> For  Parents
                             </div>
                       
                             </motion.div>:null
