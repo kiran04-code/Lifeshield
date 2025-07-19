@@ -219,12 +219,12 @@ const Navbar = () => {
                                     y:[-7,0]
                                 }} className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
         
-                          <div className='flex gap-2 mb-5'  onClick={()=>{setfirsdrop4(false);naviaget("/docter");isopne(false)}}>
+                          <div className='flex gap-2 mb-5'  >
                               <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
                           </div>
                  
-                            <div className='flex gap-2'>
-                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Parents
+                            <div className='flex gap-2' onClick={()=>{setfirsdrop4(false);naviaget("/docter");isopne(false)}} >
+                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Hospital
                             </div>
                       
                             </motion.div>:null

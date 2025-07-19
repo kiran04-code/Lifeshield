@@ -31,7 +31,7 @@ const DocterPage = () => {
   Expand your reach, deliver timely care, and support families anytime, anywhere.
                 </p>
 
-                <div className='flex md:px-8  px-3 py-2'>
+                <div className='flex md:px-8   py-2'>
                     <div className='  flex gap-5 bg-[#322bff7a] p-6 items-center justify-centere py-2  rounded-xl cursor-pointer  '>
                         <div className='flex justify-between items-center flex-col'>
                             <div className='md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex  p-2 rounded-full   border-2 border-[#6552E3] justify-center items-center'>
@@ -44,11 +44,11 @@ const DocterPage = () => {
                 </div>
             </div>
             <div className="">
-                <div className='flex justify-center  md:mt-20'>
+                <div className='flex justify-center  md:mt-5'>
                     <img
-                        src="/host.png"
+                        src="/School_Productivity_Tracker-removebg-preview.png"
                         alt="Get Vaccinated"
-                        className="w-full h-90 md:mr-10  max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
+                        className=" h-110 md:mr-10  max-w-xs sm:max-w-xl md:max-w-md lg:max-w-xl"
                     />
 
                 </div>
