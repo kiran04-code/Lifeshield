@@ -62,7 +62,7 @@ const Navbar = () => {
                             <IoIosArrowDown className='text-xl' />
                         </motion.span>
                     </Link>
-                    <Link to={""} onMouseEnter={() => setPanel(false)} onClick={{}} className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl' >
+                    <Link to={"#aboute"} onMouseEnter={() => setPanel(false)} onClick={{}} className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl' >
                         About <motion.span whileHover={{
                             y: 5
                         }}

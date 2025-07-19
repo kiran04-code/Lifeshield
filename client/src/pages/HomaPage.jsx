@@ -4,6 +4,7 @@ import OurService from '../components/OurService'
 import Docter from '../components/Docter'
 import Parents from '../components/Parents'
 import WhyPage from '../components/WhyPage'
+import About from '../components/About'
 
 const HomaPage = () => {
   return (
@@ -13,6 +14,7 @@ const HomaPage = () => {
       <OurService/>
       <Docter/>
       <Parents/>
+      <About/>
     </div>
   )
 }
