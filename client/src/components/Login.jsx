@@ -8,7 +8,9 @@ const Login = () => {
   const [activeTab, setActiveTab] = useState("Sign-up");
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [email, setEmail] = useState("");
+
   const [otp, setOtp] = useState("");
+    console.log(email,otp)
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const hnadle = useCallback(()=>{
        if( emailPattern.test(email)){
