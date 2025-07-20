@@ -5,9 +5,7 @@ import { sendmaintoUser } from "../util/email.js";
 
 export const signup = async (req, res) => {
     try {
-        console.log(req.body)
         const { fullName, email, Number, date } = req.body;
-        
         const UserFound = await user.findOne({ email })
         if (UserFound) {
             return res.json({
@@ -22,10 +20,11 @@ export const signup = async (req, res) => {
                 Number,
                 date
             })
+          
             const token = createToken(data)
             return  res.cookie("token_user",token).json({
                 success: true,
-                message: "User Login SucessFull!",
+                message: "User Login successfully!",
                 userData:data
             })
         }
@@ -42,7 +41,8 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email } = req.body;
-        const findUser = await user.findOne({ email }); // Use findOne instead of find
+        console.log(email)
+        const findUser = await user.findOne({ email }); 
 
         if (!findUser) {
             return res.json({
@@ -105,9 +105,9 @@ export const verify = async(req,res)=>{
 
 export const logout = async(req,res)=>{
 try {
-    res.json({
+    res.clearCookie("token_user").json({
         success:true,
-        message:"Logout Sucessfull!"
+        message:"Logged out successfully"
     })
 } catch (error) {
     console.log(error)
@@ -116,5 +116,25 @@ try {
         message:"Issuue for Logout"
     })
 }
+}
+
+export const Auth = async(req,res)=>{
+  try {
+     if (!req.user) {
+      return res.status(401).json({ success: false, message: "Unauthorized access" });
+    }
+    const id = req.user._id
+    const data = await user.findById(id)
+    res.json({
+        success:true,
+        userData:data
+    })
+  } catch (error) {
+    console.log(error)
+    return res.json({
+        success:false,
+        message:error.message
+    })
+  }
 }
 

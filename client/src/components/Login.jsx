@@ -5,33 +5,57 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/auth";
 import {useNavigate} from "react-router-dom"
+import { formToJSON } from "axios";
 const Login = () => {
   const [activeTab, setActiveTab] = useState("Sign-up");
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [datas,setdatas] = useState({})
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState();
   const {User,setUser,axios} = useAuth()
   const [otp, setOtp] = useState("");
   const navigate = useNavigate()
-  console.log(User)
  const hnadlechnage = (e)=>{
   const {name,value} = e.target
   setdatas({...datas,[name]:value})
  }
- const hnadleSubmit =async(e)=>{
+ const hnadleSubmit = useCallback(async(e)=>{
 e.preventDefault()
 try {
-  const {data} = await  axios.post("/Signup",datas)
-  if(data.succes){
+  const {data} = await  axios.post("http://localhost:3010/api/Signup",datas)
+  if(data.success){
     setUser(data.userData)
     toast.success(data.message)
-    setdatas("")
     navigate("/parent")
+  }
+  else{
+    setUser(null)
+    console.log(data)
+    toast.error(data.message)
   }
 } catch (error) {
   console.log(error)
 }
- }
+ })
+ console.log(email)
+const hnadlesubmit = async()=>{
+  try {
+  const {data} = await axios.get("http://localhost:3010/api/signin",{email:email})
+  if(data.success){
+    toast.success(data.message)
+    setShowOtpInput(true)
+  }
+  else{
+    toast.success("Error to Send Message")
+    setShowOtpInput(false)
+  }
+  } catch (error) {
+    toast.success(error.message)
+    setShowOtpInput(false)
+  }
+}
+useEffect(()=>{
+  hnadlesubmit()
+},[email])
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-opacity-40 backdrop-blur-[6px]">
       <motion.div className="bg-[#E0EAFF] w-full max-w-2xl shadow-xl p-6 md:p-10 rounded-2xl">
@@ -40,8 +64,9 @@ try {
         </h1>
 
         {/* Form */}
-        <form className="space-y-4" onSubmit={hnadleSubmit} >
+        
           {activeTab === "Sign-up" ? (
+            <form className="space-y-4" onSubmit={hnadleSubmit} >
             <div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -99,8 +124,10 @@ try {
                 </button>
               </div>
             </div>
+             </form>
           ) : (
-            <div>
+            <form>
+              <div>
               {!showOtpInput ? (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -139,8 +166,9 @@ try {
                 </div>
               )}
             </div>
+            </form>
           )}
-        </form>
+       
 
         {/* Divider */}
         <div className="flex items-center justify-center my-6">

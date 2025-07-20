@@ -1,6 +1,26 @@
 import React from 'react'
-
+import { useAuth } from '../../../context/auth'
+import ageFinder from '../../../lib/ageCalculator'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 const UserInfo = () => {
+   const { User,setUser,axios} = useAuth()
+   const navigate = useNavigate()
+   const logout = async(req,res)=>{
+  try {
+    const {data} = await axios.get("http://localhost:3010/api/logout")
+    if(data.success){
+      toast.success(data.message)
+      setUser(null)
+      navigate("/parent")
+    }
+    else{
+      toast.error("Isuue to Logout!")
+    }
+  } catch (error) {
+    console.log(error)
+  }
+   }
   return (
     <div className='w-full p-5'>
       {/* Profile Header */}
@@ -8,8 +28,8 @@ const UserInfo = () => {
         <div className='flex items-center gap-4'>
           <div className='w-20 h-20 rounded-full bg-red-300'></div>
           <div>
-            <h1 className='text-xl sm:text-2xl font-bold uppercase'>Kiran Santosh Rathod</h1>
-            <p className='text-sm text-gray-600'>kiran.rathod24@gmail.com</p>
+            <h1 className='text-xl sm:text-2xl font-bold uppercase'>{User.fullName}</h1>
+            <p className='text-sm text-gray-600'>{User.email}</p>
           </div>
         </div>
       </div>
@@ -21,7 +41,7 @@ const UserInfo = () => {
             <label className='text-sm font-medium'>Full Name</label>
             <input
               type='text'
-              value='Kiran Santosh Rathod'
+              value={User.fullName}
               className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
               readOnly
             />
@@ -30,7 +50,7 @@ const UserInfo = () => {
             <label className='text-sm font-medium'>Email</label>
             <input
               type='email'
-              value='kiran.rathod24@gmail.com'
+              value={User.email}
               className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
               readOnly
             />
@@ -45,7 +65,7 @@ const UserInfo = () => {
             <label className='text-sm font-medium'>Phone Number</label>
             <input
               type='text'
-              value='+91 9876543210'
+              value={User.Number}
               className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
               readOnly
             />
@@ -54,7 +74,7 @@ const UserInfo = () => {
             <label className='text-sm font-medium'>Date of Birth</label>
             <input
               type='text'
-              value='2004-09-12'
+              value={User.date}
               className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
               readOnly
             />
@@ -69,12 +89,12 @@ const UserInfo = () => {
             <label className='text-sm font-medium'>Your Age</label>
             <input
               type='text'
-              value='20'
+              value= {ageFinder(User.date)}
               className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
               readOnly
             />
           </div>
-          <button className='bg-blue-500 text-white px-6 py-2 w-full md:w-40   hover:bg-blue-600 transition duration-300'>
+          <button onClick={()=>logout()} className='bg-blue-500 text-white px-6 py-2 w-full md:w-40   hover:bg-blue-600 transition duration-300'>
             Logout
           </button>
         </div>

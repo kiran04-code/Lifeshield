@@ -18,7 +18,12 @@ import UserInfo from './components/Profile/components/UserInfo'
 import SlotInfo from './components/Profile/components/SlotInfo'
 import {ToastContainer} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import NotFound from './components/NotFound/NotFound'
+import ProtectedRoute from './privteRoute/p01'
+
 function App() {
+  const {User} = useAuth()
+ console.log(User)
   return (
     <BrowserRouter>
     <ToastContainer
@@ -32,10 +37,11 @@ function App() {
         <Route path='/docter' element={<DocterPage />} />
         <Route path='/login' element={<Login />} />
         
-        <Route path='/profile' element={<ProfilePage />} >
+         <Route path='/profile' element={<ProtectedRoute />} >
          <Route index element={<UserInfo/>} />
          <Route path='SlotInfo' element={<SlotInfo/>} />
         </Route>
+    
         <Route path='/parent' element={<ParentPage />}>
           <Route index element={<NearCenterInfo />} />
           <Route path="DocterCalls" element={<NeareByVideoClles />} />
