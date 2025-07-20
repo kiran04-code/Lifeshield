@@ -5,11 +5,8 @@ const AuthContext = createContext(null);
 
 // Create the provider component
 export const AuthContextProvider = ({ children }) => {
-  const [isLogin, setIsLOG] = useState(false);
-  console.log(isLogin)
   const value = {
-    isLogin,
-    setIsLOG,
+  
   };
 
   return (

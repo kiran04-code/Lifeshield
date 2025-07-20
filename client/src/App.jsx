@@ -25,6 +25,8 @@ function App() {
 
         <Route path='/' element={<HomaPage />} />
         <Route path='/docter' element={<DocterPage />} />
+        <Route path='/login' element={<Login />} />
+        
         <Route path='/profile' element={<ProfilePage />} >
          <Route index element={<UserInfo/>} />
          <Route path='SlotInfo' element={<SlotInfo/>} />
@@ -32,7 +34,7 @@ function App() {
         <Route path='/parent' element={<ParentPage />}>
           <Route index element={<NearCenterInfo />} />
           <Route path="DocterCalls" element={<NeareByVideoClles />} />
-          <Route path='h3' element={"h3"} />
+  
         </Route>
       </Routes>
       <Footer />
