@@ -16,10 +16,15 @@ import Login from './components/Login'
 import ProfilePage from './components/Profile/ProfilePage'
 import UserInfo from './components/Profile/components/UserInfo'
 import SlotInfo from './components/Profile/components/SlotInfo'
-
+import {ToastContainer} from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   return (
     <BrowserRouter>
+    <ToastContainer
+  
+
+    />
       <Navbar />
       <Routes>
 

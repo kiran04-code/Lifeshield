@@ -4,3 +4,6 @@
 *{
   font-family: "Outfit", sans-serif;
 }
+.toast-success {
+  background-color: #00ff08 !important; /* Custom green */
+}
