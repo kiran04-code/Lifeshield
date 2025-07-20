@@ -7,7 +7,6 @@ import FeatureLayout from '../components/parent/FeatureLayout'
 import { useAuth } from '../context/auth'
 
 const ParentPage = () => {
-    const {isLogin,setIsLOG} = useAuth()
   return (
     <div >
       <ParentHreoSection/>

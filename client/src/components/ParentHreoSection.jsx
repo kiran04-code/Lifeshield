@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth';
 const ParentHreoSection = () => {
     const navigate = useNavigate()
-    const {isLogin,setIsLOG} = useAuth()
   return (
     <div>
        <div className='w-full bg-[#E0EAFF] md:flex'>

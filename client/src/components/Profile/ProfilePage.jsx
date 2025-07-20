@@ -11,7 +11,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Right Content */}
-      <div className='bg-[#E0EAFF] flex-1 p-5'>
+      <div className='bg-[#E0EAFF] flex-1 p-5 mt-2'>
         <div className='' >
             <div>
                 <h1 className='text-2xl font-semibold text-blue-600'>Hello, Kiran</h1>

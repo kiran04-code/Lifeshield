@@ -18,7 +18,6 @@ import UserInfo from './components/Profile/components/UserInfo'
 import SlotInfo from './components/Profile/components/SlotInfo'
 
 function App() {
-  const { isLogin, setIsLOG } = useAuth()
   return (
     <BrowserRouter>
       <Navbar />
@@ -37,9 +36,7 @@ function App() {
         </Route>
       </Routes>
       <Footer />
-      {
-        isLogin ? <Login /> : <></>
-      }
+      
     </BrowserRouter>
   )
 }
