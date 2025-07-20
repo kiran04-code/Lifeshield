@@ -10,7 +10,6 @@ const playlaod = {
 }
 
 const token = JWT.sign(playlaod,process.env.JWT_SCREATE_KEY)
-console.log(token)
 return token;
 } 
 

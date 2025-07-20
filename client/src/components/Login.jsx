@@ -3,24 +3,35 @@ import { FcGoogle } from "react-icons/fc";
 import { FaUserPlus } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-
+import { useAuth } from "../context/auth";
+import {useNavigate} from "react-router-dom"
 const Login = () => {
   const [activeTab, setActiveTab] = useState("Sign-up");
   const [showOtpInput, setShowOtpInput] = useState(false);
+  const [datas,setdatas] = useState({})
   const [email, setEmail] = useState("");
-
+  const {User,setUser,axios} = useAuth()
   const [otp, setOtp] = useState("");
-    console.log(email,otp)
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const hnadle = useCallback(()=>{
-       if( emailPattern.test(email)){
-  toast.success(`OTP sent to ${email}`,)
-  setShowOtpInput(true)
+  const navigate = useNavigate()
+  console.log(User)
+ const hnadlechnage = (e)=>{
+  const {name,value} = e.target
+  setdatas({...datas,[name]:value})
  }
-  })
-useEffect(()=>{
-  hnadle()
-},[email])
+ const hnadleSubmit =async(e)=>{
+e.preventDefault()
+try {
+  const {data} = await  axios.post("/Signup",datas)
+  if(data.succes){
+    setUser(data.userData)
+    toast.success(data.message)
+    setdatas("")
+    navigate("/parent")
+  }
+} catch (error) {
+  console.log(error)
+}
+ }
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-opacity-40 backdrop-blur-[6px]">
       <motion.div className="bg-[#E0EAFF] w-full max-w-2xl shadow-xl p-6 md:p-10 rounded-2xl">
@@ -29,7 +40,7 @@ useEffect(()=>{
         </h1>
 
         {/* Form */}
-        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-4" onSubmit={hnadleSubmit} >
           {activeTab === "Sign-up" ? (
             <div>
               <div>
@@ -38,6 +49,8 @@ useEffect(()=>{
                 </label>
                 <input
                   type="text"
+                  name="fullName"
+                 onChange={hnadlechnage}
                   placeholder="Enter Your Name"
                   className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -48,6 +61,8 @@ useEffect(()=>{
                 </label>
                 <input
                   type="text"
+                  name="Number"
+                  onChange={hnadlechnage}
                   placeholder="Enter Your Mobile Number"
                   className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -58,6 +73,8 @@ useEffect(()=>{
                 </label>
                 <input
                   type="email"
+                  name="email"
+                 onChange={hnadlechnage}
                   placeholder="Enter Your Email"
                   className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -68,6 +85,8 @@ useEffect(()=>{
                 </label>
                 <input
                   type="date"
+                  name="date"
+                  onChange={hnadlechnage}
                   className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>

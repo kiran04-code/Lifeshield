@@ -4,9 +4,10 @@ import user from "../model/user.js";
 import { sendmaintoUser } from "../util/email.js";
 
 export const signup = async (req, res) => {
-
     try {
+        console.log(req.body)
         const { fullName, email, Number, date } = req.body;
+        
         const UserFound = await user.findOne({ email })
         if (UserFound) {
             return res.json({
@@ -24,7 +25,8 @@ export const signup = async (req, res) => {
             const token = createToken(data)
             return  res.cookie("token_user",token).json({
                 success: true,
-                message: "User Login SucessFull!"
+                message: "User Login SucessFull!",
+                userData:data
             })
         }
 
