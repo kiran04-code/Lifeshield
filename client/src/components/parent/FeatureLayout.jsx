@@ -34,7 +34,7 @@ const FeatureLayout = () => {
                   onClick={() => setFetu(info.name)}
                   className={`${
                     fetu === info.name ? "bg-[#92b5ff]" : ""
-                  } text-[16px] md:text-[20px] flex items-center gap-3 md:w-95 hover:bg-[#E0EAFF] p-3 transition rounded-2xl cursor-pointer`}
+                  } text-[16px] md:text-[20px]  flex items-center gap-3 md:w-95 hover:bg-[#E0EAFF] p-3 transition rounded-2xl cursor-pointer`}
                 >
                   <div className='bg-white border-2 border-blue-400 p-1 rounded-xl'>
                      {info.icon}

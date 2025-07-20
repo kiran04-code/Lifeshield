@@ -13,27 +13,34 @@ import NearCenterInfo from './components/parent/NearCenterInfo'
 import NeareByVideoClles from './components/parent/VideoCallConsultationInfo'
 import { useAuth } from './context/auth'
 import Login from './components/Login'
+import ProfilePage from './components/Profile/ProfilePage'
+import UserInfo from './components/Profile/components/UserInfo'
+import SlotInfo from './components/Profile/components/SlotInfo'
 
 function App() {
-  const {isLogin,setIsLOG} = useAuth()
+  const { isLogin, setIsLOG } = useAuth()
   return (
-  <BrowserRouter>
-      <Navbar/>
-  <Routes>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
 
-    <Route path='/' element={<HomaPage/>}/>
-    <Route path='/docter' element={<DocterPage/>}/>
-    <Route path='/parent' element={<ParentPage/>}>
-   <Route index element={<NearCenterInfo/>}/>
-   <Route path="DocterCalls" element={<NeareByVideoClles/>}/>
-   <Route path='h3' element={"h3"}/>
-  </Route>
-   </Routes>
-  <Footer/>
-  {
-          isLogin ? <Login/>:<></>
-        }
-  </BrowserRouter>
+        <Route path='/' element={<HomaPage />} />
+        <Route path='/docter' element={<DocterPage />} />
+        <Route path='/profile' element={<ProfilePage />} >
+         <Route index element={<UserInfo/>} />
+         <Route path='SlotInfo' element={<SlotInfo/>} />
+        </Route>
+        <Route path='/parent' element={<ParentPage />}>
+          <Route index element={<NearCenterInfo />} />
+          <Route path="DocterCalls" element={<NeareByVideoClles />} />
+          <Route path='h3' element={"h3"} />
+        </Route>
+      </Routes>
+      <Footer />
+      {
+        isLogin ? <Login /> : <></>
+      }
+    </BrowserRouter>
   )
 }
 

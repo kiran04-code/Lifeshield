@@ -4,8 +4,21 @@ import { Outlet } from 'react-router-dom';
 
 const Card = () => {
   return (
-    <div className="p-4 ">
-       <div className='flex justify-center items-center p-2 bg-[#E0EAFF]  rounded-t-xl'>
+    <motion.div initial={{
+      y:0,
+      scale:0.8
+    }} 
+    whileInView={{
+      y:-50,
+      scale:1
+    }}
+    transition={{
+      duration:0.8,
+      ease:"easeInOut"
+    }}
+    
+    className="p-4 ">
+       <div className='flex justify-center items-center p-2 bg-[#E0EAFF] rounded-t-[60px]  md:rounded-t-[100px] mt-10'>
          <div className="flex items-center border pl-4 gap-2 border-blue-600 h-[55px] rounded-full overflow-hidden max-w-md w-full mt-5">
 
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 30 30" fill="#6B7280">
@@ -18,7 +31,7 @@ const Card = () => {
 
         </div>
        </div>
-      <div className="flex flex-col md:flex-row md:flex-wrap gap-5 justify-center bg-[#E0EAFF] p-6 rounded-xl shadow-md">
+      <div className="flex flex-col md:flex-row md:flex-wrap gap-5 justify-center bg-[#E0EAFF] p-6 rounded-b-[60px]  md:rounded-b-[100px] shadow-md">
         
         {[1, 2, 3,5].map((item) => (
           <motion.div
@@ -48,7 +61,7 @@ const Card = () => {
           </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
