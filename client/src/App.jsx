@@ -20,16 +20,12 @@ import {ToastContainer} from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 import NotFound from './components/NotFound/NotFound'
 import ProtectedRoute from './privteRoute/p01'
-
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const {User} = useAuth()
- console.log(User)
   return (
     <BrowserRouter>
-    <ToastContainer
-  
-
-    />
+    <ToastContainer/>
       <Navbar />
       <Routes>
 

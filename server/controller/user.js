@@ -41,7 +41,6 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email } = req.body;
-        console.log(email)
         const findUser = await user.findOne({ email }); 
 
         if (!findUser) {
@@ -73,9 +72,10 @@ export const verify = async(req,res)=>{
  
  try {
     const {email,otp} = req.body;
+    const optes = Number(otp)
     const findUserr = await user.findOne({email})
     const opts = findUserr.otp 
-   if(opts === otp){
+   if(opts === optes){
       findUserr.otp = undefined
       await findUserr.save()
       const token = createToken(findUserr)
@@ -83,11 +83,11 @@ export const verify = async(req,res)=>{
       return res.cookie("token_user",token).json({
         success:true,
         message:"Login Sucessfull!",
-        datas:findUserr,
+        userData:findUserr,
     })
    }
   else{
-    return res(400).json({
+    return res.json({
     success:false,
     message:"In valid Otp"
    })

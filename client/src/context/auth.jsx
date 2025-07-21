@@ -6,9 +6,8 @@ const AuthContext = createContext(null);
 // Create the provider component
 export const AuthContextProvider = ({ children }) => {
   const [User,setUser] = useState(null)
-  console.log(User)
   const  bakend_ulr = import.meta.env.VITE_BAKEND_URL
-  axios.defaults.baseURL = "http://localhost:3010/api"
+  axios.defaults.baseURL = bakend_ulr
   axios.defaults.withCredentials = true
   const value = {
   axios,

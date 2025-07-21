@@ -7,10 +7,16 @@ import { authUser } from "./middleware/user.js";
 import cors from "cors"
 config()
 const app = express()
+const allOrigins = [
+  "http://localhost:5173",
+  "https://lifeshield.onrender.com"
+];
+
 app.use(cors({
-    origin:"http://localhost:5173",
-    credentials:true
-}))
+  origin: allOrigins,
+  credentials: true
+}));
+
 app.use(cookieParser())
 app.use(authUser("token_user"))
 app.use(express.json());

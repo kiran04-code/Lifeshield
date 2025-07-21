@@ -5,14 +5,15 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/auth";
 import {useNavigate} from "react-router-dom"
-import { formToJSON } from "axios";
+import Loader from "../utils/Loader";
 const Login = () => {
   const [activeTab, setActiveTab] = useState("Sign-up");
-  const [showOtpInput, setShowOtpInput] = useState(false);
+  const [showOtpInput, setShowOtpInput] = useState(true);
   const [datas,setdatas] = useState({})
-  const [email, setEmail] = useState();
+  const [email, setEmail] = useState("");
   const {User,setUser,axios} = useAuth()
   const [otp, setOtp] = useState("");
+  const [load,setload] = useState(false)
   const navigate = useNavigate()
  const hnadlechnage = (e)=>{
   const {name,value} = e.target
@@ -21,7 +22,8 @@ const Login = () => {
  const hnadleSubmit = useCallback(async(e)=>{
 e.preventDefault()
 try {
-  const {data} = await  axios.post("http://localhost:3010/api/Signup",datas)
+  
+  const {data} = await  axios.post("/Signup",datas)
   if(data.success){
     setUser(data.userData)
     toast.success(data.message)
@@ -36,26 +38,44 @@ try {
   console.log(error)
 }
  })
- console.log(email)
-const hnadlesubmit = async()=>{
+ 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setload(true)
+    try {
+      const { data } = await axios.post("/signin", { email });
+      if (data.success) {
+        toast.success(data.message);
+        setShowOtpInput(true);
+        setload(false)
+      } else {
+        toast.error(data.message);
+        setShowOtpInput(false);
+         setload(false)
+      }
+    } catch (error) {
+      toast.error(error.message);
+      setShowOtpInput(false);
+    }
+  };
+ const  handleotp = async(e)=>{
   try {
-  const {data} = await axios.get("http://localhost:3010/api/signin",{email:email})
-  if(data.success){
-    toast.success(data.message)
-    setShowOtpInput(true)
-  }
-  else{
-    toast.success("Error to Send Message")
-    setShowOtpInput(false)
-  }
+    e.preventDefault()
+    const {data} = await axios.post("/vrfy",{email,otp})
+    console.log(data)
+    if(data.success){
+      setUser(data.userData)
+      toast.success(data.message)
+      navigate("/parent")
+    }
+    else{
+      toast.error(data.message)
+      setOtp("")
+    }
   } catch (error) {
-    toast.success(error.message)
-    setShowOtpInput(false)
+    console.log(error)
   }
-}
-useEffect(()=>{
-  hnadlesubmit()
-},[email])
+ }
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-opacity-40 backdrop-blur-[6px]">
       <motion.div className="bg-[#E0EAFF] w-full max-w-2xl shadow-xl p-6 md:p-10 rounded-2xl">
@@ -126,9 +146,9 @@ useEffect(()=>{
             </div>
              </form>
           ) : (
-            <form>
               <div>
               {!showOtpInput ? (
+                <form onSubmit={handleSubmit}>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Email Address
@@ -140,11 +160,22 @@ useEffect(()=>{
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter Your Email"
                     className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    
                   />
-                
+                  <div className="w-full h-10 justify-end flex mt-2 ">
+
+                    <button type="submit" className="bg-blue-600 px-2 py-2 text-white rounded-2xl"> 
+                      {
+                        load ? <Loader/>:"Get Otp"
+                      }
+                      </button>
+                  </div>
                 </div>
+                </form>
               ) : (
-                <div>
+                
+               <form onSubmit={handleotp} >
+                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Enter OTP
                   </label>
@@ -162,11 +193,13 @@ useEffect(()=>{
                     >
                       Verify OTP
                     </button>
+                    
                   </div>
+                  <p className="ml-1 cursor-pointer text-blue-600" onClick={()=>setShowOtpInput(false)}>send Agian Otp</p>
                 </div>
+               </form>
               )}
             </div>
-            </form>
           )}
        
 

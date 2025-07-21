@@ -5,5 +5,6 @@
   font-family: "Outfit", sans-serif;
 }
 .toast-success {
-  background-color: #00ff08 !important; /* Custom green */
+  background-color: #c2c2c2 ;
+  font-family: 'Poppins', sans-serif; /* Replace with your desired font */
 }
