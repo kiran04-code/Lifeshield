@@ -26,7 +26,7 @@ const UserInfo = () => {
       {/* Profile Header */}
       <div className='flex flex-col sm:flex-row items-center justify-between gap-5 w-full'>
         <div className='flex items-center gap-4'>
-          <div className='w-20 h-20 rounded-full bg-red-300'></div>
+          <div className='w-20 h-20 rounded-full  bg-[#68b3ff94] text-white flex justify-center items-center text-5xl'>{User.fullName.substring(0,1)}</div>
           <div>
             <h1 className='text-xl sm:text-2xl font-bold uppercase'>{User.fullName}</h1>
             <p className='text-sm text-gray-600'>{User.email}</p>
