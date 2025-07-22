@@ -21,6 +21,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NotFound from './components/NotFound/NotFound'
 import ProtectedRoute from './privteRoute/p01'
 import 'react-toastify/dist/ReactToastify.css';
+import NearVaccineCenter from './pages/NearVaccineCenter'
 function App() {
   const {User} = useAuth()
   return (
@@ -31,6 +32,7 @@ function App() {
 
         <Route path='/' element={<HomaPage />} />
         <Route path='/docter' element={<DocterPage />} />
+        <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/login' element={<Login />} />
         
          <Route path='/profile' element={<ProtectedRoute />} >

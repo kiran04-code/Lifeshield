@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { FaLocationDot } from "react-icons/fa6";
 import { FaFileVideo } from "react-icons/fa6";
-
+import { useAuth } from '../../context/auth';
 const FeatureLayout = () => {
+  const {User} = useAuth()
   const [fetu, setFetu] = useState("Search NearBy Vaccine Center");
   console.log(fetu)
 const data = [

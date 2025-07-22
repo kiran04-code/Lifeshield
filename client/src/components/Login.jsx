@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaUserPlus } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/auth";
 import {useNavigate} from "react-router-dom"

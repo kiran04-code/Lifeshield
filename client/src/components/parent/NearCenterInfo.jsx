@@ -1,6 +1,10 @@
 import React from 'react';
+import { useAuth } from '../../context/auth';
+import { useNavigate } from 'react-router-dom';
 
 const NearCenterInfo = () => {
+  const navigate = useNavigate()
+    const {User} = useAuth()
   return (
     <div className="bg-[#E0EAFF] p-6 md:p-10 rounded-3xl shadow-md w-full flex flex-col md:flex-row items-center gap-6">
       
@@ -15,6 +19,11 @@ const NearCenterInfo = () => {
         <p className="text-gray-700 text-md">
           This feature helps parents and individuals book appointments quickly by showing real-time availability based on selected age groups or vaccine type.
         </p>
+         <div className='mt-2'>
+       {
+        User ? <button className='bg-blue-700 text-white px-5 p-2 rounded-[5px]'onClick={()=>navigate("NearVaccineCenter ")}  > Explore</button> :null
+      }
+     </div>
       </div>
 
       {/* Image Section */}
@@ -25,6 +34,7 @@ const NearCenterInfo = () => {
           className="w-full max-w-md rounded-xl shadow-lg"
         />
       </div>
+    
     </div>
   );
 };
