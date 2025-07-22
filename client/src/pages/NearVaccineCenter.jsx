@@ -5,7 +5,6 @@ const NearVaccineCenter = () => {
   return (
     <div>
       <SerachEngine/>
-      <h1>NearVaccineCenter</h1>
     </div>
   )
 }

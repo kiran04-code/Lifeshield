@@ -8,13 +8,7 @@
         services: "Vaccination, General Checkup, Emergency"
       },
     
-    ,  {
-        name: "Noble Hospital",
-        contact: "09087070890",
-        timings: "9 AM - 9 PM Tuesday - closed",
-        address: "FV9Q+9V5, Kondhwa Main Rd, Kondhwa, Pune, Maharashtra 411048",
-        services: "Vaccination, Surgery, General Medicine"
-      },
+    ,  
     
     ,  {
         name: "Siddhivinayak Hospital",
@@ -119,13 +113,13 @@
         address: "Gurudwara road walekarwadi chinchwad, Pune, Maharashtra 411033",
         services: "Vaccination, General Checkup"
       },
-      , {
-        name: "Sahyadri Hospital",
-        contact: "08888822222",
-        timings: "24 hours",
-        address: "opp. Sakhar Sankul, Anutej Atharv society, Narveer Tanaji Wadi, Shivajinagar, Pune, Maharashtra 411005",
-        services: "Vaccination, Emergency, General Medicine"
-      },
+      // , {
+      //   name: "Sahyadri Hospital",
+      //   contact: "08888822222",
+      //   timings: "24 hours",
+      //   address: "opp. Sakhar Sankul, Anutej Atharv society, Narveer Tanaji Wadi, Shivajinagar, Pune, Maharashtra 411005",
+      //   services: "Vaccination, Emergency, General Medicine"
+      // },
       , {
         name: "Usha Nursing Home",
         contact: "02026344969",

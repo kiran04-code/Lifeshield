@@ -22,6 +22,11 @@ import NotFound from './components/NotFound/NotFound'
 import ProtectedRoute from './privteRoute/p01'
 import 'react-toastify/dist/ReactToastify.css';
 import NearVaccineCenter from './pages/NearVaccineCenter'
+import Hospitaldetail from './components/NearByCenter/components/hospitaldetail'
+import DockerLogin from './components/DockerLogin/DockerLoginpage'
+import LoginCreate from './components/DockerLogin/LoginCreate'
+import CreatAccount from './components/DockerLogin/DashBoad'
+import CreateProfile from './components/DockerLogin/Hospitalregister'
 function App() {
   const {User} = useAuth()
   return (
@@ -31,8 +36,12 @@ function App() {
       <Routes>
 
         <Route path='/' element={<HomaPage />} />
+        <Route path='/DokcterLogin' element={<DockerLogin/>} />
+        <Route path='/DokcterLogin/CreateProfile' element={<CreateProfile/>} />
+        <Route path='/DokcterLogin/:nameLogin' element={<LoginCreate/>} />
         <Route path='/docter' element={<DocterPage />} />
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
+        <Route path='/hospital/:name' element={<Hospitaldetail />} />
         <Route path='/login' element={<Login />} />
         
          <Route path='/profile' element={<ProtectedRoute />} >
