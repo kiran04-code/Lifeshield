@@ -27,6 +27,9 @@ import DockerLogin from './components/DockerLogin/DockerLoginpage'
 import LoginCreate from './components/DockerLogin/LoginCreate'
 import CreatAccount from './components/DockerLogin/DashBoad'
 import CreateProfile from './components/DockerLogin/Hospitalregister'
+import DashBoad from './components/DockerLogin/DashBoad'
+import ProtechRouteToDocterPage from './privteRoute/P02'
+import HostShowPage from './components/DockerLogin/hostShowPage'
 function App() {
   const {User} = useAuth()
   return (
@@ -37,8 +40,10 @@ function App() {
 
         <Route path='/' element={<HomaPage />} />
         <Route path='/DokcterLogin' element={<DockerLogin/>} />
-        <Route path='/DokcterLogin/CreateProfile' element={<CreateProfile/>} />
+        <Route path='/hostpiyalshow' element={<HostShowPage/>} />
+        <Route path='/DokcterLogin/CreateProfile' element={<ProtechRouteToDocterPage/>} />
         <Route path='/DokcterLogin/:nameLogin' element={<LoginCreate/>} />
+        <Route path='/DokcterdashBord' element={<DashBoad/>} />
         <Route path='/docter' element={<DocterPage />} />
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/hospital/:name' element={<Hospitaldetail />} />

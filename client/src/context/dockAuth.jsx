@@ -5,14 +5,17 @@ const DocAuthContext = createContext(null);
 
 // Create the provider component
 export const DocAuthContextProvider = ({ children }) => {
-  const [docterdata,setDockterData] = useState({})
+  const [docterdata,setDockterData] = useState(null)
+  const [hostpitaldata,sethostpitaldata] = useState(mull)
   const  bakend_ulr = import.meta.env.VITE_BAKEND_URL
   axios.defaults.baseURL = bakend_ulr
   axios.defaults.withCredentials = true
   const value = {
   axios, 
   docterdata,
-  setDockterData
+  setDockterData,
+  hostpitaldata,
+  sethostpitaldata
   };
  const auth = async()=>{
     const {data} = await axios.get("/authdocter")

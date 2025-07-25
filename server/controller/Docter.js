@@ -110,7 +110,7 @@ export const loginVrfy = async(req,res)=>{
          findUser.otp = undefined,
          findUser.save()   
          const token = createTokenforDocter(findUser)
-          res.cookie("octer_user",token).json({
+          res.cookie("Docter_user",token).json({
             success:true,
             message:" User Login successfully!",
             userData:findUser

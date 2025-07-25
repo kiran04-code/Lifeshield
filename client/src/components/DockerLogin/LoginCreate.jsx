@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useDocAuth } from '../../context/dockAuth'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -87,7 +87,7 @@ try {
         toast.success(data.message)
       setDockterData(data.userData)
       isloder(false)
-      navigate("/DokcterLogin/CreateProfile")
+      navigate("/hostpiyalshow")
     }
     else
     {
@@ -131,7 +131,12 @@ try {
                                         loader ?<Loader/> :"login"
                                        }
                                     </button>
-                                </form> : <form  onSubmit={verfyLogin} >
+                                    <div className='flex justify-center items-center mt-5'>
+                                             <p>Don't have an Account <Link className='text-blue-600 cursor-pointer underline' to={"/DokcterLogin/CreatAccount"}>Signup</Link></p>
+                                        </div>
+                                
+                                </form> 
+                                : <form  onSubmit={verfyLogin} >
                                     <div className='mb-4'>
                                         <label className='block text-gray-700 font-medium mb-2'>OTP</label>
                                         <input
@@ -151,6 +156,7 @@ try {
                                         loader ?<Loader/> :"OTP"
                                        }
                                     </button>
+
                                 </form>
                             }
                         </div>
@@ -212,6 +218,9 @@ try {
                                                 loader ? <Loader/>:"CreateAccount"
                                             }
                                         </button>
+                                        <div className='flex justify-center items-center mt-5'>
+                                             <p>Alredy have an  Account  <Link className='text-blue-600 cursor-pointer underline' to={"/DokcterLogin/Login"}>Signin</Link></p>
+                                        </div>
                                     </form>
                                 }
                             </div>

@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import { authUserDocter } from "./middleware/Dock.js";
 import { authUser } from "./middleware/user.js";
 import DocterRoutes from "./routes/Docter.js";
+import hostpitalRoutes from "./routes/HostpitalRoutes.js";
 import cors from "cors"
 config()
 const app = express()
@@ -41,6 +42,7 @@ DBonnection(process.env.MONGO_URL).then(()=>{
 })
 app.use("/api",UserRoutes)
 app.use("/api",DocterRoutes)
+app.use("/api",hostpitalRoutes)
 app.get("/api/user",(req,res)=>{
     res.json({
         sucess:true,
