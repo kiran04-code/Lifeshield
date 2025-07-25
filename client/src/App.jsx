@@ -43,7 +43,7 @@ function App() {
         <Route path='/hostpiyalshow' element={<HostShowPage/>} />
         <Route path='/DokcterLogin/CreateProfile' element={<ProtechRouteToDocterPage/>} />
         <Route path='/DokcterLogin/:nameLogin' element={<LoginCreate/>} />
-        <Route path='/DokcterdashBord' element={<DashBoad/>} />
+        <Route path='/DokcterdashBord/:id' element={<DashBoad/>} />
         <Route path='/docter' element={<DocterPage />} />
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/hospital/:name' element={<Hospitaldetail />} />

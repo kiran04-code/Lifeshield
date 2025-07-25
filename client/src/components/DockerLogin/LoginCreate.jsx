@@ -13,7 +13,7 @@ const LoginCreate = () => {
     const [otplogin,setotplogin] = useState('')
     const [fromsdata,setFromdata] = useState({})
     const [loader,isloder] = useState(false)
-     const {axios,setDockterData,docterdata}  = useDocAuth()
+     const {axios,setDockterData,docterdata,hostpitaldata}  = useDocAuth()
      const navigate = useNavigate()
     const handleOnChange = (e)=>{
         const {name,value} = e.target
@@ -87,7 +87,12 @@ try {
         toast.success(data.message)
       setDockterData(data.userData)
       isloder(false)
-      navigate("/hostpiyalshow")
+     if(hostpitaldata === "undefined"){
+         navigate("/DokcterLogin/CreateProfile")
+     }
+     else{
+         navigate("/hostpiyalshow")
+     }
     }
     else
     {

@@ -30,7 +30,7 @@ const handleFromData = (e) => {
     console.log(data); // ✅ Now this will have your response
     if(data.success){
       toast.success(data.message)
-      navigate("/DokcterdashBord")
+      navigate("/hostpiyalshow")
       setisloading(false)
     }
     else{
