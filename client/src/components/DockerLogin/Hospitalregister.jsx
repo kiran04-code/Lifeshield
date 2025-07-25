@@ -41,7 +41,6 @@ const handleFromData = (e) => {
     console.error("Submission error:", error);
   }
 };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#85acff] px-4">
       <div className="bg-white max-w-md w-full rounded-2xl shadow-lg p-6 sm:p-8">
@@ -49,8 +48,6 @@ const handleFromData = (e) => {
         <p className="text-sm text-gray-500 mt-1 mb-6">
           Help us maintain our medical community’s integrity with verified credentials.
         </p>
-
-        {/* Name Fields */}
        <form action="" onSubmit={hynadleSubmitFrom}>
          <div className="flex space-x-2 mb-4">
           <select className="w-1/4 px-2 py-2 border rounded bg-yellow-50 text-gray-800">
@@ -60,8 +57,6 @@ const handleFromData = (e) => {
           <input type="text" onChange={handleFromData} name="Mname" placeholder="Middle" className="w-1/3 px-3 py-2 border rounded bg-yellow-50" />
           <input type="text" onChange={handleFromData} name="lname" placeholder="Last" className="w-1/3 px-3 py-2 border rounded bg-yellow-50" />
         </div>
-
-        {/* Gender */}
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1">Gender</label>
           <div className="flex space-x-3">
@@ -70,18 +65,12 @@ const handleFromData = (e) => {
                 <button type='button' onClick={()=>setGenter(name)} className={`px-4 py-2 border rounded-full  ${ Gender === name ? "bg-blue-100":null} text-gray-700 hover:bg-blue-100`}>{name}</button>
               ))
             }
-
-
           </div>
         </div>
-
-        {/* DOB */}
         <div className="mb-4">
           <label className="block text-gray-700 font-medium mb-1">Date of birth</label>
           <input type="date" name="date" onChange={handleFromData} className="w-full px-4 py-2 border rounded bg-white" />
         </div>
-
-        {/* Phone Number */}
         <div className="mb-2">
           <label className="block text-gray-700 font-medium mb-1">Mobile Number With Country Code</label>
           <div className="flex">
@@ -98,8 +87,6 @@ const handleFromData = (e) => {
           </div>
           {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
         </div>
-
-        {/* Email */}
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-1">Email</label>
           <input

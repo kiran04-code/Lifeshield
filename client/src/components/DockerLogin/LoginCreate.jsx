@@ -45,7 +45,7 @@ try {
     if(data.success){
         toast.success(data.message)
         setDockterData(data.useData)
-      navigate("/DokcterLogin/CreateProfile")
+      navigate("/DokcterLogin/  ")
     }
     else
     {
@@ -87,8 +87,6 @@ try {
         toast.success(data.message)
       setDockterData(data.userData)
       isloder(false)
-    
-
          navigate("/hostpiyalshow")
      
     }
