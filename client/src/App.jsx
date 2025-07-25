@@ -29,7 +29,7 @@ import CreatAccount from './components/DockerLogin/DashBoad'
 import CreateProfile from './components/DockerLogin/Hospitalregister'
 import DashBoad from './components/DockerLogin/DashBoad'
 import ProtechRouteToDocterPage from './privteRoute/P02'
-import HostShowPage from './components/DockerLogin/hostShowPage'
+import HostShowPage from './components/DockerLogin/HostShowPage'
 function App() {
   const {User} = useAuth()
   return (
