@@ -2,7 +2,7 @@ import hostRgister from "../model/hostpitalRegister.js";
 export const hostRgisters = async (req, res) => {
   const { Gender, from } = req.body
   try {
-    const id = req.docter._id
+    const id = req.docter?._id
 
     const finHostpital = await hostRgister.find({}).populate("createdBy");
     const existingHospital = finHostpital.find(

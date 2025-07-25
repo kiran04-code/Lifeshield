@@ -87,12 +87,10 @@ try {
         toast.success(data.message)
       setDockterData(data.userData)
       isloder(false)
-     if(hostpitaldata === undefined){
-         navigate("/DokcterLogin/CreateProfile")
-     }
-     else{
+    
+
          navigate("/hostpiyalshow")
-     }
+     
     }
     else
     {
