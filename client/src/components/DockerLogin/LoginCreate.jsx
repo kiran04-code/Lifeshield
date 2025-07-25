@@ -44,7 +44,7 @@ try {
     const {data} = await axios.post("/SignVrfy",{otp:otpsignup,fromsdata})
     if(data.success){
         toast.success(data.message)
-      setDockterData(data.useData)
+        setDockterData(data.useData)
       navigate("/DokcterLogin/CreateProfile")
     }
     else
@@ -87,7 +87,7 @@ try {
         toast.success(data.message)
       setDockterData(data.userData)
       isloder(false)
-     if(hostpitaldata === "undefined"){
+     if(hostpitaldata === undefined){
          navigate("/DokcterLogin/CreateProfile")
      }
      else{
