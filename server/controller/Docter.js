@@ -51,11 +51,17 @@ export const SignVrfy = async (req, res) => {
             findUser.otp = undefined,
                 findUser.save()
             const token = createTokenforDocter(findUser)
-            return res.cookie("Docter_user", token).json({
-                success: true,
-                message: "User Login successfully!",
-                userData: true,
+            return res.cookie("Docter_user", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production", // must be true in prod
+                sameSite: "Strict", // or "Lax" or "None" (if cross-site)
+                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
             })
+                .json({
+                    success: true,
+                    message: "User Login successfully!",
+                    userData: true,
+                })
         }
         else {
             return res.json({
@@ -87,7 +93,7 @@ export const loginDoc = async (req, res) => {
             const otps = Math.floor(1000 + Math.random() * 9000);
             findUser.otp = otps
             findUser.save()
-            await sendmaintoUser(validemail,otps)
+            await sendmaintoUser(validemail, otps)
             res.json({
                 success: true,
                 message: "OTP Send successfully! "
@@ -95,76 +101,81 @@ export const loginDoc = async (req, res) => {
         }
 
     } catch (error) {
-  console.log(error)
+        console.log(error)
     }
 }
 
-export const loginVrfy = async(req,res)=>{
+export const loginVrfy = async (req, res) => {
     try {
-        const {otp ,fromsdata} = req.body;
+        const { otp, fromsdata } = req.body;
         const validEmila = fromsdata.email;
-        const findUser = await Docter.findOne({email:validEmila})
-         const NumsOtps = Number(otp)
-         const otps = findUser.otp
-      if(NumsOtps === otps){ 
-         findUser.otp = undefined,
-         findUser.save()   
-         const token = createTokenforDocter(findUser)
-          res.cookie("Docter_user",token).json({
-            success:true,
-            message:" User Login successfully!",
-            userData:findUser
-        })
-      }
-      else{
-        return res.json({
-            success:false,
-            message:"In valid Otp"
-        })
-      }
+        const findUser = await Docter.findOne({ email: validEmila })
+        const NumsOtps = Number(otp)
+        const otps = findUser.otp
+        if (NumsOtps === otps) {
+            findUser.otp = undefined,
+                findUser.save()
+            const token = createTokenforDocter(findUser)
+            return res.cookie("Docter_user", token, {
+                httpOnly: true,
+                secure:"production", // must be true in prod
+                sameSite: "Strict", // or "Lax" or "None" (if cross-site)
+                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            }).json({
+                success: true,
+                message: " User Login successfully!",
+                userData: findUser
+            })
+        }
+        else {
+            return res.json({
+                success: false,
+                message: "In valid Otp"
+            })
+        }
     } catch (error) {
         console.log(error)
         return res.json({
-            success:true,
-            message:error.message
+            success: true,
+            message: error.message
         })
     }
 }
 
-export const authdoc = async(req,res)=>{
+export const authdoc = async (req, res) => {
     try {
-        if(!req.docter){
+        if (!req.docter) {
             return res.status(400).json({
-                message:"Unothrized Userr"
+                message: "Unothrized Userr"
             })
         }
         const id = req.docter._id
         const findUser = await Docter.findById(id)
         res.json({
-            success:true,
-            userData:findUser
+            success: true,
+            userData: findUser
         })
-        
+
     } catch (error) {
         console.log(error)
-    return res.json({
-        success:false,
-        message:error.message
-    })
-  }
+        return res.json({
+            success: false,
+            message: error.message
+        })
+    }
 }
 
 
-export const DocterLogout = (req,res)=>{
- try {
-    return res.clearCookie("Docter_user").json({
-    success:true,
- })
- } catch (error) {
-    console.log(error)
-    return res.json({
-        success:false,
-     message:error.message
-    })
- }
+export const DocterLogout = (req, res) => {
+    try {
+        return res.clearCookie("Docter_user").json({
+            success: true,
+        })
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            success: false,
+            message: error.message
+        })
+    }
 }

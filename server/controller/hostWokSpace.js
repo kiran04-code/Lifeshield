@@ -1,9 +1,8 @@
 import hostWrokSpaces from "../model/createHostWorkspace.js";
 import Docter from "../model/Docter.js";
 export const createWrokSpace = async (req, res) => {
-    const { formData, locationseting, number } = req.body
+    const { formData, locationseting, number,latitude, longitide,village,timeing} = req.body
     try {
-        console.log(number)
         const id = req.docter?._id
         const adres = locationseting
         const finUser = await hostWrokSpaces.findOne({ adres })
@@ -26,7 +25,12 @@ export const createWrokSpace = async (req, res) => {
                 location: locationseting,
                 specialization: formData.specialization,
                 Number: number,
-                profileId: id
+                profileId: id,
+                lat:latitude,
+                lon:longitide,
+                village:village,
+                timeopne:timeing
+
             })
             const datas = await Docter.findById(id);
             if (!datas) {
@@ -34,7 +38,7 @@ export const createWrokSpace = async (req, res) => {
                 return;
             }
             datas.hotPitalRegisters = true;
-            await datas.save(); // Await this to persist changes
+            await datas.save(); 
             res.json({
                 success: true,
                 message: "HostPital Register SucessFull!"
@@ -74,4 +78,16 @@ export const getResterData = async(req,res)=>{
             message:error.message
         })
     }
+}
+
+export const findAllHostpital = async(req,res)=>{
+  try {
+    const finaLLhospital = await hostWrokSpaces.find({})
+    res.json({
+        success:true,
+        hotData:finaLLhospital
+    })
+  } catch (error) {
+    console.log(error)
+  }
 }

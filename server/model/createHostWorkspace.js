@@ -17,6 +17,22 @@ const hostpitalSchema = new mongoose.Schema({
         type:Number,
         require:true,
     },
+    lat:{
+        type:Number,
+        require:true
+    },
+    lon:{
+        type:Number,
+        require:true
+    },
+    village:{
+        type:String,
+        require:true
+    },
+    timeopne:{
+        type:String,
+        require:true
+    },
    profileId:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"docter"

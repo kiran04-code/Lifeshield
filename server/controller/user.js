@@ -14,18 +14,23 @@ export const signup = async (req, res) => {
             })
 
         } else {
-          const  data =    await user.create({
+            const data = await user.create({
                 fullName,
                 email,
                 Number,
                 date
             })
-          
+
             const token = createToken(data)
-            return  res.cookie("token_user",token).json({
+            res.cookie("token_user", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production", // must be true in prod
+                sameSite: "Strict", // or "Lax" or "None" (if cross-site)
+                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            }).json({
                 success: true,
                 message: "User Login successfully!",
-                userData:data
+                userData: data
             })
         }
 
@@ -41,7 +46,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const { email } = req.body;
-        const findUser = await user.findOne({ email }); 
+        const findUser = await user.findOne({ email });
 
         if (!findUser) {
             return res.json({
@@ -52,7 +57,7 @@ export const login = async (req, res) => {
 
         const otps = Math.floor(1000 + Math.random() * 9000);
         findUser.otp = otps
-       await  findUser.save()
+        await findUser.save()
         if (otps) {
             await sendmaintoUser(email, otps);
             return res.json({
@@ -68,73 +73,79 @@ export const login = async (req, res) => {
         });
     }
 };
-export const verify = async(req,res)=>{
- 
- try {
-    const {email,otp} = req.body;
-    const optes = Number(otp)
-    const findUserr = await user.findOne({email})
-    const opts = findUserr.otp 
-   if(opts === optes){
-      findUserr.otp = undefined
-      await findUserr.save()
-      const token = createToken(findUserr)
-     
-      return res.cookie("token_user",token).json({
-        success:true,
-        message:"Login Sucessfull!",
-        userData:findUserr,
-    })
-   }
-  else{
-    return res.json({
-    success:false,
-    message:"In valid Otp"
-   })
-   
-  }
+export const verify = async (req, res) => {
 
- } catch (error) {
-    console.log(error)
-    res.json({
-        success:false,
-        message:error.message
-    })
- }
-}
+    try {
+        const { email, otp } = req.body;
+        const optes = Number(otp)
+        const findUserr = await user.findOne({ email })
+        const opts = findUserr.otp
+        if (opts === optes) {
+            findUserr.otp = undefined
+            await findUserr.save()
+            const token = createToken(findUserr)
 
-export const logout = async(req,res)=>{
-try {
-    res.clearCookie("token_user").json({
-        success:true,
-        message:"Logged out successfully"
-    })
-} catch (error) {
-    console.log(error)
-    res.josn({
-        success:false,
-        message:"Issuue for Logout"
-    })
-}
-}
+            res.cookie("token_user", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production", // must be true in prod
+  sameSite: "Strict", // or "Lax" or "None" (if cross-site)
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+})
+.json({
+                success: true,
+                message: "Login Sucessfull!",
+                userData: findUserr,
+            })
+        }
+        else {
+            return res.json({
+                success: false,
+                message: "In valid Otp"
+            })
 
-export const Auth = async(req,res)=>{
-  try {
-     if (!req.user) {
-      return res.status(401).json({ success: false, message: "Unauthorized access" });
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.json({
+            success: false,
+            message: error.message
+        })
     }
-    const id = req.user._id
-    const data = await user.findById(id)
-    res.json({
-        success:true,
-        userData:data
-    })
-  } catch (error) {
-    console.log(error)
-    return res.json({
-        success:false,
-        message:error.message
-    })
-  }
+}
+
+export const logout = async (req, res) => {
+    try {
+        res.clearCookie("token_user").json({
+            success: true,
+            message: "Logged out successfully"
+        })
+    } catch (error) {
+        console.log(error)
+        res.josn({
+            success: false,
+            message: "Issuue for Logout"
+        })
+    }
+}
+
+export const Auth = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(401).json({ success: false, message: "Unauthorized access" });
+        }
+        const id = req.user._id
+        const data = await user.findById(id)
+        res.json({
+            success: true,
+            userData: data
+        })
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            success: false,
+            message: error.message
+        })
+    }
 }
 
