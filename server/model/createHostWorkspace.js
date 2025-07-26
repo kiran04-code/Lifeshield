@@ -19,7 +19,7 @@ const hostpitalSchema = new mongoose.Schema({
     },
    profileId:{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"hostpitalRegister"
+    ref:"docter"
    }
 })
 

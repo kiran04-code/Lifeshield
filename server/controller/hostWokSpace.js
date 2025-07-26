@@ -35,7 +35,6 @@ export const createWrokSpace = async (req, res) => {
             }
             datas.hotPitalRegisters = true;
             await datas.save(); // Await this to persist changes
-            console.log("Updated data:", datas);
             res.json({
                 success: true,
                 message: "HostPital Register SucessFull!"
@@ -46,6 +45,33 @@ export const createWrokSpace = async (req, res) => {
         return res.json({
             success: false,
             message: error.messsage
+        })
+    }
+}
+
+export const getResterData = async(req,res)=>{
+    try {
+        const id = req.docter?._id
+
+        if(id){
+ const existingHospitalregiter = await hostWrokSpaces.find({}).populate('profileId')
+        const dataa = existingHospitalregiter.find((data)=>data.profileId._id.toString()===  id.toString())
+        return res.json({
+            success:true,
+            hotData:dataa
+        })
+        }else{
+        return res.json({
+            success:true,
+            hotData:null
+        })
+        }
+       
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            success:false,
+            message:error.message
         })
     }
 }

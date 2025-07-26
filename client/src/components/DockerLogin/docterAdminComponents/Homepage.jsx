@@ -8,17 +8,25 @@ import { CiWarning } from "react-icons/ci";
 import { IoIosArrowDown } from "react-icons/io";
 import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 const BarPage = () => {
     const {id} = useParams()
-    var {hostpitaldata,docterdata} = useDocAuth()
+   let navigate = useNavigate()
+    var {hostpitaldata,docterdata,hostpitaldataworkspace,axios} = useDocAuth()
   const [showMenu, setShowMenu] = useState(true); // Set to true for always visible (toggle optional)
-
+  const handleLogout = async()=>{
+  try {
+    const {data} = await  axios.get("/DocterLogout")
+    console.log(data)
+  navigate('/docter')
+  } catch (error) {
+    console.log(error)
+  }
+  }
   return (
     <motion.div initial={{
         opacity:0,
-
     }
     } whileInView={{
         opacity:1,
@@ -46,10 +54,9 @@ const BarPage = () => {
               <span className="text-xs text-white bg-green-500 px-2 py-0.5 rounded-full">New</span>
             </li>
           </ul>
-
           {/* Footer */}
           <div className='mt-4 border-t pt-3'>
-            <button className="flex items-center gap-2 text-red-500 hover:bg-red-50 w-full p-2 rounded">
+            <button onClick={handleLogout} className=" cursor-pointer  flex items-center gap-2 text-red-500 hover:bg-red-50 w-full p-2 rounded">
               <FaSignOutAlt /> Log Out
             </button>
           </div>
@@ -61,8 +68,8 @@ const BarPage = () => {
 
 
 const Homepage = () => {
-  var { hostpitaldata,docterdata } = useDocAuth();
-   const [isbutton,setisbutton] = useState()
+  var { hostpitaldata,docterdata,hostpitaldataworkspace } = useDocAuth();
+   const [isbutton,setisbutton] = useState("")
   useEffect(()=>{
    setisbutton(docterdata)
   },[docterdata])
@@ -87,7 +94,7 @@ const {id} = useParams()
           </div>
           <div className="flex items-center bg-gray-100 px-3 py-1 rounded-full gap-2 text-sm">
             <FaHospital />
-            <span>Your Hospital</span>
+            <span>{hostpitaldataworkspace?.hospitalName}</span>
           </div>
           <div className="flex items-center bg-gray-100 px-3 py-1 rounded-full gap-2 text-sm ml-2">
             <CiWarning className='text-red-700 text-xl' />

@@ -40,6 +40,8 @@ export const hostRgisters = async (req, res) => {
 export const docterhostpital = async (req, res) => {
   try {
     const docterId = req.docter?._id;
+    if(docterId){
+      
     const finHostpital = await hostRgister.find({}).populate("createdBy");
     const existingHospital = finHostpital.find(
       (host) => host.createdBy._id.toString() === docterId.toString()
@@ -49,6 +51,13 @@ export const docterhostpital = async (req, res) => {
       hostData: existingHospital,
       message: "data id Goted"
     })
+    }else{
+      return res.json({
+      success: false,
+      hostData: null,
+
+    })
+    }
   } catch (error) {
     console.log(error)
     res.json({

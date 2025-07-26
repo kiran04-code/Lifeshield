@@ -153,3 +153,18 @@ export const authdoc = async(req,res)=>{
     })
   }
 }
+
+
+export const DocterLogout = (req,res)=>{
+ try {
+    return res.clearCookie("Docter_user").json({
+    success:true,
+ })
+ } catch (error) {
+    console.log(error)
+    return res.json({
+        success:false,
+     message:error.message
+    })
+ }
+}

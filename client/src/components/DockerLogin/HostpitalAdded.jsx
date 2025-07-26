@@ -20,7 +20,6 @@ useEffect(() => {
     setNumber(docterdata.Number); // update when data is available
   }
 }, [docterdata]); // runs whenever docterdata changes
-  console.log(number)
   var [formData, setFormData] = useState({
     hospitalName: '',
     specialization: ''
@@ -46,6 +45,7 @@ useEffect(() => {
         console.error("Location access denied:", error);
       })
   }, [])
+  console.log(selecthostpital)
   useEffect(() => {
     const filterData = location.find((data, index) => data.properties.name === selecthostpital)
     setfilterhotspil(filterData)
@@ -97,6 +97,7 @@ useEffect(() => {
             <select
               className="w-full px-4 py-2 mb-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               onChange={handleChange}
+              onClick={(e) => setselecthostpital(e.target.value)}
               name="hospitalName"
               defaultValue=""
             >
@@ -104,10 +105,10 @@ useEffect(() => {
                 -- Select a hospital --
               </option>
               {location.map((data, index) => (
-                <option key={index} value={data.properties.name} onClick={() => setselecthostpital(data.properties.name)}>
+                <option key={index} value={data.properties.name} >
                   {data.properties.name}
                 </option>
-              ))}
+              ))} 
             </select>
             <input
               type="text"
@@ -124,15 +125,14 @@ useEffect(() => {
             <select
               className="w-full px-4 py-2 mb-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               onChange={handleChange}
+              onClick={(e) => setlocationsetting(e.target.value )}
               name="location"
               defaultValue=""
             >
               <option value="" disabled>
                 -- Select a hospital --
               </option>
-              <option onChange={handleChange} onClick={(e) => setlocationsetting(
-                `${filterHostpilat?.properties?.address_line1}-${filterHostpilat?.properties?.address_line2}`
-              )}
+              <option onChange={handleChange} 
                 value={`${filterHostpilat?.properties?.address_line1}-${filterHostpilat?.properties?.address_line2}`} >
                 {`${filterHostpilat?.properties?.address_line1}-${filterHostpilat?.properties?.address_line2}`}
               </option>

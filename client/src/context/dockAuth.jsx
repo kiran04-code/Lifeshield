@@ -5,8 +5,10 @@ const DocAuthContext = createContext(null);
 
 // Create the provider component
 export const DocAuthContextProvider = ({ children }) => {
-  const [docterdata,setDockterData] = useState({})
+  const [docterdata,setDockterData] = useState(null)
+
   const [hostpitaldata,sethostpitaldata] = useState(null)
+  const [hostpitaldataworkspace,sethostpitaldataworkspace] = useState(null)
   const  bakend_ulr = import.meta.env.VITE_BAKEND_URL
   axios.defaults.baseURL = bakend_ulr
   axios.defaults.withCredentials = true
@@ -15,7 +17,8 @@ export const DocAuthContextProvider = ({ children }) => {
   docterdata,
   setDockterData,
   hostpitaldata,
-  sethostpitaldata
+  sethostpitaldata,
+  hostpitaldataworkspace
   };
  const auth = async()=>{
     const {data} = await axios.get("/authdocter")
@@ -23,6 +26,13 @@ export const DocAuthContextProvider = ({ children }) => {
      setDockterData(data.userData)
     }
  }
+ const hotdataauth = async()=>{
+    const {data} = await axios.get("/getResterData")
+    if(data.success){
+     sethostpitaldataworkspace(data.hotData)
+    }
+ }
+ console.log(hostpitaldataworkspace)
  const hostAuth = async()=>{
  try {
   const {data} = await axios.get("/docterhostpital")
@@ -33,10 +43,12 @@ export const DocAuthContextProvider = ({ children }) => {
  console.log(error)
  }
  }
- console.log(hostpitaldata)
 useEffect(()=>{
 auth()
-},[])
+},[docterdata])
+useEffect(()=>{
+hotdataauth()
+},[docterdata])
 useEffect(()=>{
 hostAuth()
 },[docterdata])
