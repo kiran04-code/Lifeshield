@@ -5,7 +5,7 @@ const DocAuthContext = createContext(null);
 
 // Create the provider component
 export const DocAuthContextProvider = ({ children }) => {
-  const [docterdata,setDockterData] = useState(null)
+  const [docterdata,setDockterData] = useState({})
   const [hostpitaldata,sethostpitaldata] = useState(null)
   const  bakend_ulr = import.meta.env.VITE_BAKEND_URL
   axios.defaults.baseURL = bakend_ulr
@@ -26,7 +26,9 @@ export const DocAuthContextProvider = ({ children }) => {
  const hostAuth = async()=>{
  try {
   const {data} = await axios.get("/docterhostpital")
-  sethostpitaldata(data.hostData)
+  if (data?.hostData) {
+  sethostpitaldata(data.hostData);
+}
  } catch (error) {
  console.log(error)
  }

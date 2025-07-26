@@ -6,13 +6,13 @@ import { FaUser, FaStar, FaUserFriends, FaFileAlt, FaCalendarAlt, FaCoins, FaQue
 import { useDocAuth } from '../../../context/dockAuth';
 import { CiWarning } from "react-icons/ci";
 import { IoIosArrowDown } from "react-icons/io";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 const BarPage = () => {
     const {id} = useParams()
-    var {hostpitaldata} = useDocAuth()
+    var {hostpitaldata,docterdata} = useDocAuth()
   const [showMenu, setShowMenu] = useState(true); // Set to true for always visible (toggle optional)
 
   return (
@@ -61,9 +61,13 @@ const BarPage = () => {
 
 
 const Homepage = () => {
-  var { hostpitaldata } = useDocAuth();
+  var { hostpitaldata,docterdata } = useDocAuth();
+   const [isbutton,setisbutton] = useState()
+  useEffect(()=>{
+   setisbutton(docterdata)
+  },[docterdata])
   const [isOpen, setIsopen] = useState(false);
-
+const {id} = useParams()
   return (
     <div className=''>
       {/* Navbar */}
@@ -81,9 +85,6 @@ const Homepage = () => {
             <FaCalendarAlt />
             <span>{new Date().toDateString()}</span>
           </div>
-
-          <button className="bg-gray-100 px-2 py-1 rounded text-sm">Today</button>
-
           <div className="flex items-center bg-gray-100 px-3 py-1 rounded-full gap-2 text-sm">
             <FaHospital />
             <span>Your Hospital</span>
@@ -137,15 +138,20 @@ const Homepage = () => {
           <h1 className="text-3xl md:text-5xl font-bold text-gray-800 mb-4">
             Welcome to Lifeshield
           </h1>
-          <p className="text-gray-600 text-md md:text-xl mb-8">
+          {
+            isbutton.hotPitalRegisters === true ? <div><p className="text-gray-600 text-md md:text-xl mb-8">
+  Thank you for registering your hospital on our platform. Together, let's work toward making healthcare more efficient and vaccination tracking easier for everyone.
+</p>
+</div>:<div><p className="text-gray-600 text-md md:text-xl mb-8">
             Join our mission to make healthcare more accessible. Register your hospital today and help track vaccinations efficiently.
           </p>
           <Link
-            to="/DokcterdashBord/register-hospital"
+            to={`/DokcterdashBord/${id}/register-hospital`}
             className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-full transition shadow-lg"
           >
             Register Your Hospital
-          </Link>
+          </Link></div>
+          }
         </div>
         <footer className="mt-16 text-sm text-gray-500">
           &copy; {new Date().getFullYear()} Lifeshield. All rights reserved.

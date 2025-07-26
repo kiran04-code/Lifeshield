@@ -9,6 +9,10 @@ const DocterSchema = new mongoose.Schema({
         type:String,
         require:true,
     },
+      hotPitalRegisters:{
+        type:Boolean,
+        default:false
+    },
     otp:{
         type:Number,
     }

@@ -27,6 +27,6 @@ const hostpitalRegisterSchema = new mongoose.Schema({
     }
 })
 
-const hostRgister = mongoose.model.docter || mongoose.model("hostpitalRegister",hostpitalRegisterSchema)
+const hostRgister = mongoose.model.hostpitalRegister || mongoose.model("hostpitalRegister",hostpitalRegisterSchema)
 
 export default hostRgister
