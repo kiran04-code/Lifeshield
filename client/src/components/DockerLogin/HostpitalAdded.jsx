@@ -5,21 +5,33 @@ import { useDocAuth } from '../../context/dockAuth';
 import { useNavigate } from 'react-router-dom';
 import Loader3 from '../../utils/Loder3';
 import { useParams } from 'react-router-dom';
+import Loader from '../../utils/Loader';
 const HospitalRegisterForm = () => {
   const [location, setlocation] = useState([])
   const [filterHostpilat, setfilterhotspil] = useState([])
   const [selecthostpital, setselecthostpital] = useState('')
   const [locationseting, setlocationsetting] = useState('')
-  const {id} = useParams()
+  const [timeing, settime] = useState('')
+  const [village, setVillage] = useState('')
+  const [isloade, setloderr] = useState(false)
+  const [longitide, setLongitude] = useState();
+  const [latitude, setLatitude] = useState();
+
+  useEffect(() => {
+    console.log("Latitude:", latitude);
+    console.log("Longitude:", longitide);
+    console.log("Village:", village);
+  }, [latitude, longitide, village]);
+  const { id } = useParams()
   const [loader, setloader] = useState(false)
-  const { axios, docterdata,hostpitaldata } = useDocAuth()
+  const { axios, docterdata, hostpitaldata } = useDocAuth()
   const navigate = useNavigate()
-  const [number, setNumber] = useState(); // default to empty string
-useEffect(() => {
-  if (docterdata?.Number) {
-    setNumber(docterdata.Number); // update when data is available
-  }
-}, [docterdata]); // runs whenever docterdata changes
+  const [number, setNumber] = useState();
+  useEffect(() => {
+    if (docterdata?.Number) {
+      setNumber(docterdata.Number);
+    }
+  }, [docterdata]);
   var [formData, setFormData] = useState({
     hospitalName: '',
     specialization: ''
@@ -45,7 +57,6 @@ useEffect(() => {
         console.error("Location access denied:", error);
       })
   }, [])
-  console.log(selecthostpital)
   useEffect(() => {
     const filterData = location.find((data, index) => data.properties.name === selecthostpital)
     setfilterhotspil(filterData)
@@ -56,14 +67,16 @@ useEffect(() => {
   const hnadleCretaWorkSpace = async (e) => {
     try {
       e.preventDefault();
-      console.log('Submitted Hospital Data:', { formData });
-      const { data } = await axios.post("/createWrokSpace", {formData,locationseting,number})
+      setloderr(true)
+      const { data } = await axios.post("/createWrokSpace", { formData, locationseting, number, latitude, longitide, village, timeing })
       if (data.success) {
         toast.success(data.message)
-       navigate(`/DokcterdashBord/${id}`)
+        navigate(`/DokcterdashBord/${id}`)
+        setloderr(false)
       }
       else {
         toast.error(data.message)
+        setloderr(false)
       }
     } catch (error) {
       console.log(error)
@@ -108,7 +121,7 @@ useEffect(() => {
                 <option key={index} value={data.properties.name} >
                   {data.properties.name}
                 </option>
-              ))} 
+              ))}
             </select>
             <input
               type="text"
@@ -125,16 +138,23 @@ useEffect(() => {
             <select
               className="w-full px-4 py-2 mb-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               onChange={handleChange}
-              onClick={(e) => setlocationsetting(e.target.value )}
+
+              onClick={(e) => {
+                setLongitude(filterHostpilat.properties?.lon);
+                setLatitude(filterHostpilat.properties?.lat);
+                setVillage(filterHostpilat.properties?.village);
+                setlocationsetting(e.target.value)
+              }}
               name="location"
               defaultValue=""
             >
               <option value="" disabled>
                 -- Select a hospital --
               </option>
-              <option onChange={handleChange} 
+              <option onChange={handleChange}
+
                 value={`${filterHostpilat?.properties?.address_line1}-${filterHostpilat?.properties?.address_line2}`} >
-                {`${filterHostpilat?.properties?.address_line1}-${filterHostpilat?.properties?.address_line2}`}
+                {`${filterHostpilat?.properties?.address_line1}-${filterHostpilat?.properties?.address_line2} `}
               </option>
             </select>
             <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
@@ -159,27 +179,37 @@ useEffect(() => {
             />
           </div>
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Hospital Timings</label>
+            <div className="grid grid-cols-4 gap-2 bg-blue-100 p-4 rounded border">
+              {["7 hr", "9 hr", "12 hr", "3 hr", "6 hr", "10 hr", "18 hr", "24 hr"].map((time, index) => (
+                <label key={index} className="flex items-center space-x-2 text-sm">
+                  <input onClick={(e) => settime(e.target.value)} type="checkbox" name="timings" value={time} className="form-checkbox text-blue-500" />
+                  <span>{time}</span>
+                </label>
+              ))}
+            </div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Number</label>
             <input
               type="text"
               name="Number"
               value={docterdata?.Number}
-               onChange={()=>setNumber(docterdata?.Number)}
+              onChange={() => setNumber(docterdata?.Number)}
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
               placeholder="e.g. Cardiology, Pediatrics"
-              
+
             />
           </div>
-
           <button
             type="submit"
             className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition"
           >
-            Register Hospital
+            {
+              isloade ? <Loader /> : "Register Hospital"
+            }
           </button>
         </form>
-      </div>
-    </div>
+      </div >
+    </div >
   ) : <div className="w-full flex flex-col items-center mt-20 px-4">
     {/* Instruction Box */}
     <div className="w-full max-w-xl bg-blue-50 border-l-4 border-blue-700 text-blue-800 p-5 rounded-md shadow-md mb-6">

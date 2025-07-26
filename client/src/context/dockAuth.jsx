@@ -32,7 +32,6 @@ export const DocAuthContextProvider = ({ children }) => {
      sethostpitaldataworkspace(data.hotData)
     }
  }
- console.log(hostpitaldataworkspace)
  const hostAuth = async()=>{
  try {
   const {data} = await axios.get("/docterhostpital")

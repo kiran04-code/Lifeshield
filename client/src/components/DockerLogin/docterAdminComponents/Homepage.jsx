@@ -85,8 +85,8 @@ const {id} = useParams()
     </div>
       <div className=" hidden md:w-full bg-white shadow px-4 py-3 md:flex flex-wrap md:flex-nowrap items-center justify-between gap-3">
         {/* Left side */}
-        <div className="flex flex-wrap gap-4 items-center">
-          <h1 className="text-lg font-bold text-blue-600">LifeShield</h1>
+        <div className="flex flex-wrap gap-2 items-center">
+          {/* <h1 className="text-[12px] font-bold text-blue-600">LifeShield</h1> */}
 
           <div className="flex items-center gap-2 bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">
             <FaCalendarAlt />
@@ -146,7 +146,7 @@ const {id} = useParams()
             Welcome to Lifeshield
           </h1>
           {
-            isbutton.hotPitalRegisters === true ? <div><p className="text-gray-600 text-md md:text-xl mb-8">
+            isbutton?.hotPitalRegisters === true ? <div><p className="text-gray-600 text-md md:text-xl mb-8">
   Thank you for registering your hospital on our platform. Together, let's work toward making healthcare more efficient and vaccination tracking easier for everyone.
 </p>
 </div>:<div><p className="text-gray-600 text-md md:text-xl mb-8">

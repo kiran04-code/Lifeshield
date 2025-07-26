@@ -45,8 +45,7 @@ function App() {
     <BrowserRouter>
     <ToastContainer/>
       <Navbar />
-      <Routes>
-         
+      <Routes>    
         <Route path='/' element={<HomaPage />} />
         <Route path='/DokcterLogin' element={<DockerLogin/>} />
         <Route path='/hostpiyalshow' element={<HostShowPage/>} />

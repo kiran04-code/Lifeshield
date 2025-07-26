@@ -25,7 +25,6 @@ const LoginCreate = () => {
  try {
     const {data} = await axios.post("/Doclogin",fromsdata)
   if(data.success){
-    
       toast.success(data.message)
       setsignupOTP(true)
       isloder(false)
@@ -45,7 +44,7 @@ try {
     if(data.success){
         toast.success(data.message)
         setDockterData(data.useData)
-      navigate("/DokcterLogin/  ")
+      navigate("/DokcterLogin/CreateProfile")
     }
     else
     {
