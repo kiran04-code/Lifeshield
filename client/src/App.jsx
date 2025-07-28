@@ -37,6 +37,7 @@ import Report from './components/DockerLogin/docterAdminComponents/Report'
 import Patient from './components/DockerLogin/docterAdminComponents/Patient'
 import Profile from './components/DockerLogin/docterAdminComponents/Profile/Profile'
 import HospitalRegisterForm from './components/DockerLogin/HostpitalAdded'
+import VaccinationSlot from './components/BookSlotforUser/VaccinationSlot'
 
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
         </Route>
         {/*  ABOUTE THE BOOKING OR CREATE  SLOT  */}
         <Route path='/docter' element={<DocterPage />} />
+        <Route path='/hospital/:name/VaccinationSlot' element={<VaccinationSlot />} />
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/hospital/:name' element={<Hospitaldetail />} />
         <Route path='/login' element={<Login />} />

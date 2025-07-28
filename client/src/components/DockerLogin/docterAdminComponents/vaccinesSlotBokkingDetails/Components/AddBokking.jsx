@@ -8,11 +8,20 @@ const AddBokking = () => {
     const [add, setadd] = useState("New")
     const [from, setFrom] = useState('')
     const { axios, hostpitaldataworkspace } = useDocAuth()
+    
+   const handleonchnge = (e) => {
+  const { id, value } = e.target; // value is "14:30" for example
+  const [hour, minute] = value.split(":");
+  let h = parseInt(hour, 10);
+  console.log(h)
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12 || 12;
+  const formattedTime = `${h}:${minute} ${ampm}`;
 
-    const handleonchnge = (e) => {
-        const { id, value } = e.target
-        setFrom({ ...from, [id]: value })
-    }
+  setFrom({ ...from, [id]: formattedTime });
+  console.log(from)
+};
+
     const handleSendTotime = async (e) => {
         e.preventDefault()
         try {
@@ -29,10 +38,10 @@ const AddBokking = () => {
     }
 
     return (
-        <div className={`w-[400px] h-[300px] ${add === "New" ? "justify-between" : null} flex flex-col bg-gray-100 shadow-xl rounded-lg border-blue-300 border p-4 space-y-4`}>
+        <div className={`w-[280px] h-[300px] ${add === "New" ? "justify-between" : null} flex flex-col bg-gray-100 shadow-xl rounded-lg border-blue-300 border p-4 space-y-4`}>
             <div className="flex items-center space-x-2 bg-blue-500 p-2 text-white rounded-2xl justify-evenly ">
-                <button onClick={() => setadd("New")} className="bg-gray-100 text-blue-500 px-4 py-1 rounded-xl text-sm font-semibold">+ New</button>
-                <button onClick={() => setadd("book")} className="bg-gray-100 py-1  text-sm text-blue-500 px-3 rounded-xl">Your Booking Timing</button>
+                <button onClick={() => setadd("New")} className="bg-gray-100 text-blue-500 px-4 py-1 rounded-xl text-sm font-semibold  cursor-pointer  ">+ New</button>
+                <button onClick={() => setadd("book")} className="bg-gray-100 py-1  text-sm text-blue-500 px-3 rounded-xl cursor-pointer">Your Booking Timing</button>
             </div>
             {
                 add === "New" ? <div>
@@ -66,17 +75,17 @@ const AddBokking = () => {
                             </div>
                         </div>
 
-                        <button type='submit' className="w-full mt-4 bg-blue-600 text-white py-2 rounded-md flex items-center justify-center gap-2 cursor-pointer">
+                        <button type='submit' className=" w-full mt-4 bg-blue-600 text-white py-2 rounded-md flex items-center justify-center gap-2 cursor-pointer">
                             Add Time
                         </button>
 
                     </form> </div> : <div className="w-full space-y-2">
                     {/* Title */}
-                    <h2 className="text-lg font-semibold text-gray-800">Your Booking Time</h2>
+                    <h2 className="text-lg font-semibold text-gray-800 cursor-pointer">Your Booking Time</h2>
 
                     {/* Slot display (dynamic or placeholder) */}
                     <div className="flex bg-blue-500 items-center px-3 py-2 rounded-md">
-                        <div className="text-sm text-white">{hostpitaldataworkspace.fromTime}AM To  {hostpitaldataworkspace.toTime}PM</div> {/* Replace with dynamic value */}
+                        <div className="text-sm text-white">{hostpitaldataworkspace.fromTime} To  {hostpitaldataworkspace.toTime}</div> {/* Replace with dynamic value */}
                     </div>
                 </div>
 

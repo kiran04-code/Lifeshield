@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { data, useParams } from 'react-router-dom'
+import { data, useNavigate, useParams } from 'react-router-dom'
 import { hospitalDetailss } from '../../../assets/assets'
 import Loader2 from '../../../utils/Loader2'
 import { FaLocationDot } from "react-icons/fa6";
@@ -10,6 +10,7 @@ const Hospitaldetail = () => {
   const [filterdata, setFilterData] = useState([])
   const { axios } = useDocAuth()
   const { name } = useParams()
+  const navigate = useNavigate()
    useEffect(() => {
     if (!name || hostpitalData.length === 0) return;
 
@@ -70,8 +71,8 @@ const Hospitaldetail = () => {
               {/* Book Button */}
               <div className="flex justify-end">
                 <button
-                  className="mt-4 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                  onClick={() => handleBooking(data._id)}
+                  className="mt-4 px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                  onClick={() =>navigate(`/hospital/${name}/VaccinationSlot`)}
                 >
                   Book Vaccination Slot
                 </button>
