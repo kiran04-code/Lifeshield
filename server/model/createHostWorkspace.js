@@ -1,44 +1,59 @@
 import mongoose from "mongoose";
 
 const hostpitalSchema = new mongoose.Schema({
-    hospitalName:{
-        type:String,
-        require:true,
+    hospitalName: {
+        type: String,
+        require: true,
     },
-    location:{
-        type:String,
-        require:true,
+    location: {
+        type: String,
+        require: true,
     },
-    specialization:{
-        type:String,
-        require:true
+    specialization: {
+        type: String,
+        require: true
     },
-    Number:{
+    Number: {
+        type: Number,
+        require: true,
+    },
+    lat: {
+        type: Number,
+        require: true
+    },
+    lon: {
+        type: Number,
+        require: true
+    },
+    village: {
+        type: String,
+        require: true
+    },
+    timeopne: {
+        type: String,
+        require: true
+    },
+    fromTime: {
+        type: String,
+        require: true
+    },
+    toTime: {
+        type: String,
+        require: true
+    },
+    MeetingAvialbleTime:{
+        type:Array,
+        default:[]
+    },
+    MeetingPrice:{
         type:Number,
-        require:true,
     },
-    lat:{
-        type:Number,
-        require:true
-    },
-    lon:{
-        type:Number,
-        require:true
-    },
-    village:{
-        type:String,
-        require:true
-    },
-    timeopne:{
-        type:String,
-        require:true
-    },
-   profileId:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"docter"
-   }
+    profileId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "docter"
+    }
 })
 
-const hostWrokSpaces = mongoose.model.hostWrokSpace || mongoose.model("hostWrokSpace",hostpitalSchema)
+const hostWrokSpaces = mongoose.model.hostWrokSpace || mongoose.model("hostWrokSpace", hostpitalSchema)
 
 export default hostWrokSpaces

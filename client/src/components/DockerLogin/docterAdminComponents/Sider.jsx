@@ -10,7 +10,7 @@ const Sider = () => {
     const sidebarLinks = [
         { name: `DokcterdashBord`, path: `/DokcterdashBord/${id}`, icon: <FaUserMd className="w-5 h-5" /> },
         { name: "Meeting Appointments", path: `/DokcterdashBord/${id}/patient `, icon: <IoVideocamOutline className="w-5 h-5" /> },
-        { name: "Vaccine Appointments", path: `/DokcterdashBord/${id}/Appointments `, icon: <MdOutlineVaccines className="w-5 h-5" /> },
+        { name: "Vaccine Appointments", path: `/DokcterdashBord/${id}/Appointments`, icon: <MdOutlineVaccines className="w-5 h-5" /> },
         // { name: "Chat", path: `/DokcterdashBord/${id}/Chat`, icon: <FaComments className="w-5 h-5" /> },
         // { name: "Reports", path: `/DokcterdashBord/${id}/Reports`, icon: <FaRegChartBar className="w-5 h-5" /> },
     ];

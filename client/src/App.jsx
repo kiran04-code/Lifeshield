@@ -36,8 +36,8 @@ import Chat from './components/DockerLogin/docterAdminComponents/Chat'
 import Report from './components/DockerLogin/docterAdminComponents/Report'
 import Patient from './components/DockerLogin/docterAdminComponents/Patient'
 import Profile from './components/DockerLogin/docterAdminComponents/Profile/Profile'
-import HostpitalAdded from './components/DockerLogin/HostpitalAdded'
 import HospitalRegisterForm from './components/DockerLogin/HostpitalAdded'
+
 
 function App() {
   const {User} = useAuth()
@@ -60,11 +60,11 @@ function App() {
         <Route path='/DokcterdashBord/:id/Reports' element={<Report/>}/>
         <Route path='/DokcterdashBord/:id/Appointments' element={<Appoinments/>}/>
         </Route>
+        {/*  ABOUTE THE BOOKING OR CREATE  SLOT  */}
         <Route path='/docter' element={<DocterPage />} />
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/hospital/:name' element={<Hospitaldetail />} />
         <Route path='/login' element={<Login />} />
-        
          <Route path='/profile' element={<ProtectedRoute />} >
          <Route index element={<UserInfo/>} />
          <Route path='SlotInfo' element={<SlotInfo/>} />

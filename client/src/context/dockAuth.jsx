@@ -6,7 +6,6 @@ const DocAuthContext = createContext(null);
 // Create the provider component
 export const DocAuthContextProvider = ({ children }) => {
   const [docterdata,setDockterData] = useState(null)
-
   const [hostpitaldata,sethostpitaldata] = useState(null)
   const [hostpitaldataworkspace,sethostpitaldataworkspace] = useState(null)
   const  bakend_ulr = import.meta.env.VITE_BAKEND_URL

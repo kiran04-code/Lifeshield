@@ -91,3 +91,21 @@ export const findAllHostpital = async(req,res)=>{
     console.log(error)
   }
 }
+
+export const upadeteHostbookingTime = async(req,res)=>{
+    try {
+        const {fromTime,toTime} = req.body
+        const id = req.docter?._id
+        const existingHospitalregiter = await hostWrokSpaces.find({}).populate('profileId')
+        const dataa = existingHospitalregiter.find((data)=>data.profileId._id.toString()===  id.toString())
+         dataa.fromTime = fromTime
+         dataa.toTime = toTime
+        await dataa.save()
+        res.json({
+            success:true,
+            message:"Time Added"
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
