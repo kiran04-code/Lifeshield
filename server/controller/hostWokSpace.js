@@ -109,3 +109,20 @@ export const upadeteHostbookingTime = async (req, res) => {
         console.log(error)
     }
 }
+
+export const findHostpitalAndBakeVrfy = async (req, res) => {
+    try {
+        const {vale,id}= req.body
+        await hostWrokSpaces.findByIdAndUpdate(id,{verify:vale})
+        return res.json({
+            success:true,
+            message:"Hospital Verify"
+        })
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            success: false,
+            message: error.message
+        })
+    }
+}

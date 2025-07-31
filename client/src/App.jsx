@@ -71,7 +71,7 @@ function App() {
         <Route path='/DokcterdashBord/:id/Appointments' element={<Appoinments/>}/>
         </Route>
           {/*  verfy page */}
-        <Route path='/verfyDocter' element={<Vefypage/>} />
+        <Route path='/DokcterdashBord/:id/docter/verfyDocter' element={<Vefypage/>} />
         {/*  ABOUTE THE BOOKING OR CREATE  SLOT  */}
         <Route path='/docter' element={<DocterPage />} />
         <Route path='/lifeshield/admin' element={<Admin />} />

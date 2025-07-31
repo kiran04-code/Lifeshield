@@ -5,8 +5,9 @@ export const hostRgisters = async (req, res) => {
     const id = req.docter?._id
     const finHostpital = await hostRgister.find({}).populate("createdBy");
     const existingHospital = finHostpital.find(
-      (host) => host.createdBy._id.toString() === id.toString()
+      (host) => host.createdBy?._id.toString() === id.toString()
     );
+    console.log(existingHospital)
     if (existingHospital) {
       return res.json({
         success: false,
@@ -40,10 +41,9 @@ export const docterhostpital = async (req, res) => {
   try {
     const docterId = req.docter?._id;
     if(docterId){
-      
     const finHostpital = await hostRgister.find({}).populate("createdBy");
     const existingHospital = finHostpital.find(
-      (host) => host.createdBy._id.toString() === docterId.toString()
+      (host) => host.createdBy?._id.toString() === docterId.toString()
     );
     return res.json({
       success: true,

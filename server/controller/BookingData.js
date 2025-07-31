@@ -54,7 +54,7 @@ export const BookingDataForDockter = async(req,res)=>{
         const existingHospitalregiter = await hostWrokSpaces.find({}).populate('profileId')
         const filterdata = existingHospitalregiter.find((data)=>data.profileId._id.toString() === id.toString())
        const finDBookedSlot = await BookingSlots.find({}).populate("UsercreatedBy").populate("hostId")
-       const lastBookingData = finDBookedSlot.filter((data)=>data.hostId._id.toString()=== filterdata._id.toString())
+       const lastBookingData = finDBookedSlot.filter((data)=>data.hostId?._id.toString()=== filterdata._id.toString())
        return res.json({
         success:true,
         BookingData:lastBookingData

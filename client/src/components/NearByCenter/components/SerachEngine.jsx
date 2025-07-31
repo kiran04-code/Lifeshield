@@ -56,7 +56,7 @@ const SerachEngine = () => {
             ))
           } */}
           <option value="Katraj">Katraj</option>
-          <option value="kondhwa">kondhwa </option>
+          <option value="Kondhwa Budruk">kondhwa </option>
         </select>
       </div>
 

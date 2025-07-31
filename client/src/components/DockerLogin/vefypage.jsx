@@ -1,21 +1,20 @@
 'use client'
 import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import Loader3 from '../../utils/Loder3';
 import Loader2 from '../../utils/Loader2';
 import Loader from '../../utils/Loader';
+import { useDocAuth } from '../../context/dockAuth';
 
 const VerifyPage = () => {
+  const {hostpitaldataworkspace} = useDocAuth()
   const navigate = useNavigate();
-  const { id } = useParams(); // assuming /verify/:id route
-
-  useEffect(()=>{
-  const timeer =   setTimeout(()=>{
-        navigate(`/DokcterdashBord/${id}`);
-    })
-    return ()=>clearTimeout(timeer)
-},[id,navigate]);
-
+    const { id } = useParams()
+   console.log(id)
+  if(hostpitaldataworkspace?.verify=== true){
+    navigate(`/DokcterdashBord/${id}`)
+  }
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 px-4">
       <div className="bg-white shadow-xl rounded-2xl p-8 max-w-xl text-center">

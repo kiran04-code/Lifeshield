@@ -7,7 +7,7 @@ const SlotInfo = () => {
   const {axios} = useAuth()
   const getBookedData = async()=>{
     setloader(false)
-    const {data} = await axios.get("findBookedSlot")
+    const {data} = await axios.get("/findBookedSlot")
     setBookData(data.bookedData)
     setloader(true)
   }

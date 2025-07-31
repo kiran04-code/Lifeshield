@@ -17,15 +17,10 @@ const HospitalRegisterForm = () => {
   const [longitide, setLongitude] = useState();
   const [latitude, setLatitude] = useState();
 
-  useEffect(() => {
-    console.log("Latitude:", latitude);
-    console.log("Longitude:", longitide);
-    console.log("Village:", village);
-  }, [latitude, longitide, village]);
   const { id } = useParams()
   const [loader, setloader] = useState(false)
   const { axios, docterdata, hostpitaldata } = useDocAuth()
-  const navigate = useNavigate()
+  const navigates = useNavigate()
   const [number, setNumber] = useState();
   useEffect(() => {
     if (docterdata?.Number) {
@@ -71,7 +66,7 @@ const HospitalRegisterForm = () => {
       const { data } = await axios.post("/createWrokSpace", { formData, locationseting, number, latitude, longitide, village, timeing })
       if (data.success) {
         toast.success(data.message)
-        navigate(`/verfyDocter`)
+        navigates(`/DokcterdashBord/${id}/docter/verfyDocter`)
         setloderr(false)
       }
       else {

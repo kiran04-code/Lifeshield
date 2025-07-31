@@ -23,10 +23,9 @@ export const signup = async (req, res) => {
 
             const token = createToken(data)
             res.cookie("token_user", token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === "production", // must be true in prod
-                sameSite: "Strict", // or "Lax" or "None" (if cross-site)
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+                httpOnly: true,       // Prevents client-side JavaScript from accessing the cookie
+                secure: true,         // Ensures cookie is sent only over HTTPS
+                sameSite: "none",
             }).json({
                 success: true,
                 message: "User Login successfully!",
@@ -86,10 +85,9 @@ export const verify = async (req, res) => {
             const token = createToken(findUserr)
 
             res.cookie("token_user", token, {
-                httpOnly: true,
-                secure: "production", // must be true in prod
-                sameSite: "Strict", // or "Lax" or "None" (if cross-site)
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+                httpOnly: true,       // Prevents client-side JavaScript from accessing the cookie
+                secure: true,         // Ensures cookie is sent only over HTTPS
+                sameSite: "none",
             })
                 .json({
                     success: true,

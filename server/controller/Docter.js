@@ -117,10 +117,9 @@ export const loginVrfy = async (req, res) => {
                 findUser.save()
             const token = createTokenforDocter(findUser)
             return res.cookie("Docter_user", token, {
-                httpOnly: true,
-                secure:"production", // must be true in prod
-                sameSite: "Strict", // or "Lax" or "None" (if cross-site)
-                maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+               httpOnly: true,       // Prevents client-side JavaScript from accessing the cookie
+        secure: true,         // Ensures cookie is sent only over HTTPS
+        sameSite: "none",
             }).json({
                 success: true,
                 message: " User Login successfully!",

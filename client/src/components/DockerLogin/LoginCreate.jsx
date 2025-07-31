@@ -86,7 +86,6 @@ const LoginCreate = () => {
                 setDockterData(data.userData)
                 isloder(false)
                 navigate("/hostpiyalshow")
-
             }
             else {
                 toast.error(data.message)
