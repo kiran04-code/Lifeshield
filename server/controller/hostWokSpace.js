@@ -1,7 +1,7 @@
 import hostWrokSpaces from "../model/createHostWorkspace.js";
 import Docter from "../model/Docter.js";
 export const createWrokSpace = async (req, res) => {
-    const { formData, locationseting, number,latitude, longitide,village,timeing} = req.body
+    const { formData, locationseting, number, latitude, longitide, village, timeing } = req.body
     try {
         const id = req.docter?._id
         const adres = locationseting
@@ -26,10 +26,10 @@ export const createWrokSpace = async (req, res) => {
                 specialization: formData.specialization,
                 Number: number,
                 profileId: id,
-                lat:latitude,
-                lon:longitide,
-                village:village,
-                timeopne:timeing
+                lat: latitude,
+                lon: longitide,
+                village: village,
+                timeopne: timeing
 
             })
             const datas = await Docter.findById(id);
@@ -38,7 +38,7 @@ export const createWrokSpace = async (req, res) => {
                 return;
             }
             datas.hotPitalRegisters = true;
-            await datas.save(); 
+            await datas.save();
             res.json({
                 success: true,
                 message: "HostPital Register SucessFull!"
@@ -53,57 +53,57 @@ export const createWrokSpace = async (req, res) => {
     }
 }
 
-export const getResterData = async(req,res)=>{
+export const getResterData = async (req, res) => {
     try {
         const id = req.docter?._id
 
-        if(id){
- const existingHospitalregiter = await hostWrokSpaces.find({}).populate('profileId')
-        const dataa = existingHospitalregiter.find((data)=>data.profileId._id.toString()===  id.toString())
-        return res.json({
-            success:true,
-            hotData:dataa
-        })
-        }else{
-        return res.json({
-            success:true,
-            hotData:null
-        })
+        if (id) {
+            const existingHospitalregiter = await hostWrokSpaces.find({}).populate('profileId')
+            const dataa = existingHospitalregiter.find((data) => data.profileId._id.toString() === id.toString())
+            return res.json({
+                success: true,
+                hotData: dataa
+            })
+        } else {
+            return res.json({
+                success: true,
+                hotData: null
+            })
         }
-       
+
     } catch (error) {
         console.log(error)
         return res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
         })
     }
 }
 
-export const findAllHostpital = async(req,res)=>{
-  try {
-    const finaLLhospital = await hostWrokSpaces.find({})
-    res.json({
-        success:true,
-        hotData:finaLLhospital
-    })
-  } catch (error) {
-    console.log(error)
-  }
+export const findAllHostpital = async (req, res) => {
+    try {
+        const finaLLhospital = await hostWrokSpaces.find({}).populate('profileId')
+        res.json({
+            success: true,
+            hotData: finaLLhospital
+        })
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-export const upadeteHostbookingTime = async(req,res)=>{
+export const upadeteHostbookingTime = async (req, res) => {
     try {
-        const {fromTime,toTime} = req.body
+        const { fromTime, toTime } = req.body
         const id = req.docter?._id
         const existingHospitalregiter = await hostWrokSpaces.find({}).populate('profileId')
-        const dataa = existingHospitalregiter.find((data)=>data.profileId._id.toString()===  id.toString())
-         dataa.fromTime = fromTime
-         dataa.toTime = toTime
+        const dataa = existingHospitalregiter.find((data) => data.profileId._id.toString() === id.toString())
+        dataa.fromTime = fromTime
+        dataa.toTime = toTime
         await dataa.save()
         res.json({
-            success:true,
-            message:"Time Added"
+            success: true,
+            message: "Time Added"
         })
     } catch (error) {
         console.log(error)

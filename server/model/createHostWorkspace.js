@@ -51,7 +51,12 @@ const hostpitalSchema = new mongoose.Schema({
     profileId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "docter"
+    },
+    verify:{
+        type:Boolean,
+        default:false
     }
+
 })
 
 const hostWrokSpaces = mongoose.model.hostWrokSpace || mongoose.model("hostWrokSpace", hostpitalSchema)

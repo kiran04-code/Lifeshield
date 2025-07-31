@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import HomaPage from './pages/HomaPage'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -38,15 +38,24 @@ import Patient from './components/DockerLogin/docterAdminComponents/Patient'
 import Profile from './components/DockerLogin/docterAdminComponents/Profile/Profile'
 import HospitalRegisterForm from './components/DockerLogin/HostpitalAdded'
 import VaccinationSlot from './components/BookSlotforUser/VaccinationSlot'
+import Admin from './LifeshieldAdmin/Admin'
+import Vefypage from './components/DockerLogin/vefypage'
 
 
 function App() {
   const {User} = useAuth()
+ const isAdmin = location.pathname === '/lifeshield/admin';
+ console.log(isAdmin)
   return (
+    
     <BrowserRouter>
     <ToastContainer/>
-      <Navbar />
-      <Routes>    
+    
+    {
+      isAdmin ? null:<Navbar/>
+    }
+      <Routes>  
+       
         <Route path='/' element={<HomaPage />} />
         <Route path='/DokcterLogin' element={<DockerLogin/>} />
         <Route path='/hostpiyalshow' element={<HostShowPage/>} />
@@ -61,8 +70,11 @@ function App() {
         <Route path='/DokcterdashBord/:id/Reports' element={<Report/>}/>
         <Route path='/DokcterdashBord/:id/Appointments' element={<Appoinments/>}/>
         </Route>
+          {/*  verfy page */}
+        <Route path='/verfyDocter' element={<Vefypage/>} />
         {/*  ABOUTE THE BOOKING OR CREATE  SLOT  */}
         <Route path='/docter' element={<DocterPage />} />
+        <Route path='/lifeshield/admin' element={<Admin />} />
         <Route path='/hospital/:name/VaccinationSlot' element={<VaccinationSlot />} />
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/hospital/:name' element={<Hospitaldetail />} />
@@ -78,7 +90,9 @@ function App() {
   
         </Route>
       </Routes>
-      <Footer />
+     {
+      isAdmin ? null:<Footer/>
+    }
       
     </BrowserRouter>
   )

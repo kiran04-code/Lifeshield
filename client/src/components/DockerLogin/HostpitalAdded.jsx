@@ -71,7 +71,7 @@ const HospitalRegisterForm = () => {
       const { data } = await axios.post("/createWrokSpace", { formData, locationseting, number, latitude, longitide, village, timeing })
       if (data.success) {
         toast.success(data.message)
-        navigate(`/DokcterdashBord/${id}`)
+        navigate(`/verfyDocter`)
         setloderr(false)
       }
       else {
