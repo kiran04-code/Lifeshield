@@ -3,7 +3,10 @@ import { CiHospital1 } from "react-icons/ci";
 import { RiParentFill } from "react-icons/ri";
 import { FaHeartCirclePlus } from "react-icons/fa6";
 import { motion } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 const HeroSection = () => {
+
+    const navigate = useNavigate()
     return (
         <div className='w-full bg-[#E0EAFF] h-screen md:flex'>
             <div>
@@ -33,13 +36,13 @@ const HeroSection = () => {
                 <div className='flex md:px-8  px-3 py-2'>
                     <div className='  flex gap-5 bg-[#322bff7a] p-6 items-center justify-centere py-2  rounded-full md:w-70 w-80  '>
                         <div className='flex justify-between items-center flex-col'>
-                            <div className='md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex  p-2 rounded-full   border-2 border-[#6552E3] justify-center items-center'>
+                            <div onClick={()=>navigate("/parent")} className=' cursor-pointer  md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex  p-2 rounded-full   border-2 border-[#6552E3] justify-center items-center'>
                                 <CiHospital1 className='text-2xl  text-[#5039e2]' />
                             </div>
                          <p>Hospitals & Doctors</p>
                         </div>
                         <div className='flex justify-between items-center flex-col'>
-                            <div className='md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex p-2 rounded-full  border-2 border-[#6552E3] justify-center items-center'>
+                            <div onClick={()=>navigate("/docter")} className=' cursor-pointer  md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex p-2 rounded-full  border-2 border-[#6552E3] justify-center items-center'>
                                 <RiParentFill className='text-2xl  text-[#6552E3]' />
                             </div>
                             <p>Parents</p>
