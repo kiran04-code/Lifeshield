@@ -41,16 +41,29 @@ const hostpitalSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    MeetingAvialbleTime:{
-        type:Array,
-        default:[]
+   MeetingAvialbleTimeandpakcage: [
+  {
+    time: {
+      type: String,
+      required: true
     },
+    price: {
+      type: Number,
+      required: true
+    }
+  }
+],
+
     MeetingPrice:{
         type:Number,
     },
     profileId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "docter"
+    },
+    vcallONOff:{
+        type:Boolean,
+        default:false
     },
     verify:{
         type:Boolean,

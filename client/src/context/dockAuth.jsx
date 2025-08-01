@@ -11,14 +11,7 @@ export const DocAuthContextProvider = ({ children }) => {
   const  bakend_ulr = import.meta.env.VITE_BAKEND_URL
   axios.defaults.baseURL = bakend_ulr
   axios.defaults.withCredentials = true
-  const value = {
-  axios, 
-  docterdata,
-  setDockterData,
-  hostpitaldata,
-  sethostpitaldata,
-  hostpitaldataworkspace
-  };
+
  const auth = async()=>{
     const {data} = await axios.get("/authdocter")
     if(data.success){
@@ -50,6 +43,16 @@ hotdataauth()
 useEffect(()=>{
 hostAuth()
 },[docterdata])
+
+  const value = {
+  axios, 
+  docterdata,
+  setDockterData,
+  hostpitaldata,
+  sethostpitaldata,
+  hostpitaldataworkspace,
+  hotdataauth
+  };
   return (
     <DocAuthContext.Provider value={value}>
       {children}

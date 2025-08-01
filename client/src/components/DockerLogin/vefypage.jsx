@@ -11,7 +11,6 @@ const VerifyPage = () => {
   const {hostpitaldataworkspace} = useDocAuth()
   const navigate = useNavigate();
     const { id } = useParams()
-   console.log(id)
   if(hostpitaldataworkspace?.verify=== true){
     navigate(`/DokcterdashBord/${id}`)
   }

@@ -112,11 +112,11 @@ export const upadeteHostbookingTime = async (req, res) => {
 
 export const findHostpitalAndBakeVrfy = async (req, res) => {
     try {
-        const {vale,id}= req.body
-        await hostWrokSpaces.findByIdAndUpdate(id,{verify:vale})
+        const { vale, id } = req.body
+        await hostWrokSpaces.findByIdAndUpdate(id, { verify: vale })
         return res.json({
-            success:true,
-            message:"Hospital Verify"
+            success: true,
+            message: "Hospital Verify"
         })
     } catch (error) {
         console.log(error)
@@ -124,5 +124,69 @@ export const findHostpitalAndBakeVrfy = async (req, res) => {
             success: false,
             message: error.message
         })
+    }
+}
+
+export const startCunstacyService = async (req, res) => {
+    try {
+
+        const { value } = req.body
+        const id = req.docter?._id
+        const finWokePlace = await hostWrokSpaces.find({}).populate("profileId")
+        const filterUserhotpital = finWokePlace.find((data) => data.profileId?._id.toString() === id.toString())
+        await hostWrokSpaces.findByIdAndUpdate(filterUserhotpital._id, { vcallONOff: value })
+        return req.jspn({
+            success: true,
+            message: "SucessFull to Enable to Video call Cunsultancy"
+        })
+    } catch (error) {
+
+    }
+}
+
+export const createTHePackage = async (req, res) => {
+    try {
+        console.log(req.body)
+        const { time, price } = req.body
+        const Price = Number(price)
+        const id = req.docter?._id
+        const finWokePlace = await hostWrokSpaces.find({}).populate("profileId")
+        const filterUserhotpital = finWokePlace.find((data) => data.profileId?._id.toString() === id.toString())
+
+        if (!filterUserhotpital) {
+            return res.status(404).json({ message: "Workspace not found for this doctor." });
+        }
+
+        filterUserhotpital.MeetingAvialbleTimeandpakcage.push({
+            time,
+            price: Price
+        })
+        await filterUserhotpital.save()
+        res.json({
+            success: true,
+            message: "Package created"
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const deletePackage = async (req, res) => {
+    try {
+        const { ids } = req.body
+        const doctorId = req.docter?._id
+        const filterUserhotpital = await hostWrokSpaces.findOne({ profileId: doctorId });
+        if (!filterUserhotpital) {
+            return res.status(404).json({ message: "Hospital not found" });
+        }
+        filterUserhotpital.MeetingAvialbleTimeandpakcage = filterUserhotpital.MeetingAvialbleTimeandpakcage.filter(
+            (data) => data?._id.toString() !== ids.toString())
+        await filterUserhotpital.save()
+        return res.json({
+            success: true,
+            message: "Package deleted successfully."
+        })
+    } catch (error) {
+
     }
 }
