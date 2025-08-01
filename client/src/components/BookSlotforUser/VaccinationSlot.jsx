@@ -6,13 +6,16 @@ import { toast } from 'react-toastify'
 import { FaCheckToSlot } from "react-icons/fa6";
 import { TbMoneybag } from "react-icons/tb";
 import { MdAccessTime } from "react-icons/md";
+import { Handler } from 'leaflet'
 
 const VaccinationSlot = () => {
     const { name } = useParams()
     const { axios } = useDocAuth()
     const [hostpitalData, setFilterData] = useState([])
     const [names, setname] = useState('')
-    const [prices, seTPrices] = useState('')
+    const [prices, seTPrices] = useState()
+    const [duartion, setDuraion] = useState()
+    const [hotPitalId, setHotpitalId] = useState('')
     const [docterDta, setDocterData] = useState([])
     const [hostpitalDatas, sethostpital] = useState([])
     const navigate = useNavigate()
@@ -31,8 +34,6 @@ const VaccinationSlot = () => {
         setname(name)
         const filtered = hostpitalDatas.filter((data) => data._id === name);
         setFilterData(filtered);
-
-
     }, [hostpitalDatas]);
     useEffect(() => {
         const fetchAllData = async () => {
@@ -73,9 +74,50 @@ const VaccinationSlot = () => {
     }
     const BookedSlot = async (e) => {
         e.preventDefault()
+        console.log(hotPitalId)
         try {
-            const { data } = await axios.post("/BookMeetingSlot", { price: prices })
-            console.log(data)
+            if (!prices) {
+                return toast.error("Selecte First Package and Slot ")
+            }
+            const { data: { order } } = await axios.post("/BookMeetingSlot", { price: prices })
+            const { data: { key } } = await axios("/apikeyRazorpay")
+            const options = {
+                key: key,
+                amount: order.amount,
+                currency: 'INR',
+                name: User.fullName,
+                description: 'Test Transaction',
+                order_id: order.id,
+                handler: async function (response) {
+                    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = response
+                    const payload = {
+                        razorpay_payment_id,
+                        razorpay_order_id,
+                        razorpay_signature,
+                        id: hotPitalId,
+                        prices,
+                        duartion,
+
+                    }
+                    const { data } = await axios.post("/payment-success", payload)
+                    console.log(data)
+                    if (data.seccess) {
+                        toast.success(data, message)
+                        navigate("/profile")
+                    }
+                },
+                prefill: {
+                    name: User.fullName,
+                    email: User.email,
+                    contact: User.Number
+                },
+                theme: {
+                    color: '#4FBF8B'
+                },
+
+            };
+            const rzp = new window.Razorpay(options);
+            rzp.open();
         } catch (error) {
             console.log(error)
         }
@@ -198,8 +240,6 @@ const VaccinationSlot = () => {
                                     <div className="flex items-center gap-2">
 
                                         <span className='flex justify-center items-center gap-1 p-1 '>  <TbMoneybag /><strong>Price:</strong>
-
-
                                             {
                                                 data.MeetingAvialbleTimeandpakcage.map((daa) => (
                                                     <div className=' gap-1 '>
@@ -235,7 +275,7 @@ const VaccinationSlot = () => {
                                         <option>Morning</option>
                                         <option>Evening</option>
                                     </select>
-                                    <select  onClick={(e)=>seTPrices(e.target.value)}   className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                    <select onClick={(e) => seTPrices(e.target.value)} className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
                                         <option>Select Package </option>
                                         {
                                             data.MeetingAvialbleTimeandpakcage.map((daa) => (
@@ -247,11 +287,25 @@ const VaccinationSlot = () => {
                                             )
                                         }
                                     </select>
+                                    <select onClick={(e) => setDuraion(e.target.value)} className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                        <option>Select Time </option>
+                                        {
+                                            data.MeetingAvialbleTimeandpakcage.map((daa) => (
+
+                                                <option value={daa.duartion}>{daa.time}</option>
+
+                                            )
+
+                                            )
+                                        }
+                                    </select>
 
 
                                     <button
 
                                         type='submit'
+                                        onClick={() => setHotpitalId(data?._id)}
+
                                         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-semibold"
                                     >
                                         Book Slot

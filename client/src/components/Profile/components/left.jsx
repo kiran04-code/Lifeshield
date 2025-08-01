@@ -15,6 +15,11 @@ const Left = () => {
     name:"Booking Slot",
     icons:<LuTicketCheck  className='text-xl'/>,
     link:"SlotInfo"
+ },
+ {
+    name:"Meet Booking Detail",
+    icons:<LuTicketCheck  className='text-xl'/>,
+    link:"meetBooking"
  }
 
     ]

@@ -40,6 +40,7 @@ import HospitalRegisterForm from './components/DockerLogin/HostpitalAdded'
 import VaccinationSlot from './components/BookSlotforUser/VaccinationSlot'
 import Admin from './LifeshieldAdmin/Admin'
 import Vefypage from './components/DockerLogin/vefypage'
+import MeetBooking from './components/Profile/components/meetBooking'
 
 
 function App() {
@@ -79,9 +80,11 @@ function App() {
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/hospital/:name' element={<Hospitaldetail />} />
         <Route path='/login' element={<Login />} />
+        {/*  profile oulter */}
          <Route path='/profile' element={<ProtectedRoute />} >
          <Route index element={<UserInfo/>} />
          <Route path='SlotInfo' element={<SlotInfo/>} />
+         <Route path='meetBooking' element={<MeetBooking/>} />
         </Route>
     
         <Route path='/parent' element={<ParentPage />}>

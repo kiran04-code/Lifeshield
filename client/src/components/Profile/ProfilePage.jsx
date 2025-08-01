@@ -1,8 +1,10 @@
 import React from 'react'
 import Left from './components/left'
 import { Outlet } from 'react-router-dom'
+import { useAuth } from '../../context/auth'
 
 const ProfilePage = () => {
+    const {User} = useAuth()
   return (
     <div className='flex flex-col md:flex-row md:gap-5 md:p-10 w-full min-h-screen bg-[#F9FAFB]'>
       {/* Left Sidebar */}
@@ -14,7 +16,7 @@ const ProfilePage = () => {
       <div className='bg-[#E0EAFF] flex-1 p-5 mt-2'>
         <div className='' >
             <div>
-                <h1 className='text-2xl font-semibold text-blue-600'>Hello, Kiran</h1>
+                <h1 className='text-2xl font-semibold text-blue-600'>Hello,{User.fullName.split(" ").map((data)=>(<p>{data}</p>))}</h1>
             </div>
         <div>
           <Outlet/>

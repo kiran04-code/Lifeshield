@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const SlotBookSchema = new mongoose.Schema({
     duration:{
@@ -13,9 +14,16 @@ const SlotBookSchema = new mongoose.Schema({
          type:mongoose.Schema.Types.ObjectId,
          ref:"hostWrokSpace",
     },
-    paymennt:{
+    paymentmoney:{
+        type:Number,
+        require:true
+    },
+    payment:{
      type:String,
      default:"false"
+    },
+    paymentid:{
+        type:String,
     }
 },{timestamps:true})
 

@@ -9,6 +9,7 @@ import DocterRoutes from "./routes/Docter.js";
 import hostpitalRoutes from "./routes/HostpitalRoutes.js";
 import BookingRoutes from "./routes/BookingSlot.js";
 import hostpitaWorkSpace from "./routes/HostWokSpace.js";
+import Razorpay from "razorpay"
 import meeetingRoutes from "./routes/MeetingBooking.js";
 import cors from "cors"
 config()
@@ -38,6 +39,14 @@ app.get("/docter/test",(req,res)=>{
     userData:req.docter
  })
 })
+// Create teh Instance of Razorpay 
+export const instance = new Razorpay({
+    key_secret:process.env.RAZORPAY_SCREATE_KEY,
+    key_id:process.env.RAZORPAY_API_KEY ,
+     headers: {
+    "X-Razorpay-Account": "Qm9HxV8IzX6RcB"
+  }
+})
 DBonnection(process.env.MONGO_URL).then(()=>{
     console.log("MONGODB IS CONNECTED!")
 }).catch((ERR)=>{
@@ -53,6 +62,11 @@ app.get("/api/user",(req,res)=>{
     res.json({
         sucess:true,
         data:req.user
+    })
+})
+app.get("/api/apikeyRazorpay",(req,res)=>{
+   return  res.status(200).json({
+     key:process.env.RAZORPAY_API_KEY
     })
 })
 app.listen(PORT,(req,res)=>{
