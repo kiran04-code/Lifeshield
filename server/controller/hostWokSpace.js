@@ -146,7 +146,6 @@ export const startCunstacyService = async (req, res) => {
 
 export const createTHePackage = async (req, res) => {
     try {
-        console.log(req.body)
         const { time, price } = req.body
         const Price = Number(price)
         const id = req.docter?._id

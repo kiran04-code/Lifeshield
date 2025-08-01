@@ -9,6 +9,7 @@ import DocterRoutes from "./routes/Docter.js";
 import hostpitalRoutes from "./routes/HostpitalRoutes.js";
 import BookingRoutes from "./routes/BookingSlot.js";
 import hostpitaWorkSpace from "./routes/HostWokSpace.js";
+import meeetingRoutes from "./routes/MeetingBooking.js";
 import cors from "cors"
 config()
 const app = express()
@@ -47,6 +48,7 @@ app.use("/api",DocterRoutes)
 app.use("/api",hostpitalRoutes)
 app.use("/api",hostpitaWorkSpace)
 app.use("/api",BookingRoutes)
+app.use("/api",meeetingRoutes)
 app.get("/api/user",(req,res)=>{
     res.json({
         sucess:true,

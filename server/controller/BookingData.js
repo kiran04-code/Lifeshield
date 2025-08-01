@@ -2,6 +2,7 @@
 import { assign } from "nodemailer/lib/shared/index.js"
 import BookingSlots from "../model/BookSlotVaccines.js"
 import hostWrokSpaces from "../model/createHostWorkspace.js"
+import hostRgister from "../model/hostpitalRegister.js"
 
 
 export const BookingSlotss =  async(req,res)=>{
@@ -76,4 +77,24 @@ export const handleStatusUpdate = async(req,res)=>{
  } catch (error) {
     console.log(error)
  }
+}
+
+
+export const findDocterName = async(req,res)=>{
+    try {
+        const {id} = req.body
+        const data = await hostWrokSpaces.findById(id).populate('profileId')
+     const hotpitalid =data?.profileId._id.toString()
+        const datas = await hostRgister.findOne({createdBy:hotpitalid})
+        return res.json({
+            success:true,
+            dataDoc:datas
+        })
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            success:false,
+            message:error.message
+        })
+    }
 }

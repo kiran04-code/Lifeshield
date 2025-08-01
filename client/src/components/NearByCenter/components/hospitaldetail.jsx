@@ -22,6 +22,7 @@ const Hospitaldetail = () => {
     const fetchAllData = async () => {
       try {
         const { data } = await axios.get("/findAllHostpital");
+        console.log(data.hotData)
         sethostpital(data.hotData);
       } catch (error) {
         console.log(error);
