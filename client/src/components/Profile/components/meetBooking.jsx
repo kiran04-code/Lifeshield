@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../../context/auth'
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 const MeetBooking = () => {
     const [dataBooked, setBookData] = useState([])
     const [loader, setloader] = useState(false)
@@ -49,16 +49,23 @@ const MeetBooking = () => {
                                     <td><button className="text-[10px]">{booking.paymentmoney} rupees</button></td>
                                     <td className="py-3 px-4">
                                         {
-                                            booking.MeetId === "false"? <span
-                                            className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md text-nowrap transition"
-                                        >
-                                           Joining Soon
-                                        </span>:<button
-                                            onClick={() => navigate(`/Room/${booking.MeetId}`)}
-                                            className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md hover:bg-green-700 transition"
-                                        >
-                                           Join
-                                        </button>
+                                            booking.MeetId === "false" ? <span
+                                                className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md text-nowrap transition"
+                                            >
+                                                Joining Soon
+                                            </span> : <div>{
+
+                                                booking.MeetId === "complete" ? <button
+                                                    className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md hover:bg-green-700 transition"
+                                                >
+                                                    Completed
+                                                </button> : <button
+                                                    onClick={() => navigate(`/Room/${booking.MeetId}`)}
+                                                    className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md hover:bg-green-700 transition"
+                                                >
+                                                    Join
+                                                </button>
+                                            }</div>
                                         }
                                     </td>
                                 </tr>

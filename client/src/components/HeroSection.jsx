@@ -36,13 +36,13 @@ const HeroSection = () => {
                 <div className='flex md:px-8  px-3 py-2'>
                     <div className='  flex gap-5 bg-[#322bff7a] p-6 items-center justify-centere py-2  rounded-full md:w-70 w-80  '>
                         <div className='flex justify-between items-center flex-col'>
-                            <div onClick={()=>navigate("/parent")} className=' cursor-pointer  md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex  p-2 rounded-full   border-2 border-[#6552E3] justify-center items-center'>
+                            <div onClick={()=>navigate("/docter")} className=' cursor-pointer  md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex  p-2 rounded-full   border-2 border-[#6552E3] justify-center items-center'>
                                 <CiHospital1 className='text-2xl  text-[#5039e2]' />
                             </div>
                          <p>Hospitals & Doctors</p>
                         </div>
                         <div className='flex justify-between items-center flex-col'>
-                            <div onClick={()=>navigate("/docter")} className=' cursor-pointer  md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex p-2 rounded-full  border-2 border-[#6552E3] justify-center items-center'>
+                            <div onClick={()=>navigate("/parent")} className=' cursor-pointer  md:w-10 md:h-10 bg-[#E0EAFF] md:rounded-full md:flex p-2 rounded-full  border-2 border-[#6552E3] justify-center items-center'>
                                 <RiParentFill className='text-2xl  text-[#6552E3]' />
                             </div>
                             <p>Parents</p>

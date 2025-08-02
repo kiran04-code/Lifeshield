@@ -13,17 +13,17 @@ const CretaeMeeing = ({ value }) => {
   }, [hostpitaldataworkspace])
   const hnadleSubmiit = async (e) => {
     e.preventDefault()
-    const { data } = await axios.post("/meetdAddToBookMeet",{MeetId,hotId})
+    const { data } = await axios.post("/meetdAddToBookMeet", { MeetId, hotId, orderid:value.orderId })
     if (data.success) {
       toast.success(data.message)
-      value(false)
+      value.setCreateMeet(false)
     }
-    else{
-       toast.error(data.message)
+    else {
+      toast.error(data.message)
     }
   }
   return (
-    <div onClick={() => value(false)} className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-r bg-[#91a4f867] flex flex-col items-center justify-center">
+    <div onClick={() => value.setCreateMeet(false)} className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-r bg-[#91a4f867] flex flex-col items-center justify-center">
       <form action="" onSubmit={hnadleSubmiit} onClick={(e) => e.stopPropagation()} >
         <div className="bg-white shadow-lg rounded-2xl p-8 w-80 flex flex-col items-center space-y-4">
           <h2 className="text-2xl font-semibold text-blue-600">create a Instance Room</h2>
@@ -45,41 +45,38 @@ const CretaeMeeing = ({ value }) => {
   );
 };
 
-const ProfileOfPatient = ({ value }) => {
-  return (
-    <div>
-      {
-        value?.map((data) => (
-          <div onClick={() => setView(false)} className="absolute top-70 right-5  bg-white shadow-lg rounded-xl border">
-            <div className="w-[400px] bg-[#3c7aff]  rounded-lg shadow-lg p-6">
-              <h1 className="text-white text-2xl font-bold text-center mb-6">Patients Profile Info</h1>
 
-              <div className="text-white text-sm space-y-4">
-                <p><span className="font-semibold">Name:</span> {data.userBooked?.fullName}</p>
-                <p><span className="font-semibold">Phone:</span> {data.userBooked?.Number}</p>
-                <p><span className="font-semibold">Email:</span> {data.userBooked?.email}</p>
-              </div>
-            </div>
-          </div>
-        ))
-      }
-    </div>
-
-  );
-};
 
 const ShowBookingDataMeeting = () => {
-  var [view, setView] = useState(false);
+  var [orderId, setOrderId] = useState("");
   var [createmeet, setCreateMeet] = useState(false);
   const [DataBooked, setBookeddata] = useState([]);
-   const navigate = useNavigate()
-  const { axios } = useAuth();
+  const [hotId, setHotId] = useState('')
+    const { hostpitaldataworkspace, axios } = useDocAuth()
+  useEffect(() => {
+    setHotId(hostpitaldataworkspace._id)
+  }, [hostpitaldataworkspace])
+
+  const navigate = useNavigate()
 
   const FindBookedData = async () => {
     try {
       const { data } = await axios.get("/getAllrespectiveMeetingdata");
       console.log(data);
       setBookeddata(data.meetData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const MeetComplted = async (MeetId) => {
+    try {
+      const { data } = await axios.post("/MeetComplted",{orderId:orderId,MeetId});
+     if(data.success){
+      toast.success(data.message)
+     }
+     else{
+      toast.error(data.message)
+     }
     } catch (error) {
       console.log(error);
     }
@@ -100,7 +97,6 @@ const ShowBookingDataMeeting = () => {
             <th className="py-3 px-4 text-left">Emmail</th>
             <th className="py-3 px-4 text-left">Patient Number</th>
             <th className="py-3 px-4 text-left">Action</th>
-            <th className="py-3 px-4 text-left">View</th>
           </tr>
         </thead>
         <tbody className="text-[13px] text-gray-700">
@@ -112,28 +108,38 @@ const ShowBookingDataMeeting = () => {
               <td className="py-3 px-4">{data.userBooked.email}</td>
               <td className="py-3 px-4">{data.userBooked?.Number}</td>
               <td className="py-3 px-4 space-x-2 flex gap-2">
-               {
-                data.MeetId === 'false'? <button
-                  onClick={() => setCreateMeet(!createmeet)}
-                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                >
-                  createMeet
-                </button>: <button
-                  onClick={() =>navigate(`/Room/${data.MeetId}`) }
-                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                >
-                  Join
-                </button>
-               }
+                {
+                  data.MeetId === 'false' ? <button
+                    onClick={() => {setCreateMeet(!createmeet); setOrderId(data._id) }}
+                    className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                  >
+                    createMeet
+                  </button> :<div className='flex gap-1'>
+                    {
+
+                      data.MeetId === "complete" ?<button
+                    
+                    className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                  >
+                    Completed
+                  </button>:<div className='flex gap-2'><button
+                    onClick={() => navigate(`/Room/${data.MeetId}`)}
+                    className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                  >
+                    Join
+                  </button>
+                  <button
+                    onClick={()=>{setOrderId(data._id);MeetComplted("complete")}}
+                    className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                  >
+                    Complete
+                  </button></div>
+                    }
+                  
+                  </div>
+                }
               </td>
-              <td className="py-3 px-4">
-                <button
-                  onClick={() => setView(!view)}
-                  className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
-                >
-                  View
-                </button>
-              </td>
+             
             </tr>
           ))}
         </tbody>
@@ -142,8 +148,8 @@ const ShowBookingDataMeeting = () => {
 
       {/* Conditional Profile Display */}
 
-      {view && <ProfileOfPatient value={DataBooked} />}
-      {createmeet ? <CretaeMeeing value={setCreateMeet} /> : null}
+      
+      {createmeet ? <CretaeMeeing value={{setCreateMeet,orderId}} /> : null}
     </div>
   );
 };

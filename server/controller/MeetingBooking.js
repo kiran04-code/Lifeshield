@@ -28,7 +28,6 @@ export const BookMeetingSlot = async (req, res) => {
 }
 
 export const paymentDone = async (req, res) => {
-    console.log(req.body)
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
@@ -93,19 +92,39 @@ export const getAllrespectiveMeetingdata = async (req, res) => {
 
 export const meetdAddToBookMeet = async (req, res) => {
     try {
-  const {hotId,MeetId} = req.body
-  const hostmeetData = await MeetBooked.findOne({hospitalId:hotId}).populate("hospitalId")
-  hostmeetData.MeetId = MeetId;
-  await hostmeetData.save()
-  return res.json({
-    success:true,
-    message:"Meeting created SucessFull!"
-  })
+        const { MeetId, orderid } = req.body
+
+        const hostmeetData = await MeetBooked.findById(orderid)
+        hostmeetData.MeetId = MeetId
+        await hostmeetData.save()
+        return res.json({
+            success: true,
+            message: "Meeting created SucessFull!"
+        })
     } catch (error) {
         console.log(error)
         return res.json({
             success: false,
             message: true
+        })
+    }
+}
+
+export const MeetComplted = async (req, res) => {
+    try {
+        const { orderId, MeetId } = req.body
+        const hostmeetData = await MeetBooked.findById(orderId)
+        hostmeetData.MeetId = MeetId
+        await hostmeetData.save()
+        return res.json({
+            success: true,
+            message: "Meeting mark SuccesFull"
+        })
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            success: false,
+            message: error.message
         })
     }
 }

@@ -74,7 +74,6 @@ const VaccinationSlot = () => {
     }
     const BookedSlot = async (e) => {
         e.preventDefault()
-        console.log(hotPitalId)
         try {
             if (!prices) {
                 return toast.error("Selecte First Package and Slot ")
@@ -101,8 +100,8 @@ const VaccinationSlot = () => {
                     }
                     const { data } = await axios.post("/payment-success", payload)
                     console.log(data)
-                    if (data.seccess) {
-                        toast.success(data, message)
+                    if (data.success) {
+                        toast.success(data.message)
                         navigate("/profile")
                     }
                 },
