@@ -10,10 +10,13 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'public/_redirects', // path to your file
-          dest: '.' // copy it to the root of dist/
+          src: 'public/_redirects',
+          dest: '.' // copied to dist/
         }
       ]
     })
-  ]
+  ],
+  server: {
+    historyApiFallback: true
+  }
 })
