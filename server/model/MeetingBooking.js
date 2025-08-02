@@ -22,6 +22,10 @@ const SlotBookSchema = new mongoose.Schema({
      type:String,
      default:"false"
     },
+    MeetId:{
+     type:String,
+     default:"false"
+    },
     paymentid:{
         type:String,
     }

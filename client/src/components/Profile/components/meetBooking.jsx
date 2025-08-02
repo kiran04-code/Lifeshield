@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '../../../context/auth'
-
+import {useNavigate} from "react-router-dom"
 const MeetBooking = () => {
     const [dataBooked, setBookData] = useState([])
     const [loader, setloader] = useState(false)
+    const navigate = useNavigate()
     const { axios } = useAuth()
     const getBookedData = async () => {
         setloader(false)
@@ -47,12 +48,18 @@ const MeetBooking = () => {
                                     <td className="py-3 px-4 text-[12px]">{booking.hospitalId?.Number || "N/A"}</td>
                                     <td><button className="text-[10px]">{booking.paymentmoney} rupees</button></td>
                                     <td className="py-3 px-4">
-                                        <button
-                                            onClick={() => window.print()}
-                                            className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md hover:bg-   green-700 transition"
+                                        {
+                                            booking.MeetId === "false"? <span
+                                            className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md text-nowrap transition"
+                                        >
+                                           Joining Soon
+                                        </span>:<button
+                                            onClick={() => navigate(`/Room/${booking.MeetId}`)}
+                                            className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md hover:bg-green-700 transition"
                                         >
                                            Join
                                         </button>
+                                        }
                                     </td>
                                 </tr>
                             ))

@@ -71,22 +71,41 @@ export const MeetBookingDtaa = async (req, res) => {
     }
 }
 
-export const getAllrespectiveMeetingdata = async(req,res)=>{
+export const getAllrespectiveMeetingdata = async (req, res) => {
     try {
         const id = req.docter?._id
-       const findBookedSlot = await hostWrokSpaces.findOne({profileId:id}).populate("profileId")
-      const filterid = findBookedSlot._id
+        const findBookedSlot = await hostWrokSpaces.findOne({ profileId: id }).populate("profileId")
+        const filterid = findBookedSlot._id
         const findBookedSlots = await MeetBooked.find({}).populate("userBooked").populate("hospitalId")
         const filterBookedData = findBookedSlots.filter((data) => data.hospitalId?._id.toString() === filterid.toString())
         return res.json({
-            success:true,
-            meetData:filterBookedData
+            success: true,
+            meetData: filterBookedData
         })
     } catch (error) {
         console.log(error)
         return res.json({
-            success:false,
-            message:error.message
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+export const meetdAddToBookMeet = async (req, res) => {
+    try {
+  const {hotId,MeetId} = req.body
+  const hostmeetData = await MeetBooked.findOne({hospitalId:hotId}).populate("hospitalId")
+  hostmeetData.MeetId = MeetId;
+  await hostmeetData.save()
+  return res.json({
+    success:true,
+    message:"Meeting created SucessFull!"
+  })
+    } catch (error) {
+        console.log(error)
+        return res.json({
+            success: false,
+            message: true
         })
     }
 }

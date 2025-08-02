@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
+    "@zegocloud/zego-uikit-prebuilt": "^2.15.1",
     "axios": "^1.10.0",
     "leaflet": "^1.9.4",
     "motion": "^12.23.6",
