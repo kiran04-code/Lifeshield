@@ -29,12 +29,12 @@ const Left = () => {
       <h1 className='text-2xl font-bold mb-6 text-blue-700'>Account Center</h1>
 
       {/* Navigation Items */}
-      <div className='flex md:flex-col gap-5 flex-row '>
+      <div className='flex md:flex-col gap-5 flex-row  overflow-x-scroll'>
         {
             account.map((data,index)=>(
                 <Link to={`/profile/${data.link}`} onClick={()=>setHover(data.name)}  className={` ${hover === data.name ? "bg-[#8497be] text-white":null}    flex items-center gap-3  p-2 rounded-md cursor-pointer transition `}>
           {data.icons}
-          <p className='text-md font-medium'>{data.name}</p>
+          <p className='text-md font-medium text-nowrap'>{data.name}</p>
         </Link>
             ))
         }
