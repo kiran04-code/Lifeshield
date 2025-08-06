@@ -97,7 +97,7 @@ try {
                   name="fullName"
                  onChange={hnadlechnage}
                   placeholder="Enter Your Name"
-                  className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 rounded-xl py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -109,8 +109,8 @@ try {
                   name="Number"
                   onChange={hnadlechnage}
                   placeholder="Enter Your Mobile Number"
-                  className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                  className="w-full  rounded-xl px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                /> 
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -121,7 +121,7 @@ try {
                   name="email"
                  onChange={hnadlechnage}
                   placeholder="Enter Your Email"
-                  className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full  rounded-xl px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -132,13 +132,13 @@ try {
                   type="date"
                   name="date"
                   onChange={hnadlechnage}
-                  className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 rounded-xl   py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div className="flex justify-center mt-6">
                 <button
                   type="submit"
-                  className="bg-blue-700 text-white w-147 px-8 py-2 hover:bg-blue-800 transition duration-200"
+                  className="bg-blue-700  rounded-xl text-white w-147 px-8 py-2 hover:bg-blue-800 transition duration-200"
                 >
                   Sign Up
                 </button>
@@ -159,7 +159,7 @@ try {
                     required
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter Your Email"
-                    className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 rounded-xl py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                     
                   />
                   <div className="w-full h-10 justify-end flex mt-2 ">
@@ -184,12 +184,12 @@ try {
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
                     placeholder="Enter OTP"
-                    className="w-full px-4 py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 rounded-xl py-2 border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <div className="flex justify-center mt-6">
                     <button
                       type="submit"
-                      className="bg-green-600 w-147 text-white px-8 py-2 hover:bg-green-700 transition duration-200"
+                      className="bg-green-600 w-147 rounded-xl text-white px-8 py-2 hover:bg-green-700 transition duration-200"
                     >
                       Verify OTP
                     </button>
