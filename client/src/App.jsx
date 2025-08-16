@@ -81,7 +81,7 @@ function App() {
         <Route path='/hospital/:name/VaccinationSlot' element={<VaccinationSlot />} />
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/hospital/:name' element={<Hospitaldetail />} />
-        <Route path='/AboutPage' element={<AboutPage/>} />
+        <Route path='/aboutTeam' element={<AboutPage/>} />
         <Route path='/login' element={<Login />} />
         {/*  profile oulter */}
         <Route path='/profile' element={<ProtectedRoute />} >
