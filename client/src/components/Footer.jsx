@@ -10,7 +10,7 @@ const Footer = () => {
 
                 <div className='max-w-80'>
 
-                    <img src="/02logo.png" alt="logo" className='mb-4 h-12 md:h-10' />
+                    <img src="/logi2-removebg-preview.png" alt="logo" className='mb-4 h-15 md:h-15' />
 
                     <p className='text-sm'>
 
@@ -136,7 +136,7 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto px-6 py-16 flex flex-col items-center">
                 <div className="flex items-center space-x-3 mb-6">
                     <img alt="" className="h-29"
-                        src="/02logo.png" />
+                        src="/logi2-removebg-preview.png" />
                 </div>
                 <p className="text-center max-w-xl text-3xl  leading-relaxed text-[#165BF0] font-bold">
                     Healthy.Strong.Ready.

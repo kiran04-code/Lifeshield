@@ -48,7 +48,7 @@ const Navbar = () => {
 
                 <div className=''>
 
-                    <img src="/02logo.png" alt="" className='w-55 h-17 cursor-pointer' onClick={()=>naviaget("/")}/>
+                    <img src="/logi2-removebg-preview.png" alt="" className='w-55 h-17 cursor-pointer' onClick={()=>naviaget("/")}/>
                 </div>
                 <div className='md:flex md:gap-10 p-5 md:mr-30 text-[#1057EC] hidden '>
                     <Link to={"/"} onMouseEnter={()=>setPanel(false)}  className='  flex justify-center items-center gap-2 hover:bg-[#1057EC]  hover:text-white py-2 px-2 transition rounded-2xl'>

@@ -42,6 +42,7 @@ import Admin from './LifeshieldAdmin/Admin'
 import Vefypage from './components/DockerLogin/vefypage'
 import MeetBooking from './components/Profile/components/meetBooking'
 import Index from './components/DockerLogin/Room/Index'
+import AboutPage from './components/AboutSection/AboutPage'
 
 
 function App() {
@@ -80,6 +81,7 @@ function App() {
         <Route path='/hospital/:name/VaccinationSlot' element={<VaccinationSlot />} />
         <Route path='/parent/NearVaccineCenter' element={<NearVaccineCenter />} />
         <Route path='/hospital/:name' element={<Hospitaldetail />} />
+        <Route path='/AboutPage' element={<AboutPage/>} />
         <Route path='/login' element={<Login />} />
         {/*  profile oulter */}
         <Route path='/profile' element={<ProtectedRoute />} >
@@ -90,8 +92,7 @@ function App() {
 
         <Route path='/parent' element={<ParentPage />}>
           <Route index element={<NearCenterInfo />} />
-          <Route path="DocterCalls" element={<NeareByVideoClles />} />
-         
+          <Route path="DocterCalls" element={<NeareByVideoClles />} /> 
         </Route>
          {/* Room Routes */}
           <Route path="/Room/:roomId" element={<Index />} />
