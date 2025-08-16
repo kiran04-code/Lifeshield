@@ -7,7 +7,7 @@ const AboutPage = () => {
             name: "kiran Rathod",
             role: "Technical Lead",
             linkDEnLink: "https://www.linkedin.com/in/kiran-rathod-66b009331/",
-            img:"kiru2-removebg-preview.png"
+            img:"kk-removebg-preview.png"
         },
         {
             name: "Vedant Polawar",
