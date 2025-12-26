@@ -2,8 +2,10 @@ import nodemailer from "nodemailer";
 
 export const sendmaintoUser = async (email, otps) => {
   try {
-      const transporter = nodemailer.createTransport({
-      service: "gmail",
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false,  // use TLS
       auth: {
         user: process.env.EMAIL,
         pass: process.env.EMAIL_PASS,
@@ -11,7 +13,7 @@ export const sendmaintoUser = async (email, otps) => {
     });
 
 
-  const html = `<!DOCTYPE html>
+    const html = `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -59,7 +61,7 @@ export const sendmaintoUser = async (email, otps) => {
       html,
     });
 
-    return info; 
+    return info;
 
   } catch (error) {
     console.error("Error sending email:", error);
