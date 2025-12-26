@@ -68,7 +68,7 @@ export const login = async (req, res) => {
         console.error("Login Error:", error.message);
         return res.status(500).json({
             success: false,
-            message: `Email failed, but user is created: ${err.message}`
+            message: `Email failed, but user is created: ${error.message}`
         });
     }
 };
