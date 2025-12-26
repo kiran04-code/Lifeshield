@@ -1,58 +1,69 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import axios from "axios"
+import axios from "axios";
+
 // Create the context
 const DocAuthContext = createContext(null);
 
-// Create the provider component
 export const DocAuthContextProvider = ({ children }) => {
-  const [docterdata,setDockterData] = useState(null)
-  const [hostpitaldata,sethostpitaldata] = useState(null)
-  const [hostpitaldataworkspace,sethostpitaldataworkspace] = useState(null)
-  const  bakend_ulr = import.meta.env.VITE_BAKEND_URL
-  axios.defaults.baseURL = bakend_ulr
-  axios.defaults.withCredentials = true
+  const [docterdata, setDockterData] = useState(null);
+  const [hostpitaldata, sethostpitaldata] = useState(null);
+  const [hostpitaldataworkspace, sethostpitaldataworkspace] = useState(null);
 
- const auth = async()=>{
-    const {data} = await axios.get("/authdocter")
-    if(data.success){
-     setDockterData(data.userData)
+  const bakend_ulr = import.meta.env.VITE_BAKEND_URL;
+
+  axios.defaults.baseURL = bakend_ulr;
+  axios.defaults.withCredentials = true;
+
+  const auth = useCallback(async () => {
+    try {
+      const { data } = await axios.get("/authdocter");
+      if (data.success) {
+        setDockterData(data.userData);
+      }
+    } catch (error) {
+      console.log(error);
     }
- }
- const hotdataauth = async()=>{
-    const {data} = await axios.get("/getResterData")
-    if(data.success){
-     sethostpitaldataworkspace(data.hotData)
+  }, []);
+
+  const hotdataauth = useCallback(async () => {
+    try {
+      const { data } = await axios.get("/getResterData");
+      if (data.success) {
+        sethostpitaldataworkspace(data.hotData);
+      }
+    } catch (error) {
+      console.log(error);
     }
- }
- const hostAuth = async()=>{
- try {
-  const {data} = await axios.get("/docterhostpital")
-  if (data?.hostData) {
-  sethostpitaldata(data.hostData);
-}
- } catch (error) {
- console.log(error)
- }
- }
-useEffect(()=>{
-auth()
-},[docterdata])
-useEffect(()=>{
-hotdataauth()
-},[docterdata])
-useEffect(()=>{
-hostAuth()
-},[docterdata])
+  }, []);
+
+  const hostAuth = useCallback(async () => {
+    try {
+      const { data } = await axios.get("/docterhostpital");
+      if (data?.hostData) {
+        sethostpitaldata(data.hostData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  // ✅ RUN ONLY ONCE
+  useEffect(() => {
+    auth();
+    hotdataauth();
+    hostAuth();
+  }, [auth, hotdataauth, hostAuth]);
 
   const value = {
-  axios, 
-  docterdata,
-  setDockterData,
-  hostpitaldata,
-  sethostpitaldata,
-  hostpitaldataworkspace,
-  hotdataauth
+    axios,
+    docterdata,
+    setDockterData,
+    hostpitaldata,
+    sethostpitaldata,
+    hostpitaldataworkspace,
+    hotdataauth,
   };
+
   return (
     <DocAuthContext.Provider value={value}>
       {children}
@@ -60,7 +71,7 @@ hostAuth()
   );
 };
 
-// Custom hook to use auth context
+// Custom hook
 export const useDocAuth = () => {
   return useContext(DocAuthContext);
 };

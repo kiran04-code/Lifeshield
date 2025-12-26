@@ -1,33 +1,49 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import axios from "axios"
-// Create the context
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import Axios from "axios"; // 👈 alias import
+
+// Create context
 const AuthContext = createContext(null);
 
-// Create the provider component
+// Create axios instance BUT keep name axios
+const axios = Axios.create({
+  baseURL: import.meta.env.VITE_BAKEND_URL,
+  withCredentials: true,
+});
+
 export const AuthContextProvider = ({ children }) => {
-  const [User,setUser] = useState(null)
-  const  bakend_ulr = import.meta.env.VITE_BAKEND_URL
-  console.log(bakend_ulr)
-  axios.defaults.baseURL = bakend_ulr
-  axios.defaults.withCredentials = true
-  const value = {
-  axios,
-  User,
-  setUser
-  };
-  const auth = useCallback( async()=>{   
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const auth = useCallback(async () => {
     try {
-      const {data} = await axios.get("/Auth")
-      if(data.success){
-        setUser(data.userData)
+      const { data } = await axios.get("/Auth");
+      if (data?.success) {
+        setUser(data.userData);
+      } else {
+        setUser(null);
       }
     } catch (error) {
-      console.log(error)
+      console.error("Auth error:", error);
+      setUser(null);
+    } finally {
+      setLoading(false);
     }
-  },[])
-  useEffect(()=>{
-auth()
-  },[])
+  }, []);
+
+  useEffect(() => {
+    auth();
+  }, [auth]);
+
+  const value = useMemo(
+    () => ({
+      axios, // 👈 same name everywhere
+      user,
+      setUser,
+      loading,
+    }),
+    [user, loading]
+  );
+
   return (
     <AuthContext.Provider value={value}>
       {children}
@@ -35,8 +51,5 @@ auth()
   );
 };
 
-// Custom hook to use auth context
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+// Hook
+export const useAuth = () => useContext(AuthContext);
