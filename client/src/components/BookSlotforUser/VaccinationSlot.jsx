@@ -1,108 +1,117 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDocAuth } from '../../context/dockAuth'
-import { useAuth } from '../../context/auth'
-import { toast } from 'react-toastify'
-import { FaCheckToSlot } from "react-icons/fa6";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDocAuth } from '../../context/dockAuth';
+import { useAuth } from '../../context/auth';
+import { toast } from 'react-toastify';
+import { FaCheckCircle, FaVideo, FaHospital, FaStethoscope } from "react-icons/fa";
 import { TbMoneybag } from "react-icons/tb";
 import { MdAccessTime } from "react-icons/md";
-import { Handler } from 'leaflet'
 
 const VaccinationSlot = () => {
-    const { name } = useParams()
-    const { axios } = useDocAuth()
-    const [hostpitalData, setFilterData] = useState([])
-    const [names, setname] = useState('')
-    const [prices, seTPrices] = useState()
-    const [duartion, setDuraion] = useState()
-    const [hotPitalId, setHotpitalId] = useState('')
-    const [docterDta, setDocterData] = useState([])
-    const [hostpitalDatas, sethostpital] = useState([])
-    const navigate = useNavigate()
-    const [from, setFrom] = useState({
+    const { name } = useParams();
+    const { axios } = useDocAuth();
+    const { User } = useAuth();
+    const navigate = useNavigate();
+
+    const [hospitalData, setHospitalData] = useState([]);
+    const [doctorData, setDoctorData] = useState(null);
+    const [allHospitals, setAllHospitals] = useState([]);
+    
+    const [bookingForm, setBookingForm] = useState({
         hospital: '',
         time: '',
         vaccine: ''
     });
-    const handlechange = (e) => {
-        const { name, value } = e.target
-        setFrom({ ...from, [name]: value })
-    }
-    const { User } = useAuth()
-    useEffect(() => {
-        if (!name || hostpitalDatas.length === 0) return;
-        setname(name)
-        const filtered = hostpitalDatas.filter((data) => data._id === name);
-        setFilterData(filtered);
-    }, [hostpitalDatas]);
-    useEffect(() => {
-        const fetchAllData = async () => {
-            try {
-                const { data } = await axios.get("/findAllHostpital");
-                sethostpital(data.hotData);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchAllData();
-    }, [hostpitalData]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault(); // ← move this to the top!
+    const [selectedPrice, setSelectedPrice] = useState("");
+    const [selectedDuration, setSelectedDuration] = useState("");
+    const [activeHospitalId, setActiveHospitalId] = useState("");
+
+    const handleFormChange = (e) => {
+        const { name, value } = e.target;
+        setBookingForm({ ...bookingForm, [name]: value });
+    };
+
+    const fetchAllData = async () => {
         try {
-            if (!from.hospital || !from.time || !from.vaccine) {
-                toast.error("❌ Please fill in all fields before submitting.");
-                return;
-            }
-            const { data } = await axios.post("/BookSlot", { from, name });
-            if (data.success) {
-                toast.success(data.message)
-                navigate("/profile  ")
-            }
+            const { data } = await axios.get("/findAllHostpital");
+            setAllHospitals(data.hotData);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
-    const findDocteeDetail = async () => {
-        try {
-            const { data } = await axios.post("/findDocterName", { id: name })
-            setDocterData(data.dataDoc)
 
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const BookedSlot = async (e) => {
-        e.preventDefault()
+    const findDoctorDetail = async () => {
         try {
-            if (!prices) {
-                return toast.error("Selecte First Package and Slot ")
+            const { data } = await axios.post("/findDocterName", { id: name });
+            setDoctorData(data.dataDoc);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAllData();
+        findDoctorDetail();
+    }, [name]);
+
+    useEffect(() => {
+        if (allHospitals.length > 0) {
+            const filtered = allHospitals.filter((h) => h._id === name);
+            setHospitalData(filtered);
+            if (filtered.length > 0) {
+                setBookingForm(prev => ({ ...prev, hospital: filtered[0].hospitalName }));
             }
-            const { data: { order } } = await axios.post("/BookMeetingSlot", { price: prices })
-            const { data: { key } } = await axios("/apikeyRazorpay")
+        }
+    }, [allHospitals, name]);
+
+    const handlePhysicalBooking = async (e) => {
+        e.preventDefault();
+        try {
+            if (!bookingForm.hospital || !bookingForm.time || !bookingForm.vaccine) {
+                toast.error("Please fill in all fields.");
+                return;
+            }
+            const { data } = await axios.post("/BookSlot", { from: bookingForm, name });
+            if (data.success) {
+                toast.success(data.message);
+                navigate("/profile");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleConsultationPayment = async (e) => {
+        e.preventDefault();
+        try {
+            if (!selectedPrice) {
+                return toast.error("Please select a consultation package.");
+            }
+
+            const { data: { order } } = await axios.post("/BookMeetingSlot", { price: selectedPrice });
+            const { data: { key } } = await axios("/apikeyRazorpay");
+
             const options = {
                 key: key,
                 amount: order.amount,
                 currency: 'INR',
-                name: User.fullName,
-                description: 'Test Transaction',
+                name: "LifeShield Consultation",
+                description: `Consultation with Dr. ${doctorData?.lname}`,
                 order_id: order.id,
                 handler: async function (response) {
-                    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = response
                     const payload = {
-                        razorpay_payment_id,
-                        razorpay_order_id,
-                        razorpay_signature,
-                        id: hotPitalId,
-                        prices,
-                        duartion,
-
-                    }
-                    const { data } = await axios.post("/payment-success", payload)
-                    console.log(data)
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        razorpay_signature: response.razorpay_signature,
+                        id: activeHospitalId,
+                        prices: selectedPrice,
+                        duartion: selectedDuration,
+                    };
+                    const { data } = await axios.post("/payment-success", payload);
                     if (data.success) {
-                        toast.success(data.message)
-                        navigate("/profile")
+                        toast.success("Consultation Booked Successfully!");
+                        navigate("/profile");
                     }
                 },
                 prefill: {
@@ -110,227 +119,185 @@ const VaccinationSlot = () => {
                     email: User.email,
                     contact: User.Number
                 },
-                theme: {
-                    color: '#4FBF8B'
-                },
-
+                theme: { color: '#1057EC' },
             };
             const rzp = new window.Razorpay(options);
             rzp.open();
         } catch (error) {
-            console.log(error)
+            console.error(error);
         }
-    }
-    useEffect(() => {
-        findDocteeDetail()
-    }, [name, docterDta])
+    };
+
     const vaccineOptions = [
-        'Hepatitis B (1 Month)',
-        'Rotavirus (2 Months)',
-        'DTP (6 Months)',
-        'MMR (12 Months)',
-        'Polio (3 Years)',
-        'Varicella (5 Years)',
-        'HPV (12 Years)',
-        'COVID-19 (16 Years)',
+        'Hepatitis B (1 Month)', 'Rotavirus (2 Months)', 'DTP (6 Months)',
+        'MMR (12 Months)', 'Polio (3 Years)', 'Varicella (5 Years)',
+        'HPV (12 Years)', 'COVID-19 (16 Years)',
     ];
 
     return (
-        <div className="w-full px-4 py-6 min-h-screen bg-blue-50">
-            <div className="flex flex-col md:flex-row justify-center items-center gap-2 text-center mb-6">
-                <h1 className="text-xl md:text-2xl font-bold text-blue-600">
-                    Dr {docterDta.fname} {docterDta.Mname} {docterDta.lname} Clinic
-                </h1>
-                {hostpitalData.map((data) => (
-                    <h1 key={data.hospitalName} className="text-xl md:text-2xl font-bold text-blue-600 underline">
-                        {data.hospitalName}
+        <div className="min-h-screen bg-[#F8FAFF] py-12 px-4">
+            <div className="max-w-6xl mx-auto">
+                <header className="text-center mb-12">
+                    <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-4">
+                        <FaHospital /> Appointment Booking
+                    </div>
+                    <h1 className="text-3xl md:text-4xl font-extrabold text-gray-800">
+                        {doctorData ? `Dr. ${doctorData.fname} ${doctorData.lname}'s Clinic` : "Loading Clinic..."}
                     </h1>
-                ))}
-            </div>
+                    {hospitalData.map((h) => (
+                        <p key={h._id} className="text-blue-600 font-semibold text-lg mt-2">{h.hospitalName}</p>
+                    ))}
+                </header>
 
-            <div className="flex flex-col lg:flex-row flex-wrap gap-6 justify-center items-start">
-                {/* Booking Form */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    
+                    <div className="bg-white rounded-3xl shadow-xl shadow-blue-100/50 border border-white p-8">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="bg-blue-600 p-3 rounded-2xl text-white">
+                                <FaCheckCircle size={20} />
+                            </div>
+                            <h2 className="text-xl font-bold text-gray-800">Physical Vaccination</h2>
+                        </div>
 
-                <form className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md" onSubmit={handleSubmit}>
-                    <h1 className='text-xl text-blue-500 font-bold'>Book Vaccination slot In this Hostpital </h1>
-                    <label className="block mb-2 text-gray-600 font-semibold">Select Hospital</label>
-                    <select
-                        name="hospital"
-                        onChange={handlechange}
-                        value={from.hospital}
-                        className="w-full mb-4 p-2 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    >
-                        <option value="">-- Choose Hospital --</option>
-                        {hostpitalData.map((data, idx) => (
-                            <option key={idx} value={data.hospitalName}>{data.hospitalName}</option>
-                        ))}
-                    </select>
+                        <form onSubmit={handlePhysicalBooking} className="space-y-5">
+                            <div>
+                                <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Hospital Name</label>
+                                <input 
+                                    type="text" 
+                                    value={bookingForm.hospital} 
+                                    readOnly 
+                                    className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl font-medium text-gray-600 cursor-not-allowed"
+                                />
+                            </div>
 
-                    <label className="block mb-2 text-gray-600 font-semibold">Select Time Slot</label>
-                    <input
-                        name="time"
-                        type="time"
-                        onChange={handlechange}
-                        value={from.time}
-                        className="w-full mb-4 p-2 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                    <input
-                        type="tel"
-                        value={User?.Number}
-                        readOnly
-                        className="w-full mb-4 p-2 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    />
-                    <label className="block mb-2 text-gray-600 font-semibold">Select Vaccine</label>
-                    <select
-                        name="vaccine"
-                        onChange={handlechange}
-                        value={from.vaccine}
-                        className="w-full mb-6 p-2 border border-blue-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    >
-                        <option value="">-- Choose Vaccine --</option>
-                        {vaccineOptions.map((vaccine, index) => (
-                            <option key={index} value={vaccine}>{vaccine}</option>
-                        ))}
-                    </select>
-
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded font-semibold"
-                    >
-                        Book Slot
-                    </button>
-                </form>
-                {/* Online Consultation Section */}
-                <div className="bg-white shadow-xl rounded-2xl p-6 w-full lg:max-w-md xl:max-w-lg">
-                    {hostpitalData.map((data) =>
-                        data.vcallONOff ? (
-                            <div key={data.hospitalName}>
-                                <h2 className="text-lg font-semibold mb-4 text-blue-700">Book Doctor Consultation</h2>
-
-                                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
-                                    <img
-                                        src="/docddata.jpg"
-                                        alt="doctor"
-                                        className="w-28 h-28 object-cover rounded-full border"
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Preferred Time</label>
+                                    <input
+                                        name="time"
+                                        type="time"
+                                        onChange={handleFormChange}
+                                        className="w-full p-3 bg-blue-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                                     />
-                                    <div className="text-center sm:text-left md:px-12 ">
-                                        <p className="text-xl font-bold ">
-                                            Dr: {docterDta.fname} {docterDta.Mname}  {docterDta.lname}
-                                        </p>
-                                        <p className="text-gray-700">Pediatrician</p>
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Contact Number</label>
+                                    <input
+                                        type="tel"
+                                        value={User?.Number || ""}
+                                        readOnly
+                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl text-gray-500"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Select Vaccine</label>
+                                <select
+                                    name="vaccine"
+                                    onChange={handleFormChange}
+                                    className="w-full p-3 bg-blue-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none appearance-none"
+                                >
+                                    <option value="">-- Choose Vaccine --</option>
+                                    {vaccineOptions.map((v, i) => (
+                                        <option key={i} value={v}>{v}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-95"
+                            >
+                                Confirm Slot Booking
+                            </button>
+                        </form>
+                    </div>
+
+                    <div className="bg-white rounded-3xl shadow-xl shadow-blue-100/50 border border-white p-8">
+                        {hospitalData[0]?.vcallONOff ? (
+                            <>
+                                <div className="flex items-center gap-3 mb-8">
+                                    <div className="bg-purple-600 p-3 rounded-2xl text-white">
+                                        <FaVideo size={20} />
+                                    </div>
+                                    <h2 className="text-xl font-bold text-gray-800">Online Consultation</h2>
+                                </div>
+
+                                <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-2xl mb-8 border border-purple-100">
+                                    <img src="/docddata.jpg" alt="Doctor" className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm" />
+                                    <div>
+                                        <h3 className="font-bold text-gray-800">
+                                            Dr. {doctorData?.fname} {doctorData?.lname}
+                                        </h3>
+                                        <p className="text-xs font-semibold text-purple-600 uppercase tracking-wider">Pediatrician Specialist</p>
                                     </div>
                                 </div>
 
-                                <div className="space-y-2 text-sm text-gray-700 mb-4">
-                                    <div className="flex items-center gap-2">
-                                        <MdAccessTime />
-                                        <span className='flex gap-2'><strong>Duration:</strong>
-
-                                            {
-                                                data.MeetingAvialbleTimeandpakcage.map((daa) => (
-                                                    <p className='bg-amber-200 px-2 rounded-2xl  cursor-pointer'>{daa.time}</p>
-                                                )
-
-                                                )
-                                            }
-
-                                        </span>
+                                <form onSubmit={handleConsultationPayment} className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="p-4 bg-gray-50 rounded-2xl">
+                                            <p className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase mb-3">
+                                                <MdAccessTime /> Typical Duration
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {hospitalData[0]?.MeetingAvialbleTimeandpakcage.map((p, i) => (
+                                                    <span key={i} className="px-3 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-700">
+                                                        {p.time}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="p-4 bg-gray-50 rounded-2xl">
+                                            <p className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase mb-3">
+                                                <TbMoneybag /> Availability
+                                            </p>
+                                            <p className="text-xs font-bold text-gray-700">Sun: Morning / Evening</p>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
 
-                                        <span className='flex justify-center items-center gap-1 p-1 '>  <TbMoneybag /><strong>Price:</strong>
-                                            {
-                                                data.MeetingAvialbleTimeandpakcage.map((daa) => (
-                                                    <div className=' gap-1 '>
-                                                        <p className='bg-green-300 flex px-1 py-1 rounded-2xl justify-center items-centerc  cursor-pointer '> ₹   {daa.price} for {daa.time} </p>
-                                                    </div>
-                                                )
-
-                                                )
-                                            }
-                                        </span>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Select Package</label>
+                                        <select 
+                                            onChange={(e) => {
+                                                const val = e.target.value;
+                                                setSelectedPrice(val);
+                                                const pkg = hospitalData[0].MeetingAvialbleTimeandpakcage.find(p => p.price === val);
+                                                setSelectedDuration(pkg?.time || "");
+                                            }}
+                                            className="w-full p-3 bg-purple-50 border-none rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                                        >
+                                            <option value="">-- Select Price & Time --</option>
+                                            {hospitalData[0]?.MeetingAvialbleTimeandpakcage.map((p, i) => (
+                                                <option key={i} value={p.price}>₹{p.price} for {p.time}</option>
+                                            ))}
+                                        </select>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <FaCheckToSlot />
-                                        <span><strong>Available Slots:</strong> Sunday Morning, Evening</span>
-                                    </div>
-                                    <p>Consult your child’s health with a trusted pediatrician.</p>
-                                </div>
-
-                                <form className="bg-white rounded-xl p-4 shadow-md w-full" onSubmit={BookedSlot}>
-                                    <div className="flex items-center mb-3 text-blue-800 font-semibold text-lg">
-                                        <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                                            />
-                                        </svg>
-                                        Book Your Slot
-                                    </div>
-                                    <select className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                                        <option>Select Slot</option>
-                                        <option>Morning</option>
-                                        <option>Evening</option>
-                                    </select>
-                                    <select onClick={(e) => seTPrices(e.target.value)} className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                                        <option>Select Package </option>
-                                        {
-                                            data.MeetingAvialbleTimeandpakcage.map((daa) => (
-
-                                                <option value={daa.price}>₹   {daa.price} for {daa.time}</option>
-
-                                            )
-
-                                            )
-                                        }
-                                    </select>
-                                    <select onClick={(e) => setDuraion(e.target.value)} className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-                                        <option>Select Time </option>
-                                        {
-                                            data.MeetingAvialbleTimeandpakcage.map((daa) => (
-
-                                                <option value={daa.duartion}>{daa.time}</option>
-
-                                            )
-
-                                            )
-                                        }
-                                    </select>
-
 
                                     <button
-
-                                        type='submit'
-                                        onClick={() => setHotpitalId(data?._id)}
-
-                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-semibold"
+                                        type="submit"
+                                        onClick={() => setActiveHospitalId(hospitalData[0]?._id)}
+                                        className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-2xl font-bold shadow-lg shadow-purple-100 transition-all active:scale-95"
                                     >
-                                        Book Slot
+                                        Book Video Consultation
                                     </button>
-
-
                                 </form>
-                            </div>
+                            </>
                         ) : (
-                            <div
-                                key={data.hospitalName}
-                                className="w-full min-h-[180px] flex justify-center items-center text-center"
-                            >
-                                <p className="text-red-600 text-lg font-medium">
-                                    ⚠️ This clinic does not currently support online consultations.
+                            <div className="h-full flex flex-col items-center justify-center text-center py-12 space-y-4">
+                                <div className="bg-red-50 p-6 rounded-full text-red-500">
+                                    <FaStethoscope size={40} />
+                                </div>
+                                <p className="text-red-600 font-bold max-w-[250px]">
+                                    Online consultations are currently unavailable for this clinic.
                                 </p>
                             </div>
-                        )
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
+    );
+};
 
-
-    )
-}
-
-
-export default VaccinationSlot
+export default VaccinationSlot;

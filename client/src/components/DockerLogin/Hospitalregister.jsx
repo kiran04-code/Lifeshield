@@ -3,106 +3,196 @@ import { useDocAuth } from '../../context/dockAuth';
 import { useAuth } from '../../context/auth';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  User, 
+  Calendar, 
+  Smartphone, 
+  Mail, 
+  ChevronRight, 
+  Stethoscope 
+} from 'lucide-react';
 import Loader from '../../utils/Loader';
-const CreateProfile = () => {
-  const [phone, setPhone] = useState('');
-  const [phoneError, setPhoneError] = useState('');
-  const [isloading,setisloading] = useState(false)
-  const { docterdata } = useDocAuth()
-  const [from, setFrom] = useState({})
-  const navigate  = useNavigate()
-  const [Gender,setGenter] = useState('')
-  const {axios} = useAuth()
-  const gender = [
-    { name: "Male" },
-    { name: "Female" },
-    { name: "Other" },
-  ]
-const handleFromData = (e) => {
-  const { name, value } = e.target;
-  setFrom( ({ ...from, [name]: value }));
-};
-  const hynadleSubmitFrom = async (e) => {
-    setisloading(true)
-  e.preventDefault();
-  try {
-    const { data } = await axios.post("/HostkRegister", {from,Gender:Gender});
-    console.log(data); // ✅ Now this will have your response
-    if(data.success){
-      toast.success(data.message)
-      navigate("/hostpiyalshow")
-      setisloading(false)
-    }
-    else{
-      toast.error(data.message)
-      setisloading(false)
-    }
-  } catch (error) {
-    console.error("Submission error:", error);
-  }
-};
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[#85acff] px-4">
-      <div className="bg-white max-w-md w-full rounded-2xl shadow-lg p-6 sm:p-8">
-        <h2 className="text-xl font-semibold text-gray-800">Create Profile with <p className='text-blue-600'>LifeShield</p></h2>
-        <p className="text-sm text-gray-500 mt-1 mb-6">
-          Help us maintain our medical community’s integrity with verified credentials.
-        </p>
-       <form action="" onSubmit={hynadleSubmitFrom}>
-         <div className="flex space-x-2 mb-4">
-          <select className="w-1/4 px-2 py-2 border rounded bg-yellow-50 text-gray-800">
-            <option>Dr</option>
-          </select>
-          <input type="text" onChange={handleFromData} name="fname" placeholder="First" className="w-1/3 px-3 py-2 border rounded bg-yellow-50" />
-          <input type="text" onChange={handleFromData} name="Mname" placeholder="Middle" className="w-1/3 px-3 py-2 border rounded bg-yellow-50" />
-          <input type="text" onChange={handleFromData} name="lname" placeholder="Last" className="w-1/3 px-3 py-2 border rounded bg-yellow-50" />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Gender</label>
-          <div className="flex space-x-3">
-            {
-              gender.map(({name}) => (
-                <button type='button' onClick={()=>setGenter(name)} className={`px-4 py-2 border rounded-full  ${ Gender === name ? "bg-blue-100":null} text-gray-700 hover:bg-blue-100`}>{name}</button>
-              ))
-            }
-          </div>
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Date of birth</label>
-          <input type="date" name="date" onChange={handleFromData} className="w-full px-4 py-2 border rounded bg-white" />
-        </div>
-        <div className="mb-2">
-          <label className="block text-gray-700 font-medium mb-1">Mobile Number With Country Code</label>
-          <div className="flex">
-            <select className="px-3 py-2 border rounded-l bg-white text-gray-800">
-              <option>IN</option>
-            </select>
-            <input
-              type="text"
-              value={docterdata?.Number}
 
-              placeholder="07774025744"
-              className="w-full px-4 py-2 border border-l-0 rounded-r bg-yellow-50 text-gray-600"
+const CreateProfile = () => {
+  const [isloading, setisloading] = useState(false);
+  const { docterdata } = useDocAuth();
+  const [formData, setFormData] = useState({});
+  const [gender, setGender] = useState('');
+  const navigate = useNavigate();
+  const { axios } = useAuth();
+
+  const genderOptions = [
+    { name: "Male", value: "Male" },
+    { name: "Female", value: "Female" },
+    { name: "Other", value: "Other" },
+  ];
+
+  const handleFormData = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!gender) return toast.error("Please select your gender");
+    
+    setisloading(true);
+    try {
+      const { data } = await axios.post("/HostkRegister", { 
+        from: formData, 
+        Gender: gender 
+      });
+      
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/hostpiyalshow");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast.error("Failed to update profile");
+    } finally {
+      setisloading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f0f4ff] flex items-center justify-center px-4 py-10 relative overflow-hidden">
+      {/* Decorative background element */}
+      <div className="absolute top-0 right-0 p-10 opacity-10">
+        <Stethoscope size={300} className="text-blue-600" />
+      </div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white max-w-lg w-full rounded-[2.5rem] shadow-2xl shadow-blue-900/10 p-8 md:p-12 relative z-10 border border-slate-100"
+      >
+        {/* Header */}
+        <div className="mb-8">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                Step 1: Personal Details
+            </span>
+            <h2 className="text-3xl font-black text-slate-900 mt-4 tracking-tight">
+                Complete Your <span className="text-[#1057EC]">Profile.</span>
+            </h2>
+            <p className="text-slate-500 text-sm font-medium mt-2">
+                Set up your professional identity on the LifeShield network.
+            </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          
+          {/* Name Section */}
+          <div className="space-y-3">
+            <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 ml-1">
+                <User size={14} /> Full Name
+            </label>
+            <div className="grid grid-cols-12 gap-3">
+              <select className="col-span-3 px-3 py-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 font-bold focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                <option>Dr.</option>
+                <option>Mr.</option>
+                <option>Ms.</option>
+              </select>
+              <input 
+                type="text" 
+                name="fname" 
+                placeholder="First" 
+                onChange={handleFormData}
+                className="col-span-9 px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:outline-none font-medium" 
+                required
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <input 
+                type="text" 
+                name="Mname" 
+                placeholder="Middle (Optional)" 
+                onChange={handleFormData}
+                className="px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:outline-none font-medium text-sm" 
+              />
+              <input 
+                type="text" 
+                name="lname" 
+                placeholder="Last" 
+                onChange={handleFormData}
+                className="px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:outline-none font-medium text-sm" 
+                required
+              />
+            </div>
+          </div>
+
+          {/* Gender Pills */}
+          <div className="space-y-3">
+            <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Gender Identification</label>
+            <div className="flex gap-2">
+              {genderOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setGender(opt.value)}
+                  className={`flex-1 py-3 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all border ${
+                    gender === opt.value 
+                      ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-200" 
+                      : "bg-white border-slate-100 text-slate-500 hover:border-blue-200"
+                  }`}
+                >
+                  {opt.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* DOB */}
+          <div className="space-y-3">
+            <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 ml-1">
+                <Calendar size={14} /> Date of Birth
+            </label>
+            <input 
+                type="date" 
+                name="date" 
+                onChange={handleFormData} 
+                className="w-full px-4 py-4 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-blue-500/20 focus:outline-none font-medium text-slate-700" 
+                required
             />
           </div>
-          {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
-        </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 font-medium mb-1">Email</label>
-          <input
-            type="email"
-            defaultValue={docterdata?.email}
-            className="w-full px-4 py-2 border rounded bg-gray-100 text-gray-600"
-            readOnly
-          />
-        </div>
-        <button className="w-full bg-[#004bec] text-white font-medium py-2 rounded hover:bg-[#6978b9] transition">
-          {
-            isloading ? <Loader/>:"Next"
-          }
-        </button>
-       </form>
-      </div>
+
+          {/* Contact Group */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-3">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 ml-1">
+                    <Smartphone size={14} /> Mobile
+                </label>
+                <div className="px-4 py-4 bg-slate-100 border border-slate-100 rounded-2xl text-slate-500 font-bold text-sm">
+                    +91 {docterdata?.Number}
+                </div>
+            </div>
+            <div className="space-y-3">
+                <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 ml-1">
+                    <Mail size={14} /> Email
+                </label>
+                <div className="px-4 py-4 bg-slate-100 border border-slate-100 rounded-2xl text-slate-500 font-bold text-sm truncate">
+                    {docterdata?.email}
+                </div>
+            </div>
+          </div>
+
+          {/* CTA Button */}
+          <button 
+            type="submit"
+            disabled={isloading}
+            className="w-full mt-6 bg-[#1057EC] text-white font-black text-xs uppercase tracking-[0.2em] py-5 rounded-2xl hover:bg-slate-900 transition-all shadow-xl shadow-blue-900/20 flex items-center justify-center gap-2 group"
+          >
+            {isloading ? <Loader /> : (
+                <>
+                    Continue to Registration <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </>
+            )}
+          </button>
+        </form>
+      </motion.div>
     </div>
   );
 };

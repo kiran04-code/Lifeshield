@@ -1,98 +1,162 @@
-
-import React from 'react'
-import { useState } from 'react'
-import { useDocAuth } from '../../../../../context/dockAuth'
-import { toast } from 'react-toastify'
+import React, { useState } from 'react';
+import { useDocAuth } from '../../../../../context/dockAuth';
+import { toast } from 'react-toastify';
+import { 
+  Plus, 
+  Clock, 
+  CalendarRange, 
+  Save, 
+  Timer,
+  CheckCircle2 
+} from 'lucide-react';
+import Loader from '../../../../../utils/Loader';
 
 const AddBokking = () => {
-    const [add, setadd] = useState("New")
-    const [from, setFrom] = useState('')
-    const { axios, hostpitaldataworkspace } = useDocAuth()
+    const [view, setView] = useState("New"); // "New" or "Current"
+    const [form, setForm] = useState({ fromTime: '', toTime: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { axios, hostpitaldataworkspace } = useDocAuth();
     
-   const handleonchnge = (e) => {
-  const { id, value } = e.target; // value is "14:30" for example
-  const [hour, minute] = value.split(":");
-  let h = parseInt(hour, 10);
-  console.log(h)
-  const ampm = h >= 12 ? "PM" : "AM";
-  h = h % 12 || 12;
-  const formattedTime = `${h}:${minute} ${ampm}`;
+    const handleTimeChange = (e) => {aa
 
-  setFrom({ ...from, [id]: formattedTime });
-  console.log(from)
-};
+        // Convert 24h to 12h Format for User Display
+        const [hour, minute] = value.split(":");
+        let h = parseInt(hour, 10);
+        const ampm = h >= 12 ? "PM" : "AM";
+        h = h % 12 || 12;
+        const formattedTime = `${h}:${minute} ${ampm}`;
 
-    const handleSendTotime = async (e) => {
-        e.preventDefault()
+        setForm(prev => ({ ...prev, [id]: formattedTime }));
+    };
+
+    const handleSendToTime = async (e) => {
+        e.preventDefault();
+        if (!form.fromTime || !form.toTime) {
+            return toast.warn("Please set both start and end times");
+        }
+
+        setIsSubmitting(true);
         try {
-            const { data } = await axios.post("/addtime", from)
+            const { data } = await axios.post("/addtime", form);
             if (data.success) {
-                toast.success(data.message)
-            }
-            else {
-                toast.error(data.message)
+                toast.success("Schedule Updated Successfully");
+                setView("Current");
+            } else {
+                toast.error(data.message);
             }
         } catch (error) {
-            console.log(error)
+            console.error(error);
+            toast.error("Internal Server Error");
+        } finally {
+            setIsSubmitting(false);
         }
-    }
+    };
 
     return (
-        <div className={`w-[280px] h-[300px] ${add === "New" ? "justify-between" : null} flex flex-col bg-gray-100 shadow-xl rounded-lg border-blue-300 border p-4 space-y-4`}>
-            <div className="flex items-center space-x-2 bg-blue-500 p-2 text-white rounded-2xl justify-evenly ">
-                <button onClick={() => setadd("New")} className="bg-gray-100 text-blue-500 px-4 py-1 rounded-xl text-sm font-semibold  cursor-pointer  ">+ New</button>
-                <button onClick={() => setadd("book")} className="bg-gray-100 py-1  text-sm text-blue-500 px-3 rounded-xl cursor-pointer">Your Booking Timing</button>
+        <div className="w-full max-w-[340px] bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-blue-900/5 overflow-hidden transition-all">
+            {/* Header Tabs */}
+            <div className="flex p-1.5 bg-slate-50 border-b border-slate-100">
+                <button 
+                    onClick={() => setView("New")}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
+                        view === "New" 
+                        ? "bg-white text-blue-600 shadow-sm" 
+                        : "text-slate-400 hover:text-slate-600"
+                    }`}
+                >
+                    <Plus size={14} /> New Slot
+                </button>
+                <button 
+                    onClick={() => setView("Current")}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
+                        view === "Current" 
+                        ? "bg-white text-blue-600 shadow-sm" 
+                        : "text-slate-400 hover:text-slate-600"
+                    }`}
+                >
+                    <Clock size={14} /> View Active
+                </button>
             </div>
-            {
-                add === "New" ? <div>
-                    <form onSubmit={handleSendTotime}>
-                        <div className="w-full space-y-2">
-                            {/* Title */}
-                            <h2 className="text-lg font-semibold text-gray-800">Set Booking Time Slot</h2>
 
-                            {/* Time Inputs */}
-                            <div className="flex items-center space-x-4">
-                                {/* From Time */}
-                                <div className="flex flex-col">
-                                    <label htmlFor="fromTime" className="text-sm text-gray-600 mb-1">From</label>
-                                    <input
-                                        type="time"
-                                        onChange={handleonchnge}
-                                        id="fromTime"
-                                        className="border rounded-md px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
+            <div className="p-6">
+                {view === "New" ? (
+                    <form onSubmit={handleSendToTime} className="space-y-5">
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                                <CalendarRange size={18} />
+                            </div>
+                            <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight">Set Time Range</h2>
+                        </div>
 
-                                {/* To Time */}
-                                <div className="flex flex-col">
-                                    <label htmlFor="toTime" className="text-sm text-gray-600 mb-1">To</label>
-                                    <input onChange={handleonchnge}
-                                        type="time"
-                                        id="toTime"
-                                        className="border rounded-md px-3 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    />
-                                </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Start</label>
+                                <input
+                                    type="time"
+                                    id="fromTime"
+                                    onChange={handleTimeChange}
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-3 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">End</label>
+                                <input
+                                    type="time"
+                                    id="toTime"
+                                    onChange={handleTimeChange}
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-xl px-3 py-3 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                                />
                             </div>
                         </div>
 
-                        <button type='submit' className=" w-full mt-4 bg-blue-600 text-white py-2 rounded-md flex items-center justify-center gap-2 cursor-pointer">
-                            Add Time
+                        <button 
+                            type="submit" 
+                            disabled={isSubmitting}
+                            className="w-full bg-blue-600 hover:bg-slate-900 text-white py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-blue-900/10 transition-all flex items-center justify-center gap-2 group"
+                        >
+                            {isSubmitting ? <Loader /> : (
+                                <>
+                                    <Save size={16} className="group-hover:scale-110 transition-transform" /> 
+                                    Update Schedule
+                                </>
+                            )}
                         </button>
+                    </form>
+                ) : (
+                    <div className="space-y-6 py-2">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg">
+                                <CheckCircle2 size={18} />
+                            </div>
+                            <div>
+                                <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight">Active Schedule</h2>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Currently visible to patients</p>
+                            </div>
+                        </div>
 
-                    </form> </div> : <div className="w-full space-y-2">
-                    {/* Title */}
-                    <h2 className="text-lg font-semibold text-gray-800 cursor-pointer">Your Booking Time</h2>
+                        <div className="bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-6 text-center">
+                            <div className="flex items-center justify-center gap-4 text-blue-600 mb-2">
+                                <Timer size={24} />
+                            </div>
+                            <div className="flex items-center justify-center gap-3">
+                                <span className="text-2xl font-black text-slate-900 tracking-tighter">
+                                    {hostpitaldataworkspace?.fromTime || "--:--"}
+                                </span>
+                                <div className="h-1 w-4 bg-slate-300 rounded-full" />
+                                <span className="text-2xl font-black text-slate-900 tracking-tighter">
+                                    {hostpitaldataworkspace?.toTime || "--:--"}
+                                </span>
+                            </div>
+                        </div>
 
-                    {/* Slot display (dynamic or placeholder) */}
-                    <div className="flex bg-blue-500 items-center px-3 py-2 rounded-md">
-                        <div className="text-sm text-white">{hostpitaldataworkspace.fromTime} To  {hostpitaldataworkspace.toTime}</div> {/* Replace with dynamic value */}
+                        <p className="text-[10px] text-slate-400 font-medium text-center px-4">
+                            Appointments can only be booked within this clinical window.
+                        </p>
                     </div>
-                </div>
-
-            }
+                )}
+            </div>
         </div>
-
-    )
+    );
 }
 
-export default AddBokking
+export default AddBokking;

@@ -1,130 +1,147 @@
+import React, { useState } from 'react';
 
-import React from 'react'
-import { useState } from 'react'
-import { useDocAuth } from '../../../../../context/dockAuth'
-import { toast } from 'react-toastify'
-import { FaRupeeSign } from "react-icons/fa";
-const AddBokking = () => {
-  const [add, setadd] = useState("New")
-  const [time, setTime] = useState('')
-  const [price, setPrice] = useState()
-  const { axios, hostpitaldataworkspace, hotdataauth } = useDocAuth()
-  
-  const handleSendpackageData = async (e) => {
-    e.preventDefault()
-    const tim = `${time} min`
+import { toast } from 'react-toastify';
+import { Plus, IndianRupee, Clock, Trash2, Zap, Package, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useDocAuth } from '../../../../../context/dockAuth';
+
+
+const ADDpackages = () => {
+  const [view, setView] = useState("New"); 
+  const [time, setTime] = useState('');
+  const [price, setPrice] = useState('');
+  const { axios, hostpitaldataworkspace, hotdataauth } = useDocAuth();
+
+  const handleSendPackageData = async (e) => {
+    e.preventDefault();
+    if (!time || !price) return toast.error("Please fill all fields");
+
     try {
-      const { data } = await axios.post("/createPackage", { price: price, time: tim })
+      const { data } = await axios.post("/createPackage", { 
+        price: price, 
+        time: `${time} min` 
+      });
       if (data.success) {
-        toast.success(data.message)
-        hotdataauth()
-        setadd("ok")
+        toast.success("Consultation tier added");
+        await hotdataauth(); // Refresh global context
+        setTime(''); 
+        setPrice('');
+        setView("List");
       }
     } catch (error) {
-      console.log(error)
+      toast.error("Failed to add package");
     }
+  };
 
-  }
   const handleDeletePackage = async (id) => {
-  
     try {
-      const { data } = await axios.post("/deletePackage",{ids:id})
+      const { data } = await axios.post("/deletePackage", { ids: id });
       if (data.success) {
-        toast.success(data.message)
-        hotdataauth()
-        setadd("ok")
+        toast.success("Package removed");
+        await hotdataauth();
       }
     } catch (error) {
-      console.log(error)
+      toast.error("Error deleting package");
     }
-
-  }
+  };
 
   return (
-    <div className={`w-[280px]  ${add === "New" ? "justify-between" : null} flex flex-col bg-gray-100 shadow-xl rounded-lg border-blue-300 border p-4 space-y-4`}>
-      <div className="flex items-center space-x-2 bg-blue-500 p-2 text-white rounded-2xl justify-evenly ">
-        <button onClick={() => setadd("New")} className="bg-gray-100 text-blue-500 px-4 py-1 rounded-xl text-sm font-semibold  cursor-pointer  ">+ New</button>
-        <button onClick={() => setadd("book")} className="bg-gray-100 py-1  text-sm text-blue-500 px-3 rounded-xl cursor-pointer">Your created package</button>
+    <div className="w-full sm:w-[320px] bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl shadow-slate-200/50 overflow-hidden flex flex-col">
+      {/* Tab Navigation */}
+      <div className="flex p-1.5 bg-slate-50/80 m-4 rounded-2xl border border-slate-100">
+        <button 
+          onClick={() => setView("New")}
+          className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${view === "New" ? "bg-white shadow-sm text-blue-600" : "text-slate-400 hover:text-slate-600"}`}
+        >
+          Add Tier
+        </button>
+        <button 
+          onClick={() => setView("List")}
+          className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${view === "List" ? "bg-white shadow-sm text-blue-600" : "text-slate-400 hover:text-slate-600"}`}
+        >
+          My Rates
+        </button>
       </div>
-      {
-        add === "New" ? <div>
-          <p className="text-sm text-gray-700 italic text-center mt-4">
-            💙 Your time saves lives. Price it with care, touch every heart. 🩺
-          </p>
 
-          <form onSubmit={handleSendpackageData} className='flex flex-col'>
-            <div className="w-full space-y-2 flex-col flex">
-              {/* Title */}
-              <h2 className="text-lg font-semibold text-gray-800">Create Packages</h2>
+      <div className="px-6 pb-6">
+        <AnimatePresence mode="wait">
+          {view === "New" ? (
+            <motion.form 
+              key="form"
+              initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}
+              onSubmit={handleSendPackageData} 
+              className="space-y-4"
+            >
+              <div className="text-center space-y-1 mb-4">
+                <p className="text-[11px] text-slate-400 font-bold italic">"Your expertise is invaluable."</p>
+              </div>
 
-              {/* Time Inputs */}
-              <div className="flex  flex-col gap-2 justify-center items-center">
-                {/* From Time */}
-                <div className="flex flex-col ml-2">
-                  <label > Time for Meeting</label>
-                  <div className='flex justify-between items-center gap-2'>
-                    <input
-                      type="tel"
-                      onChange={(e) => setTime(e.target.value)}
-                      name="time"
-                      value={time}
-                      className="border rounded-md text-[15px] px-1 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <p>Min</p>
-                  </div>
+              <div className="space-y-3">
+                <div className="relative group">
+                  <Clock className="absolute left-4 top-3.5 text-slate-300 group-focus-within:text-blue-500 transition-colors" size={18} />
+                  <input
+                    type="number"
+                    placeholder="Duration (Minutes)"
+                    onChange={(e) => setTime(e.target.value)}
+                    value={time}
+                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-500/5 outline-none transition-all"
+                  />
                 </div>
-                <div className="flex flex-col  ">
-                  <label > price for Meeting in Rupees</label>
-                  <div className='flex justify-center items-center gap-2'>
-                    <input
-                      type="tel"
-                      onChange={(e) => setPrice(e.target.value)}
-                      name="price"
-                      value={price}
-                      className="border text-[15px] px-1  rounded-md py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <FaRupeeSign />
-                  </div>
 
+                <div className="relative group">
+                  <IndianRupee className="absolute left-4 top-3.5 text-slate-300 group-focus-within:text-blue-500 transition-colors" size={18} />
+                  <input
+                    type="number"
+                    placeholder="Fee (Rupees)"
+                    onChange={(e) => setPrice(e.target.value)}
+                    value={price}
+                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold focus:bg-white focus:ring-4 focus:ring-blue-500/5 outline-none transition-all"
+                  />
                 </div>
               </div>
-            </div>
 
-            <button type='submit' className=" w-full mt-4 bg-blue-600 text-white py-2 rounded-md flex items-center justify-center gap-2 cursor-pointer">
-              Add Time
-            </button>
-
-          </form> </div> : <div className="w-full space-y-2">
-          {/* Title */}
-          <h2 className="text-[13px] font-semibold text-gray-800 cursor-pointer">Your created package </h2>
-
-          {/* Slot display (dynamic or placeholder) */}
-          <div className="flex flex-wrap gap-3 bg-blue-500 px-4 py-3 rounded-lg shadow-md">
-            <div className="flex flex-wrap gap-3 bg-blue-500 px-4 py-3 rounded-lg shadow-md">
-              {
-                hostpitaldataworkspace?.MeetingAvialbleTimeandpakcage.map((data, index) => (
-                  <div key={index} className="bg-white text-blue-700 px-4 py-2 rounded-md text-sm font-medium shadow-sm flex items-center gap-2">
-                    <span>⏱ {data.time} • ₹{data.price}</span>
-                    <button
-                      onClick={() => handleDeletePackage(data._id)}
-                      className="ml-2 text-red-500 hover:text-red-700 font-bold"
-                      title="Delete Package"
+              <button type='submit' className="group w-full bg-blue-600 hover:bg-slate-900 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-lg shadow-blue-900/10 flex items-center justify-center gap-2">
+                Create Package <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform"/>
+              </button>
+            </motion.form>
+          ) : (
+            <motion.div 
+              key="list"
+              initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}
+              className="space-y-2 max-h-[350px] overflow-y-auto pr-1 custom-scrollbar"
+            >
+              {hostpitaldataworkspace?.MeetingAvialbleTimeandpakcage?.length > 0 ? (
+                hostpitaldataworkspace.MeetingAvialbleTimeandpakcage.map((data, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-2xl hover:border-blue-200 transition-all">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-white rounded-lg shadow-sm text-blue-500">
+                        <Zap size={14} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-black text-slate-800 tracking-tight">{data.time}</p>
+                        <p className="text-[10px] font-bold text-blue-600 tracking-widest uppercase">₹{data.price}</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => handleDeletePackage(data._id)} 
+                      className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
                     >
-                      ✖
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 ))
-              }
-            </div>
-
-          </div>
-
-        </div>
-
-      }
+              ) : (
+                <div className="text-center py-12 bg-slate-50 rounded-[2rem] border border-dashed border-slate-200">
+                  <Package className="mx-auto text-slate-200 mb-2" size={32} />
+                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">No Active Rates</p>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default AddBokking
+export default ADDpackages;

@@ -1,160 +1,138 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  Instagram, 
+  Facebook, 
+  Twitter, 
+  Linkedin, 
+  Send, 
+  Users, 
+  ArrowUpRight,
+  ShieldCheck
+} from 'lucide-react';
+
 const Footer = () => {
-    const navigate = useNavigate()
-  return (
-    <div>
-        <div>
- <div className='bg-gradient-to-b from-[#b0c8fcd7] to-[#E0EAFF] text-[#165BF0] pt-8 px-6 mt-10 md:px-16 lg:px-24 xl:px-32'>
+    const navigate = useNavigate();
+    const currentYear = new Date().getFullYear();
 
-            <div className='flex flex-wrap justify-between gap-12 md:gap-6'>
+    const footerLinks = {
+        company: [
+            { name: "About Us", path: "#" },
+            { name: "Careers", path: "#" },
+            { name: "Press", path: "#" },
+            { name: "Blog", path: "#" }
+        ],
+        support: [
+            { name: "Help Center", path: "#" },
+            { name: "Safety Info", path: "#" },
+            { name: "Contact Us", path: "#" },
+            { name: "Accessibility", path: "#" }
+        ]
+    };
 
-                <div className='max-w-80'>
+    return (
+        <motion.footer 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className="bg-slate-50 border-t border-slate-200 pt-20"
+        >
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-16">
+                    
+                    {/* Brand Section */}
+                    <div className="lg:col-span-4 space-y-6">
+                        <div className="flex items-center gap-2">
+                            <img src="/logi2-removebg-preview.png" alt="Lifeshield" className="h-12 w-auto" />
+                        </div>
+                        <p className="text-slate-500 leading-relaxed max-w-sm font-medium">
+                            Protecting the next generation with smart, accessible, and verified vaccination tracking. Healthy. Strong. Ready.
+                        </p>
+                        <div className="flex items-center gap-4">
+                            {[Instagram, Facebook, Twitter, Linkedin].map((Icon, i) => (
+                                <a key={i} href="#" className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-50 transition-all">
+                                    <Icon size={18} />
+                                </a>
+                            ))}
+                        </div>
+                    </div>
 
-                    <img src="/logi2-removebg-preview.png" alt="logo" className='mb-4 h-15 md:h-15' />
+                    {/* Navigation Columns */}
+                    <div className="lg:col-span-2">
+                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 mb-6">Company</h4>
+                        <ul className="space-y-4">
+                            {footerLinks.company.map((link) => (
+                                <li key={link.name}>
+                                    <a href={link.path} className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors flex items-center gap-1 group">
+                                        {link.name} <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-all" />
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                    <p className='text-sm'>
+                    <div className="lg:col-span-2">
+                        <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 mb-6">Support</h4>
+                        <ul className="space-y-4">
+                            {footerLinks.support.map((link) => (
+                                <li key={link.name}>
+                                    <a href={link.path} className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">
+                                        {link.name}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-
-                    </p>
-
-                    <div className='flex items-center gap-3 mt-4'>
-
-                        {/* Instagram */}
-
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-
-                            <path d="M7.75 2A5.75 5.75 0 002 7.75v8.5A5.75 5.75 0 007.75 22h8.5A5.75 5.75 0 0022 16.25v-8.5A5.75 5.75 0 0016.25 2h-8.5zM4.5 7.75A3.25 3.25 0 017.75 4.5h8.5a3.25 3.25 0 013.25 3.25v8.5a3.25 3.25 0 01-3.25 3.25h-8.5a3.25 3.25 0 01-3.25-3.25v-8.5zm9.5 1a4 4 0 11-4 4 4 4 0 014-4zm0 1.5a2.5 2.5 0 102.5 2.5 2.5 2.5 0 00-2.5-2.5zm3.5-.75a.75.75 0 11.75-.75.75.75 0 01-.75.75z" />
-
-                        </svg>
-
-                        {/* Facebook */}
-
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-
-                            <path d="M13.5 9H15V6.5h-1.5c-1.933 0-3.5 1.567-3.5 3.5v1.5H8v3h2.5V21h3v-7.5H16l.5-3h-3z" />
-
-                        </svg>
-
-                        {/* Twitter */}
-
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-
-                            <path d="M22 5.92a8.2 8.2 0 01-2.36.65A4.1 4.1 0 0021.4 4a8.27 8.27 0 01-2.6 1A4.14 4.14 0 0016 4a4.15 4.15 0 00-4.15 4.15c0 .32.04.64.1.94a11.75 11.75 0 01-8.52-4.32 4.14 4.14 0 001.29 5.54A4.1 4.1 0 013 10v.05a4.15 4.15 0 003.33 4.07 4.12 4.12 0 01-1.87.07 4.16 4.16 0 003.88 2.89A8.33 8.33 0 012 19.56a11.72 11.72 0 006.29 1.84c7.55 0 11.68-6.25 11.68-11.67 0-.18 0-.35-.01-.53A8.18 8.18 0 0022 5.92z" />
-
-                        </svg>
-
-                        {/* LinkedIn */}
-
-                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-
-                            <path d="M4.98 3.5C3.88 3.5 3 4.38 3 5.48c0 1.1.88 1.98 1.98 1.98h.02c1.1 0 1.98-.88 1.98-1.98C6.98 4.38 6.1 3.5 4.98 3.5zM3 8.75h3.96V21H3V8.75zm6.25 0h3.8v1.68h.05c.53-.98 1.82-2.02 3.75-2.02 4.01 0 4.75 2.64 4.75 6.07V21H17v-5.63c0-1.34-.03-3.07-1.88-3.07-1.88 0-2.17 1.47-2.17 2.98V21H9.25V8.75z" />
-
-                        </svg>
+                    {/* Newsletter & Team */}
+                    <div className="lg:col-span-4 space-y-8">
                         <div>
-                            <button   onClick={()=>{navigate("/aboutTeam");scrollTo(0,0)}} className='p-1 text-white bg-blue-600 rounded-xl px-2 flex justify-center items-center cursor-pointer'>Team</button>
+                            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-900 mb-6">Stay Updated</h4>
+                            <div className="relative group">
+                                <input 
+                                    type="email" 
+                                    placeholder="Enter your email" 
+                                    className="w-full bg-white border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 transition-all font-medium text-slate-700"
+                                />
+                                <button className="absolute right-2 top-2 bottom-2 bg-blue-600 text-white px-4 rounded-xl hover:bg-slate-900 transition-colors">
+                                    <Send size={18} />
+                                </button>
+                            </div>
                         </div>
 
+                        <div className="p-6 bg-blue-600 rounded-3xl text-white relative overflow-hidden group">
+                            <div className="relative z-10 flex items-center justify-between">
+                                <div>
+                                    <p className="text-xs font-black uppercase tracking-widest opacity-80 mb-1">Collaborate</p>
+                                    <p className="font-bold">Meet the Developers</p>
+                                </div>
+                                <button 
+                                    onClick={() => { navigate("/aboutTeam"); window.scrollTo(0,0); }}
+                                    className="bg-white/20 hover:bg-white text-white hover:text-blue-600 p-3 rounded-xl transition-all"
+                                >
+                                    <Users size={20} />
+                                </button>
+                            </div>
+                            <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
+                                <ShieldCheck size={100} />
+                            </div>
+                        </div>
                     </div>
-
                 </div>
 
-
-                <div>
-
-                    <p className='text-lg text-gray-800'>COMPANY</p>
-
-                    <ul className='mt-3 flex flex-col gap-2 text-sm'>
-
-                        <li><a href="#">About</a></li>
-
-                        <li><a href="#">Careers</a></li>
-
-                        <li><a href="#">Press</a></li>
-
-                        <li><a href="#">Blog</a></li>
-
-                        <li><a href="#">Partners</a></li>
-
-                    </ul>
-
-                </div>
-
-
-                <div>
-
-                    <p className='text-lg text-gray-800'>SUPPORT</p>
-
-                    <ul className='mt-3 flex flex-col gap-2 text-sm'>
-
-                        <li><a href="#">Help Center</a></li>
-
-                        <li><a href="#">Safety Information</a></li>
-
-                        <li><a href="#">Cancellation Options</a></li>
-
-                        <li><a href="#">Contact Us</a></li>
-
-                        <li><a href="#">Accessibility</a></li>
-
-                    </ul>
-
-                </div>
-
-
-                <div className='max-w-80'>
-
-                    <p className='text-lg text-gray-800'>STAY UPDATED</p>
-
-                    <p className='mt-3 text-sm'>
-
-                        Subscribe to our newsletter for inspiration and special offers.
-
+                {/* Bottom Bar */}
+                <div className="border-t border-slate-200 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <p className="text-sm font-bold text-slate-400">
+                        © {currentYear} <span className="text-slate-900">Lifeshield</span> • Crafted by kiran.dev & Team
                     </p>
-
-                    <div className='flex items-center mt-4'>
-
-                        <input type="text" className='bg-white rounded-l border border-gray-300 h-9 px-3 outline-none' placeholder='Your email' />
-
-                        <button className='flex items-center justify-center bg-blue-600 h-9 w-9 aspect-square rounded-r'>
-
-                            {/* Arrow icon */}
-
-                            <svg className="w-4 h-4 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 12H5m14 0-4 4m4-4-4-4" /></svg>
-
-                        </button>
-
+                    <div className="flex gap-8">
+                        <a href="#" className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">Privacy Policy</a>
+                        <a href="#" className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors">Terms of Service</a>
                     </div>
-
-                </div>
-
-            </div>
-
-            <hr className='border-gray-300 mt-8' />
-
-        </div>
-        </div>
-       <div>
-         <footer className="w-full bg-gradient-to-b from-[#b0c8fcd7] to-[#E0EAFF] text-white">
-            <div className="max-w-7xl mx-auto px-6 py-16 flex flex-col items-center">
-                <div className="flex items-center space-x-3 mb-6">
-                    <img alt="" className="h-29"
-                        src="/logi2-removebg-preview.png" />
-                </div>
-                <p className="text-center max-w-xl text-3xl  leading-relaxed text-[#165BF0] font-bold">
-                    Healthy.Strong.Ready.
-                </p>
-            </div>
-            <div className="border-t border-[#3B1A7A]">
-                <div className="max-w-7xl mx-auto px-6 py-6 text-center text-sm font-normal text-[#165BF0]">
-                    <a href="/">Lifeshield</a> ©2025kiran.dev&Team. All rights reserved.
                 </div>
             </div>
-        </footer>
-       </div>
-    </div>
-  )
-}
+        </motion.footer>
+    );
+};
 
-export default Footer
+export default Footer;

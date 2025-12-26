@@ -1,228 +1,251 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Loader2 from '../../utils/Loader2';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Building2, MapPin, Stethoscope, Clock, 
+  ChevronRight, Navigation, Info, ShieldCheck, Search 
+} from 'lucide-react';
 import { useDocAuth } from '../../context/dockAuth';
-import { useNavigate } from 'react-router-dom';
-import Loader3 from '../../utils/Loder3';
-import { useParams } from 'react-router-dom';
 import Loader from '../../utils/Loader';
-const HospitalRegisterForm = () => {
-  const [location, setlocation] = useState([])
-  const [filterHostpilat, setfilterhotspil] = useState([])
-  const [selecthostpital, setselecthostpital] = useState('')
-  const [locationseting, setlocationsetting] = useState('')
-  const [timeing, settime] = useState('')
-  const [village, setVillage] = useState('')
-  const [isloade, setloderr] = useState(false)
-  const [longitide, setLongitude] = useState();
-  const [latitude, setLatitude] = useState();
+import Loader3 from '../../utils/Loder3';
 
-  const { id } = useParams()
-  const [loader, setloader] = useState(false)
-  const { axios, docterdata, hostpitaldata } = useDocAuth()
-  const navigates = useNavigate()
-  const [number, setNumber] = useState();
-  useEffect(() => {
-    if (docterdata?.Number) {
-      setNumber(docterdata.Number);
-    }
-  }, [docterdata]);
-  var [formData, setFormData] = useState({
+const HostpitalAdded = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { axios, docterdata } = useDocAuth();
+
+  // State Management
+  const [nearbyHospitals, setNearbyHospitals] = useState([]);
+  const [isSearching, setIsSearching] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
     hospitalName: '',
-    specialization: ''
+    specialization: '',
+    location: '',
+    village: '',
+    lat: null,
+    lon: null,
+    timings: ''
   });
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-  const findInerarHostpital = useCallback(async () => {
-    setloader(false)
+
+  // Fetch Nearby Hospitals via Geoapify
+  const findNearbyHospitals = useCallback(async () => {
+    setIsSearching(true);
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const { latitude, longitude } = position.coords;
-        const LAT = latitude;
-        const LON = longitude;
-        const apiKey = '7e951727013c4c94ab1a32c2db0ab4b3';
-        const data = await fetch(`https://api.geoapify.com/v2/places?categories=healthcare.hospital&filter=circle:${LON},${LAT},2000&limit=50&apiKey=${apiKey}`)
-        const res = await data.json()
-        setlocation(res.features)
-        setloader(true)
+        try {
+          const { latitude, longitude } = position.coords;
+          const apiKey = '7e951727013c4c94ab1a32c2db0ab4b3';
+          const response = await fetch(
+            `https://api.geoapify.com/v2/places?categories=healthcare.hospital&filter=circle:${longitude},${latitude},5000&limit=20&apiKey=${apiKey}`
+          );
+          setIsSearching(false);
+          const res = await response.json();
+          setNearbyHospitals(res.features || []);
+           setIsSearching(false);
+        } catch (error) {
+          toast.error("Could not fetch nearby facilities");
+        } finally {
+          setIsSearching(false);
+        }
       },
       (error) => {
-        console.error("Location access denied:", error);
-      })
-  }, [])
-  useEffect(() => {
-    const filterData = location.find((data, index) => data.properties.name === selecthostpital)
-    setfilterhotspil(filterData)
-  }, [selecthostpital])
-  useEffect(() => {
-    findInerarHostpital()
-  }, [])
-  const hnadleCretaWorkSpace = async (e) => {
-    try {
-      e.preventDefault();
-      setloderr(true)
-      const { data } = await axios.post("/createWrokSpace", { formData, locationseting, number, latitude, longitide, village, timeing })
-      if (data.success) {
-        toast.success(data.message)
-        navigates(`/DokcterdashBord/${id}/docter/verfyDocter`)
-        setloderr(false)
+        setIsSearching(false);
+        toast.warning("Location access denied. Please enter details manually.");
       }
-      else {
-        toast.error(data.message)
-        setloderr(false)
+    );
+  }, []);
+
+  useEffect(() => { findNearbyHospitals(); }, [findNearbyHospitals]);
+
+  // Handle Selection from Suggestions
+  const handleHospitalSelect = (e) => {
+    const selectedName = e.target.value;
+    const hospital = nearbyHospitals.find(h => h.properties.name === selectedName);
+
+    if (hospital) {
+      setFormData(prev => ({
+        ...prev,
+        hospitalName: selectedName,
+        location: `${hospital.properties.address_line1}, ${hospital.properties.address_line2 || ''}`,
+        village: hospital.properties.village || hospital.properties.suburb || '',
+        lat: hospital.properties.lat,
+        lon: hospital.properties.lon
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, hospitalName: selectedName }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        formData: { hospitalName: formData.hospitalName, specialization: formData.specialization },
+        locationseting: formData.location,
+        number: docterdata?.Number,
+        latitude: formData.lat,
+        longitide: formData.lon,
+        village: formData.village,
+        timeing: formData.timings
+      };
+      
+      const { data } = await axios.post("/createWrokSpace", payload);
+      console.log(data)
+      if (data.success) {
+        toast.success("Workspace Created Successfully!");
+        navigate(`/DokcterdashBord/${id}/docter/verfyDocter`);
+      }else{
+         toast.error(`${data.success}`);
       }
     } catch (error) {
-      console.log(error)
-      toast.error(data.message)
+      toast.error("Failed to register workspace");
+    } finally {
+      setIsSubmitting(false);
     }
-  }
-  return loader ? (
-    <div className="w-full min-h-screen flex justify-center items-center bg-blue-50 p-4">
-      <div className="w-full max-w-xl">
+  };
 
-        {/* Instruction Box */}
-        <div className="bg-blue-100 border-l-4 border-blue-700 text-yellow-800 p-4 rounded-md shadow-sm mb-6">
-          <h3 className="text-lg font-semibold mb-2">📌 How to Register Your Hospital</h3>
-          <ul className="list-disc list-inside space-y-1 text-sm">
-            <li>🧭 <strong>Allow location access</strong> when prompted to auto-detect your hospital's area.</li>
-            <li>🏥 <strong>Find your hospital</strong> from the dropdown list based on nearby suggestions.</li>
-            <li>✍️ <strong>Register your hospital</strong> by providing its name, address, and services offered.</li>
-          </ul>
-          <p className="mt-3 text-sm text-red-600">
-            ⚠️ If your hospital is not listed, we're sorry — you're not eligible to register on Lifeshield at this time.
-          </p>
-        </div>
-        {/* Form */}
-        <form onSubmit={hnadleCretaWorkSpace} className="bg-white shadow-md rounded-lg p-6 space-y-5">
-          <h2 className="text-2xl font-bold text-center text-blue-700">Hospital Registration</h2>
+  if (isSearching) return <div className="h-screen flex items-center justify-center"><Loader3 /></div>;
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Hospital Name</label>
-
-            {/* Dropdown */}
-            <select
-              className="w-full px-4 py-2 mb-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
-              onChange={handleChange}
-              onClick={(e) => setselecthostpital(e.target.value)}
-              name="hospitalName"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                -- Select a hospital --
-              </option>
-              {location.map((data, index) => (
-                <option key={index} value={data.properties.name} >
-                  {data.properties.name}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              name="hospitalName"
-              value={formData.hospitalName}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
-              placeholder="Or enter hospital name manually"
-              required
-            />
-          </div>
-          {/* location  */}
-          <div>
-            <select
-              className="w-full px-4 py-2 mb-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
-              onChange={handleChange}
-
-              onClick={(e) => {
-                setLongitude(filterHostpilat.properties?.lon);
-                setLatitude(filterHostpilat.properties?.lat);
-                setVillage(filterHostpilat.properties?.village);
-                setlocationsetting(e.target.value)
-              }}
-              name="location"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                -- Select a hospital --
-              </option>
-              <option onChange={handleChange}
-
-                value={`${filterHostpilat?.properties?.address_line1}-${filterHostpilat?.properties?.address_line2}`} >
-                {`${filterHostpilat?.properties?.address_line1}-${filterHostpilat?.properties?.address_line2} `}
-              </option>
-            </select>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
-            <textarea
-              type="text"
-              onChange={handleChange}
-              value={locationseting}
-              className="w-full px-4 py-5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
-              placeholder="Enter hospital location"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Services</label>
-            <input
-              type="text"
-              name="specialization"
-              value={formData.specialization}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
-              placeholder="e.g. Cardiology, Pediatrics"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Hospital Timings</label>
-            <div className="grid grid-cols-4 gap-2 bg-blue-100 p-4 rounded border">
-              {["7 hr", "9 hr", "12 hr", "3 hr", "6 hr", "10 hr", "18 hr", "24 hr"].map((time, index) => (
-                <label key={index} className="flex items-center space-x-2 text-sm">
-                  <input onClick={(e) => settime(e.target.value)} type="checkbox" name="timings" value={time} className="form-checkbox text-blue-500" />
-                  <span>{time}</span>
-                </label>
-              ))}
+  return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }} 
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full max-w-4xl grid md:grid-cols-12 bg-white rounded-[2.5rem] shadow-2xl shadow-blue-100 overflow-hidden border border-white"
+      >
+        
+        {/* LEFT PANEL: INSTRUCTIONS */}
+        <div className="md:col-span-4 bg-blue-600 p-10 text-white flex flex-col justify-between relative overflow-hidden">
+          <div className="relative z-10">
+            <div className="bg-white/20 w-12 h-12 rounded-2xl flex items-center justify-center mb-6">
+               <Building2 size={24} />
             </div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Number</label>
-            <input
-              type="text"
-              name="Number"
-              value={docterdata?.Number}
-              onChange={() => setNumber(docterdata?.Number)}
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300"
-              placeholder="e.g. Cardiology, Pediatrics"
-
-            />
+            <h2 className="text-2xl font-black leading-tight mb-6">Register Your Medical Workspace</h2>
+            
+            <div className="space-y-6">
+              <Step icon={<Navigation size={18}/>} title="Auto-Detect" desc="We use GPS to find your facility instantly." />
+              <Step icon={<Search size={18}/>} title="Verify" desc="Select your hospital from the verified list." />
+              <Step icon={<ShieldCheck size={18}/>} title="Confirm" desc="Finalize your timings and services." />
+            </div>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition"
+
+          <div className="relative z-10 mt-10 p-4 bg-blue-700/50 rounded-2xl border border-blue-400/30">
+            <div className="flex gap-3">
+              <Info size={20} className="shrink-0 text-blue-200" />
+              <p className="text-[10px] font-bold leading-relaxed text-blue-100 uppercase tracking-wider">
+                Note: Only registered healthcare facilities are eligible for the Lifeshield network.
+              </p>
+            </div>
+          </div>
+          
+          {/* Decorative background circle */}
+          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        </div>
+
+        {/* RIGHT PANEL: FORM */}
+        <form onSubmit={handleSubmit} className="md:col-span-8 p-10 lg:p-14 space-y-8">
+          <div>
+            <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Hospital Details</h3>
+            
+            <div className="grid gap-6">
+              {/* Name Selection */}
+              <div className="space-y-2">
+                <label className="text-[11px] font-black text-slate-500 uppercase ml-1">Verified Facility Name</label>
+                <div className="relative">
+                  <select 
+                    onChange={handleHospitalSelect}
+                    className="w-full pl-4 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold appearance-none focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 transition-all outline-none"
+                  >
+                    <option value="">Select Suggestion...</option>
+                    {nearbyHospitals.map((h, i) => (
+                      <option key={i} value={h.properties.name}>{h.properties.name}</option>
+                    ))}
+                  </select>
+                  <ChevronRight size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 rotate-90 pointer-events-none" />
+                </div>
+                <input 
+                  type="text" 
+                  placeholder="Or enter name manually"
+                  className="w-full px-4 py-4 bg-white border border-slate-200 rounded-2xl text-sm font-bold mt-2"
+                  value={formData.hospitalName}
+                  onChange={(e) => setFormData({...formData, hospitalName: e.target.value})}
+                  required
+                />
+              </div>
+
+              {/* Address Auto-filled */}
+              <div className="space-y-2">
+                <label className="text-[11px] font-black text-slate-500 uppercase ml-1">Exact Location</label>
+                <div className="relative">
+                  <MapPin size={18} className="absolute left-4 top-4 text-blue-500" />
+                  <textarea 
+                    value={formData.location}
+                    onChange={(e) => setFormData({...formData, location: e.target.value})}
+                    placeholder="Facility Address"
+                    rows="2"
+                    className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold focus:ring-4 focus:ring-blue-500/5 outline-none resize-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Specialization */}
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black text-slate-500 uppercase ml-1">Clinical Services</label>
+                  <div className="relative">
+                    <Stethoscope size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <input 
+                      type="text"
+                      placeholder="e.g. Pediatrics"
+                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none"
+                      value={formData.specialization}
+                      onChange={(e) => setFormData({...formData, specialization: e.target.value})}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[11px] font-black text-slate-500 uppercase ml-1">Daily Availability</label>
+                  <div className="relative">
+                    <Clock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <select 
+                      className="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold outline-none appearance-none"
+                      onChange={(e) => setFormData({...formData, timings: e.target.value})}
+                    >
+                      <option value="">Select Timing</option>
+                      {["6 Hours", "12 Hours", "24 Hours (ER)"].map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full py-5 bg-blue-600 hover:bg-slate-900 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-200 flex justify-center items-center gap-3 disabled:opacity-70"
           >
-            {
-              isloade ? <Loader /> : "Register Hospital"
-            }
+            {isSubmitting ? <Loader /> : <>Initialize Workspace <ChevronRight size={18}/></>}
           </button>
         </form>
-      </div >
-    </div >
-  ) : <div className="w-full flex flex-col items-center mt-20 px-4">
-    {/* Instruction Box */}
-    <div className="w-full max-w-xl bg-blue-50 border-l-4 border-blue-700 text-blue-800 p-5 rounded-md shadow-md mb-6">
-      <h3 className="text-xl font-semibold mb-3">📌 How to Register Your Hospital</h3>
-      <ul className="list-disc list-inside space-y-2 text-sm">
-        <li>🧭 <strong>Allow location access</strong> when prompted to auto-detect your hospital's area.</li>
-        <li>🏥 <strong>Find your hospital</strong> from the dropdown list based on nearby suggestions.</li>
-        <li>✍️ <strong>Register your hospital</strong> by providing its name, address, and services offered.</li>
-      </ul>
-      <p className="mt-4 text-sm text-red-600 font-medium">
-        ⚠️ If your hospital is not listed, we're sorry — you're not eligible to register on <span className="font-bold">Lifeshield</span> at this time.
-      </p>
+      </motion.div>
     </div>
-
-    {/* Loader */}
-    <Loader3 />
-  </div>
-
+  );
 };
 
-export default HospitalRegisterForm;
+// Sub-component for instructions
+const Step = ({ icon, title, desc }) => (
+  <div className="flex gap-4">
+    <div className="bg-white/10 p-2 rounded-xl shrink-0">{icon}</div>
+    <div>
+      <h4 className="text-xs font-black uppercase tracking-widest text-white">{title}</h4>
+      <p className="text-[11px] text-blue-100 font-medium leading-relaxed">{desc}</p>
+    </div>
+  </div>
+);
+
+export default HostpitalAdded;

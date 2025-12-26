@@ -3,104 +3,84 @@ import { useAuth } from '../../../context/auth'
 import ageFinder from '../../../lib/ageCalculator'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { FaUser, FaEnvelope, FaPhone, FaBirthdayCake, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa'
+
 const UserInfo = () => {
-   const { User,setUser,axios} = useAuth()
-   const navigate = useNavigate()
-   const logout = async(req,res)=>{
-  try {
-    const {data} = await axios.get("http://localhost:3010/api/logout")
-    if(data.success){
-      toast.success(data.message)
-      setUser(null)
-      navigate("/parent")
+    const { User, setUser, axios } = useAuth()
+    const navigate = useNavigate()
+
+    const logout = async () => {
+        try {
+            const { data } = await axios.get("http://localhost:3010/api/logout")
+            if (data.success) {
+                toast.success(data.message)
+                setUser(null)
+                navigate("/parent")
+            } else {
+                toast.error("Issue to Logout!")
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
-    else{
-      toast.error("Isuue to Logout!")
-    }
-  } catch (error) {
-    console.log(error)
-  }
-   }
-  return (
-    <div className='w-full p-5'>
-      {/* Profile Header */}
-      <div className='flex flex-col sm:flex-row items-center justify-between gap-5 w-full'>
-        <div className='flex items-center gap-4'>
-          <div className='w-20 h-20 rounded-full  bg-[#68b3ff94] text-white flex justify-center items-center text-5xl'>{User.fullName.substring(0,1)}</div>
-          <div>
-            <h1 className='text-xl sm:text-2xl font-bold uppercase'>{User.fullName}</h1>
-            <p className='text-sm text-gray-600'>{User.email}</p>
-          </div>
-        </div>
-      </div>
 
-      {/* Info Section 1 */}
-      <div className='mt-8 w-full'>
-        <div className='  p-5 grid grid-cols-1 md:grid-cols-2 gap-5'>
-          <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium'>Full Name</label>
-            <input
-              type='text'
-              value={User.fullName}
-              className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
-              readOnly
-            />
-          </div>
-          <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium'>Email</label>
-            <input
-              type='email'
-              value={User.email}
-              className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
-              readOnly
-            />
-          </div>
-        </div>
-      </div>
+    return (
+        <div className='w-full animate-in fade-in duration-500'>
+            <div className='flex flex-col sm:flex-row items-center justify-between gap-6 pb-8 border-b border-gray-100'>
+                <div className='flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left'>
+                    <div className='w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 text-white flex justify-center items-center text-4xl font-bold shadow-lg shadow-blue-200 ring-4 ring-white'>
+                        {User?.fullName?.substring(0, 1).toUpperCase()}
+                    </div>
+                    <div>
+                        <h1 className='text-2xl sm:text-3xl font-extrabold text-gray-800 tracking-tight'>{User?.fullName}</h1>
+                        <p className='text-blue-600 font-medium flex items-center justify-center sm:justify-start gap-2'>
+                            <FaEnvelope className="text-xs" /> {User?.email}
+                        </p>
+                    </div>
+                </div>
+                
+                <button 
+                    onClick={logout} 
+                    className='flex items-center gap-2 bg-red-50 text-red-600 px-5 py-2.5 rounded-xl font-bold hover:bg-red-600 hover:text-white transition-all duration-300 active:scale-95 border border-red-100'
+                >
+                    <FaSignOutAlt /> Logout
+                </button>
+            </div>
 
-      {/* Info Section 2 */}
-      <div className='mt-8 w-full'>
-        <div className='  p-5 grid grid-cols-1 md:grid-cols-2 gap-5'>
-          <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium'>Phone Number</label>
-            <input
-              type='text'
-              value={User.Number}
-              className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
-              readOnly
-            />
-          </div>
-          <div className='flex flex-col gap-2'>
-            <label className='text-sm font-medium'>Date of Birth</label>
-            <input
-              type='text'
-              value={User.date}
-              className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
-              readOnly
-            />
-          </div>
-        </div>
-      </div>
+            <div className='mt-10 grid grid-cols-1 md:grid-cols-2 gap-8'>
+                <div className="space-y-6">
+                    <h3 className="text-gray-400 uppercase text-xs font-bold tracking-widest">Account Details</h3>
+                    <InfoBlock icon={<FaUser className="text-blue-500"/>} label="Full Name" value={User?.fullName} />
+                    <InfoBlock icon={<FaEnvelope className="text-blue-500"/>} label="Email Address" value={User?.email} />
+                </div>
 
-      {/* Age & Logout */}
-      <div className='mt-8 w-full'>
-        <div className='  p-5 flex flex-col md:flex-row justify-between items-center gap-5'>
-          <div className='flex flex-col gap-2 w-full md:w-auto'>
-            <label className='text-sm font-medium'>Your Age</label>
-            <input
-              type='text'
-              value= {ageFinder(User.date)}
-              className='px-4 py-2 border border-gray-300 bg-white text-gray-700  '
-              readOnly
-            />
-          </div>
-          <button onClick={()=>logout()} className='bg-blue-500 text-white px-6 py-2 w-full md:w-40   hover:bg-blue-600 transition duration-300'>
-            Logout
-          </button>
+                <div className="space-y-6">
+                    <h3 className="text-gray-400 uppercase text-xs font-bold tracking-widest">Personal Details</h3>
+                    <InfoBlock icon={<FaPhone className="text-green-500"/>} label="Phone Number" value={User?.Number || "Not Provided"} />
+                    <div className="grid grid-cols-2 gap-4">
+                        <InfoBlock icon={<FaBirthdayCake className="text-purple-500"/>} label="Birth Date" value={User?.date} />
+                        <InfoBlock icon={<FaCalendarAlt className="text-orange-500"/>} label="Current Age" value={`${ageFinder(User?.date)} Years`} />
+                    </div>
+                </div>
+            </div>
+
+            <div className="mt-12 p-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200 text-center">
+                <p className="text-gray-500 text-sm italic">
+                    Contact support if you need to change your registered email or phone number.
+                </p>
+            </div>
         </div>
-      </div>
-    </div>
-  )
+    )
 }
+
+const InfoBlock = ({ icon, label, value }) => (
+    <div className='flex items-start gap-4 p-4 rounded-2xl bg-white border border-gray-50 shadow-sm hover:shadow-md transition-shadow'>
+        <div className='mt-1 p-2 bg-gray-50 rounded-lg'>{icon}</div>
+        <div>
+            <label className='block text-xs font-bold text-gray-400 uppercase tracking-tight'>{label}</label>
+            <p className='text-gray-800 font-semibold mt-0.5'>{value}</p>
+        </div>
+    </div>
+)
 
 export default UserInfo

@@ -12,7 +12,7 @@ const Left = () => {
     link:""
  },
  {
-    name:"Booking Slot",
+    name:"Vaccines Booking Slot",
     icons:<LuTicketCheck  className='text-xl'/>,
     link:"SlotInfo"
  },

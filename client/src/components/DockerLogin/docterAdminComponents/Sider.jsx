@@ -1,43 +1,85 @@
 import React from 'react';
-import { useState } from 'react';
-import { FaUserMd, FaRegChartBar, FaComments, FaUserInjured, FaCalendarAlt } from "react-icons/fa";
-import { Link, useParams } from 'react-router-dom';
-import { IoVideocamOutline } from "react-icons/io5";
-import { MdOutlineVaccines } from "react-icons/md";
+import { Link, useParams, useLocation } from 'react-router-dom';
+import { 
+  LayoutDashboard, 
+  Video, 
+  Syringe, 
+  MessageSquare, 
+  BarChart3, 
+  LogOut,
+  ChevronRight
+} from 'lucide-react';
+
 const Sider = () => {
-    const {id} = useParams()
-    const [state,setState] = useState('')
+    const { id } = useParams();
+    const location = useLocation();
+
     const sidebarLinks = [
-        { name: `DokcterdashBord`, path: `/DokcterdashBord/${id}`, icon: <FaUserMd className="w-5 h-5" /> },
-        { name: "Meeting Appointments", path: `/DokcterdashBord/${id}/patient `, icon: <IoVideocamOutline className="w-5 h-5" /> },
-        { name: "Vaccine Appointments", path: `/DokcterdashBord/${id}/Appointments`, icon: <MdOutlineVaccines className="w-5 h-5" /> },
-        // { name: "Chat", path: `/DokcterdashBord/${id}/Chat`, icon: <FaComments className="w-5 h-5" /> },
-        // { name: "Reports", path: `/DokcterdashBord/${id}/Reports`, icon: <FaRegChartBar className="w-5 h-5" /> },
+        { 
+            name: "Dashboard", 
+            path: `/DokcterdashBord/${id}`, 
+            icon: <LayoutDashboard size={20} /> 
+        },
+        { 
+            name: "Telehealth Meetings", 
+            path: `/DokcterdashBord/${id}/patient`, 
+            icon: <Video size={20} /> 
+        },
+        { 
+            name: "Vaccine Inventory", 
+            path: `/DokcterdashBord/${id}/Appointments`, 
+            icon: <Syringe size={20} /> 
+        },
     ];
 
     return (
-        <>
-
-            {/* Sidebar */}
-            <div className="md:w-64 w-16 h-[calc(100vh-56px)] hidden border-r border-gray-200 bg-white text-base pt-4 md:flex md:flex-col transition-all duration-300">
-                {sidebarLinks.map((item, index) => (
-                    <Link
-                        to={item.path}
-                        key={index}
-                        onClick={()=>setState(item.name)}
-                        className={`flex items-center py-3 px-4 gap-4 
-                            ${index === 0
-                                ? "bg-indigo-100 text-indigo-600 font-semibold border-r-4 border-indigo-500"
-                                : "hover:bg-gray-100 text-gray-700"
-                            }`}
-                    >
-                        {item.icon}
-                        <span className="md:block hidden">{item.name}</span>
-                        
-                    </Link>
-                ))}
+        <div className="w-20 md:w-72 h-screen border-r border-slate-100 bg-white flex flex-col sticky top-0">
+            {/* Logo Section */}
+            <div className="p-6 mb-4">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                        <span className="font-black text-xl">L</span>
+                    </div>
+                    <span className="hidden md:block font-black text-slate-800 tracking-tight text-xl">
+                        LifeShield<span className="text-blue-600">.</span>
+                    </span>
+                </div>
             </div>
-        </>
+
+            {/* Navigation Links */}
+            <nav className="flex-1 px-4 space-y-2">
+                {sidebarLinks.map((item, index) => {
+                    const isActive = location.pathname === item.path;
+                    return (
+                        <Link
+                            to={item.path}
+                            key={index}
+                            className={`flex items-center py-3.5 px-4 rounded-2xl transition-all duration-200 group gap-4
+                                ${isActive 
+                                    ? "bg-blue-50 text-blue-600 shadow-sm" 
+                                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                                }`}
+                        >
+                            <div className={`${isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-600"}`}>
+                                {item.icon}
+                            </div>
+                            <span className="hidden md:block font-bold text-sm tracking-wide flex-1">
+                                {item.name}
+                            </span>
+                            {isActive && <ChevronRight size={14} className="hidden md:block" />}
+                        </Link>
+                    );
+                })}
+            </nav>
+
+            {/* Bottom Section: Profile/Logout */}
+            <div className="p-4 border-t border-slate-50">
+                <button className="w-full flex items-center py-3.5 px-4 rounded-2xl text-slate-400 hover:bg-red-50 hover:text-red-600 transition-all gap-4 group">
+                    <LogOut size={20} className="group-hover:rotate-180 transition-transform duration-300" />
+                    <span className="hidden md:block font-bold text-sm uppercase tracking-widest">Logout</span>
+                </button>
+            </div>
+        </div>
     );
 };
 

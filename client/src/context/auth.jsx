@@ -14,7 +14,7 @@ export const AuthContextProvider = ({ children }) => {
   User,
   setUser
   };
-  const auth =useCallback( async()=>{   
+  const auth = useCallback( async()=>{   
     try {
       const {data} = await axios.get("http://localhost:3010/api/Auth")
       if(data.success){
@@ -23,7 +23,7 @@ export const AuthContextProvider = ({ children }) => {
     } catch (error) {
       console.log(error)
     }
-  })
+  },[])
   useEffect(()=>{
 auth()
   },[])
@@ -35,6 +35,7 @@ auth()
 };
 
 // Custom hook to use auth context
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   return useContext(AuthContext);
 };

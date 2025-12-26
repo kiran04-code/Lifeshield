@@ -4,14 +4,13 @@ import DocterHroSection from '../components/DocterHroSection'
 import ParentHreoSection from '../components/ParentHreoSection'
 import Card from '../components/parent/Card'
 import FeatureLayout from '../components/parent/FeatureLayout'
-import { useAuth } from '../context/auth'
+
 
 const ParentPage = () => {
   return (
     <div >
       <ParentHreoSection/>
       <FeatureLayout/>
-      <Card/>     
     </div>
   )
 }

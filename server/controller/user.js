@@ -129,6 +129,7 @@ export const logout = async (req, res) => {
 
 export const Auth = async (req, res) => {
     try {
+
         if (!req.user) {
             return res.status(401).json({ success: false, message: "Unauthorized access" });
         }

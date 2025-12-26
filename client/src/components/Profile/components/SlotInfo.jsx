@@ -1,83 +1,181 @@
-import React, { useEffect, useState } from 'react'
-import { useAuth } from '../../../context/auth'
+import React, { useEffect, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  FileText, Printer, Clock, CheckCircle2, 
+  XCircle, AlertCircle, RefreshCw, ChevronRight, 
+  MapPin, Phone, Syringe 
+} from 'lucide-react';
+import { useAuth } from '../../../context/auth';
+import Loader3 from '../../../utils/Loder3';
 
 const SlotInfo = () => {
-  const [dataBooked,setBookData] = useState([])
-  const [loader,setloader] = useState(false)
-  const {axios} = useAuth()
-  const getBookedData = async()=>{
-    setloader(false)
-    const {data} = await axios.get("/findBookedSlot")
-    setBookData(data.bookedData)
-    setloader(true)
-  }
-  useEffect(()=>{
- getBookedData()
-  },[dataBooked])
+  const [dataBooked, setBookData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { axios } = useAuth();
+
+  const getBookedData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await axios.get("/findBookedSlot");
+      setBookData(data.bookedData || []);
+    } catch (error) {
+      console.error("Error fetching slots:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [axios]);
+
+  useEffect(() => {
+    getBookedData();
+  }, [getBookedData]); // Fixed: Removed dataBooked from dependency to prevent infinite loop
+
   return (
-   <div className="flex flex-col items-center w-full min-h-screen p-4 bg-gray-50">
-  <div className="w-full overflow-x-auto">
-    <div className="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 my-4 rounded-md shadow-sm">
-  <p className="font-semibold mb-1">Important Note:</p>
-  <ul className="list-disc pl-5 text-sm space-y-1">
-    <li>
-      <span className="text-red-600 font-medium">Red mark</span> indicates your appointment is still  <span className="font-semibold">pending. OR Rejected</span>
-    </li>
-    <li>
-      <span className="text-green-600 font-medium">Green mark</span> means your <span className="font-semibold">appointment is registered successfully.</span>
-    </li>
-    <li>Please allow <span className="font-semibold">5 to 10 minutes</span> for your request to be approved.</li>
-    <li>Once approved, <span className="font-semibold">please refresh</span> the page to see the updated status.</li>
-  </ul>
-</div>
+    <div className="min-h-screen bg-[#f8fafc] p-4 md:p-10 font-sans">
+      <div className="max-w-7xl mx-auto space-y-6">
+        
+        {/* HEADER SECTION */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Appointment Records</h1>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">LifeShield Patient Portal</p>
+          </div>
+          <button 
+            onClick={getBookedData}
+            className="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all text-slate-600 shadow-sm"
+          >
+            <RefreshCw size={14} className={isLoading ? "animate-spin" : ""} /> Refresh Status
+          </button>
+        </div>
 
-    <table className="min-w-full bg-white border border-gray-200 rounded-xl shadow-md">
-      <thead>
-        <tr className="bg-[#8497BE] text-white text-[12px] whitespace-nowrap">
-          <th className="py-3 px-4 text-left">Sr No.</th>
-          <th className="py-3 px-4 text-left">Hospital Name</th>
-          <th className="py-3 px-4 text-left">Booking Time</th>
-          <th className="py-3 px-4 text-left">Vaccine</th>
-          <th className="py-3 px-4 text-left">Address</th>
-          <th className="py-3 px-4 text-left">Hotspital Number</th>
-          <th className="py-3 px-4 text-left">Action</th>
-          <th className="py-3 px-4 text-left">Print</th>
-        </tr>
-      </thead>
-      <tbody>
-        {Array.isArray(dataBooked) && dataBooked.length > 0 ? (
-          dataBooked.map((booking, index) => (
-            <tr key={index} className="border-t border-gray-200 hover:bg-blue-50 transition">
-              <td className="py-3 px-4 text-[12px]">{index + 1}</td>
-              <td className="py-3 px-4 text-[12px]">{booking.Hname}</td>
-              <td className="py-3 px-4 text-[12px]">{booking.SlotTime} PM</td>
-              <td className="py-3 px-4 text-[12px]">{booking.Vname}</td>
-              <td className="py-3 px-4 text-[12px]">{booking.hostId?.location || "N/A"}</td>
-              <td className="py-3 px-4 text-[12px]">{booking.hostId?.Number || "N/A"}</td>
-              <td><button className={`text-[10px]  ${booking.status === "Rejected" ? "bg-red-500":"bg-green-500"}  p-2 rounded-2xl text-white`}>{booking.status}</button></td>
-              <td className="py-3 px-4">
-                <button
-                  onClick={() => window.print()}
-                  className="bg-green-600 text-white text-[12px] px-3 py-1 rounded-md hover:bg-   green-700 transition"
-                >
-                  Print Appointment #{index + 1}
-                </button>
-              </td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan="6" className="text-center py-4 text-gray-500">
-              No bookings found.
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </table>
+        {/* CLINICAL ADVISORY NOTE */}
+        <motion.div 
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white border border-blue-100 rounded-[2rem] p-6 shadow-sm flex flex-col md:flex-row gap-6 items-start"
+        >
+          <div className="bg-blue-600 p-4 rounded-2xl text-white">
+            <AlertCircle size={24} />
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Processing Protocol</h3>
+            <div className="grid md:grid-cols-2 gap-x-8 gap-y-2">
+              <NoteItem color="text-emerald-600" text="Green: Appointment Confirmed & Valid" />
+              <NoteItem color="text-rose-500" text="Red: Pending Review or Rejected" />
+              <NoteItem color="text-slate-500" text="Approval typically takes 5–10 minutes" />
+              <NoteItem color="text-blue-600" text="Print receipt for faster hospital check-in" />
+            </div>
+          </div>
+        </motion.div>
+
+        {/* DATA TABLE AREA */}
+        <div className="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.02)] border border-slate-100 overflow-hidden">
+          {isLoading ? (
+            <div className="py-20"><Loader3 /></div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-900 text-white uppercase text-[10px] tracking-[0.2em] font-black">
+                    <th className="py-6 px-8">Sequence</th>
+                    <th className="py-6 px-4">Hospital & Vaccine</th>
+                    <th className="py-6 px-4 text-center">Schedule</th>
+                    <th className="py-6 px-4">Contact Detail</th>
+                    <th className="py-6 px-4 text-center">Status</th>
+                    <th className="py-6 px-8 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  <AnimatePresence>
+                    {dataBooked.length > 0 ? (
+                      dataBooked.map((booking, index) => (
+                        <motion.tr 
+                          key={booking._id || index}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className="group hover:bg-slate-50/50 transition-colors"
+                        >
+                          <td className="py-6 px-8 text-xs font-black text-slate-300">#{String(index + 1).padStart(2, '0')}</td>
+                          <td className="py-6 px-4">
+                            <div className="flex flex-col">
+                              <span className="text-sm font-black text-slate-800 leading-tight">{booking.Hname}</span>
+                              <span className="flex items-center gap-1.5 text-[10px] font-bold text-blue-500 mt-1 uppercase tracking-wider">
+                                <Syringe size={12} /> {booking.Vname}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-6 px-4">
+                            <div className="flex flex-col items-center">
+                              <span className="text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1 rounded-lg">
+                                {booking.SlotTime} PM
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-6 px-4">
+                            <div className="space-y-1">
+                              <p className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
+                                <MapPin size={12} className="text-slate-300" /> {booking.hostId?.location || "N/A"}
+                              </p>
+                              <p className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
+                                <Phone size={12} className="text-slate-300" /> {booking.hostId?.Number || "N/A"}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="py-6 px-4 text-center">
+                             <StatusBadge status={booking.status} />
+                          </td>
+                          <td className="py-6 px-8 text-right">
+                            <button
+                              onClick={() => window.print()}
+                              className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-slate-200"
+                            >
+                              <Printer size={14} /> Receipt
+                            </button>
+                          </td>
+                        </motion.tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="py-20 text-center">
+                          <div className="flex flex-col items-center gap-3 opacity-20">
+                            <FileText size={60} strokeWidth={1} />
+                            <p className="text-xs font-black uppercase tracking-widest">No Active Records Found</p>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </AnimatePresence>
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Helper Sub-components
+const NoteItem = ({ color, text }) => (
+  <div className="flex items-center gap-2">
+    <div className={`w-1.5 h-1.5 rounded-full bg-current ${color}`} />
+    <span className={`text-[11px] font-bold uppercase tracking-tight ${color}`}>{text}</span>
   </div>
-</div>
+);
 
-  )
-}
+const StatusBadge = ({ status }) => {
+  const isApproved = status === "Approved" || status === "Success";
+  const isRejected = status === "Rejected";
 
-export default SlotInfo
+  return (
+    <div className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
+      isApproved ? "bg-emerald-50 text-emerald-600 border border-emerald-100" :
+      isRejected ? "bg-rose-50 text-rose-500 border border-rose-100" :
+      "bg-amber-50 text-amber-600 border border-amber-100"
+    }`}>
+      {isApproved ? <CheckCircle2 size={12} /> : isRejected ? <XCircle size={12} /> : <Clock size={12} />}
+      {status || "Processing"}
+    </div>
+  );
+};
+
+export default SlotInfo;

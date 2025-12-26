@@ -1,242 +1,114 @@
-import React from 'react'
-import { FaBars } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { FaBars, FaTimes } from "react-icons/fa";
+import { Link, useNavigate } from 'react-router-dom';
 import { IoIosArrowDown } from "react-icons/io";
-import { motion } from "motion/react"
-import { useState } from 'react';
+import { motion, AnimatePresence } from "framer-motion";
 import { CiHospital1 } from "react-icons/ci";
 import { RiParentFill } from "react-icons/ri";
-import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-    const [opne, isopne] = useState(false)
-    const [showPanet, setPanel] = useState(false)
-    const [driop1, setfirsdrop] = useState(false)
-    const [driop2, setfirsdrop2] = useState(false)
-    const [driop3, setfirsdrop3] = useState(false)
-    const [driop4, setfirsdrop4] = useState(false)
-    const naviaget = useNavigate()
-    const HoverCard = () => {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [showServiceDrop, setShowServiceDrop] = useState(false);
+    const navigate = useNavigate();
 
-        return (
-            <div className='fixed'>
+    const NavLink = ({ to, children, hasArrow = true, ...props }) => (
+        <Link 
+            to={to} 
+            className='group flex items-center gap-1.5 px-4 py-2 text-[#1057EC] font-semibold hover:bg-blue-50 rounded-xl transition-all duration-300'
+            {...props}
+        >
+            {children}
+            {hasArrow && (
+                <motion.span animate={{ y: 0 }} whileHover={{ y: 3 }}>
+                    <IoIosArrowDown className='text-sm group-hover:text-blue-700' />
+                </motion.span>
+            )}
+        </Link>
+    );
 
-                {
-                    showPanet ? <motion.div initial={{ opacity: 0, y: -40 }}            // Start below, invisible
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                            duration: 0.4,
-                        }}
-                        className=' absolute top-20 left-95 w-[200px] h-[150px] ml-170 z-50 rounded-[15px] bg-[#ffffff] text-black flex flex-col justify-center items-center  gap-5 p-5'>
-
-                        <motion.div onClick={()=>{naviaget("/parent");setPanel(false)}}   className='w-full flex gap-4 justify-center items-center hover:bg-[#d2e1ff] transition py-2 rounded-xl cursor-pointer '>
-                            <RiParentFill className=' text-3xl bg-[#dad9f8] text-[#1057EC] p-1 rounded-[5px] ' /> For  Parents
-                        </motion.div>
-                        <div   onClick={()=>{naviaget("/docter");setPanel(false)}}  className='w-full flex gap-4 justify-center items-center hover:bg-[#d2e1ff] transition py-2 rounded-xl cursor-pointer '>
-                            <CiHospital1 className=' text-3xl bg-[#dad9f8] text-[#1057EC] p-1 rounded-[5px] '
-                            /> For  Hospital
-                        </div>
-                    </motion.div> : null
-                }
-            </div>
-        )
-    }
     return (
-        <div>
-            <HoverCard />
-            <div className='w-full flex relative bg-[#E0EAFF] md:justify-between justify-between'>
-
-                <div className=''>
-
-                    <img src="/logi2-removebg-preview.png" alt="" className='w-55 h-17 cursor-pointer' onClick={()=>naviaget("/")}/>
-                </div>
-                <div className='md:flex md:gap-10 p-5 md:mr-30 text-[#1057EC] hidden '>
-                    <Link to={"/"} onMouseEnter={()=>setPanel(false)}  className='  flex justify-center items-center gap-2 hover:bg-[#1057EC]  hover:text-white py-2 px-2 transition rounded-2xl'>
-                        Home  <motion.span whileHover={{
-                            y: 5
-                        }}
-                            transition={{
-                                ease: "anticipate"
-                            }}
-                            w
-                        >
-                            <IoIosArrowDown className='text-xl' />
-                        </motion.span>
-                    </Link>
-                    <Link to={"#aboute"} onMouseEnter={() => setPanel(false)} onClick={{}} className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl' >
-                        About <motion.span whileHover={{
-                            y: 5
-                        }}
-                            transition={{
-                                ease: "anticipate"
-                            }}
-                        >
-                            <IoIosArrowDown className='text-xl' />
-                        </motion.span>
-
-                    </Link>
-                    <Link to={""} onMouseEnter={() => setPanel(false)}className='flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl'>
-                        Contact  <motion.span whileHover={{
-                            y: 5
-                        }}
-                            transition={{
-                                ease: "anticipate"
-                            }}
-                        >
-                            <IoIosArrowDown className='text-xl' />
-                        </motion.span>
-                    </Link>
-                    <Link  onClick={()=>setPanel(!showPanet)}  className=' relative flex justify-center items-center gap-2 hover:bg-[#4c3fb18a]  hover:text-white py-2 px-2 transition rounded-2xl'>
-                        Service  <motion.span whileHover={{
-                            y: 5
-                        }}
-                            transition={{
-                                ease: "anticipate"
-                            }}
-                        >
-                            <IoIosArrowDown className='text-xl' />
-                        </motion.span>
-                    </Link>
-                </div>
-                <div className='md:hidden flex justify-center items-center p-3'>
-                    <FaBars onClick={() => isopne(!opne)} className={` ${opne ? "bg-[#4575dbcc] text-white" : null}  rounded-sm transition  p-1  text-4xl  text-[#1057EC] `} />
-                </div>
-
-            </div>
-            {
-                opne ? <motion.div   animate={{
-                    y: [-250, 0]
-                }}
-
-                    transition={{
-                        duration: 0.5,
-                        ease: "easeInOut"
-                    }}
-
-                    className='z-50 bg-[#4575dbcc] text-white backdrop-blur-[2px] absolute w-full flex-col flex gap-5 justify-center rounded-bl-[10px]   rounded-br-[10px] '>
-                    <div className='ml-2  flex-col flex gap-5 justify-center px-2 py-3 '>
-                        <div className=''>
-                            <div className='flex justify-between'>
-                                <Link>Home</Link> <motion.span  onClick={()=>setfirsdrop(!driop1)}   onMouseEnter={()=>(setfirsdrop(true))} onMouseLeave={()=>setfirsdrop(false)} whileHover={{
-                                y: 5
-                            }}
-                                transition={{
-                                    ease: "anticipate"
-                                }}
-                                w
-                            >
-                                <IoIosArrowDown className='text-xl' />
-                            </motion.span>
-                            </div>
-                            {
-                                driop1 ?<motion.div animate={{
-                                    y:[-7,0]
-                                }}  className='w-full  rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
-        
-                          <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Parents
-                          </div>
-                 
-                            <div className='flex gap-2'>
-                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
-                            </div>
-                      
-                            </motion.div>:null
-                            }
-                        </div>
-                        <div className=''>
-                            <div className='flex justify-between'>
-                                <Link>About</Link> <motion.span  onClick={()=>setfirsdrop2(!driop2)}   onMouseEnter={()=>(setfirsdrop2(true))} onMouseLeave={()=>setfirsdrop2(false)} whileHover={{
-                                y: 5
-                            }}
-                                transition={{
-                                    ease: "anticipate"
-                                }}
-                                w
-                            >
-                                <IoIosArrowDown className='text-xl' />
-                            </motion.span>
-                            </div>
-                            {
-                                driop2 ?<motion.div animate={{
-                                    y:[-7,0]
-                                }}   className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
-        
-                          <div className='flex gap-2 mb-5'>
-                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Parents
-                          </div>
-                 
-                            <div className='flex gap-2'>
-                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
-                            </div>
-                      
-                            </motion.div>:null
-                            }
-                        </div>
-                        <div className=''>
-                            <div className='flex justify-between'>
-                                <Link>Contact</Link> <motion.span  onClick={()=>setfirsdrop3(!driop3)}   onMouseEnter={()=>(setfirsdrop3(true))} onMouseLeave={()=>setfirsdrop3(false)} whileHover={{
-                                y: 5
-                            }}
-                                transition={{
-                                    ease: "anticipate"
-                                }}
-                                w
-                            >
-                                <IoIosArrowDown className='text-xl' />
-                            </motion.span>
-                            </div>
-                            {
-                                driop3 ?<motion.div animate={{
-                                    y:[-7,0]
-                                }}  className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
-        
-                          <div className='flex gap-2 mb-5 '>
-                              <RiParentFill className='  rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
-                          </div>
-                 
-                            <div className='flex gap-2'>
-                                <CiHospital1 className='   rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Parents
-                            </div>
-                      
-                            </motion.div>:null
-                            }
-                        </div>
-                        <div className=''>
-                            <div className='flex justify-between'>
-                                <Link>Services</Link> <motion.span  onClick={()=>setfirsdrop4(!driop4)}   onMouseEnter={()=>(setfirsdrop4(true))} onMouseLeave={()=>setfirsdrop4(false)} whileHover={{
-                                y: 5
-                            }}
-                                transition={{
-                                    ease: "anticipate"
-                                }}
-                                w
-                            >
-                                <IoIosArrowDown className='text-xl' />
-                            </motion.span>
-                            </div>
-                            {
-                                driop4 ?<motion.div animate={{
-                                    y:[-7,0]
-                                }} className='w-full rounded-[5px] px-2 py-5 flex flex-col justify-evenly  bg-[#b7ceffa2]'>
-        
-                          <div className='flex gap-2 mb-5'onClick={()=>{setfirsdrop4(false);naviaget("/parent");isopne(false)}}  >
-                              <RiParentFill className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC] ' /> For  Parents
-                          </div>
-                 
-                            <div className='flex gap-2' onClick={()=>{setfirsdrop4(false);naviaget("/docter");isopne(false)}} >
-                                <CiHospital1 className=' rounded-[5px] bg-white p-1 text-3xl text-[#1057EC]  ' /> For  Hospital
-                            </div>
-                      
-                            </motion.div>:null
-                            }
-                        </div>
-                        
+        <nav className='sticky top-0 z-[100] w-full bg-[#E0EAFF]/80 backdrop-blur-md border-b border-blue-100'>
+            <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+                <div className='flex justify-between items-center h-20'>
+                    <div className='flex-shrink-0'>
+                        <img 
+                            src="/logi2-removebg-preview.png" 
+                            alt="Logo" 
+                            className='w-48 h-auto cursor-pointer hover:opacity-80 transition' 
+                            onClick={() => navigate("/")}
+                        />
                     </div>
-                </motion.div> : null
-            }
-        </div>
-    )
-}
 
-export default Navbar
+                    <div className='hidden md:flex items-center gap-2'>
+                        <NavLink to="/" hasArrow={false}>Home</NavLink>
+                        <NavLink to="#about" hasArrow={false}>About</NavLink>
+                        <NavLink to="#contact" hasArrow={false}>Contact</NavLink>
+
+                        <div 
+                            className='relative'
+                            onMouseEnter={() => setShowServiceDrop(true)}
+                            onMouseLeave={() => setShowServiceDrop(false)}
+                        >
+                            <button className='flex items-center gap-1.5 px-4 py-2 text-[#1057EC] font-semibold hover:bg-blue-50 rounded-xl transition-all'>
+                                Services <IoIosArrowDown className={`transition-transform duration-300 ${showServiceDrop ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            <AnimatePresence>
+                                {showServiceDrop && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 15 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 10 }}
+                                        className='absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl shadow-blue-100 border border-blue-50 p-2 overflow-hidden'
+                                    >
+                                        <ServiceItem icon={<RiParentFill />} label="For Parents" onClick={() => { navigate("/parent"); setShowServiceDrop(false); }} />
+                                        <ServiceItem icon={<CiHospital1 />} label="For Hospital" onClick={() => { navigate("/docter"); setShowServiceDrop(false); }} />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    </div>
+
+                    <div className='md:hidden'>
+                        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className='p-2 text-[#1057EC] text-2xl hover:bg-blue-100 rounded-lg transition'>
+                            {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className='md:hidden bg-white border-b border-blue-100 overflow-hidden'>
+                        <div className='flex flex-col p-4 gap-2'>
+                            <MobileNavLink to="/" label="Home" onClick={() => setIsMobileMenuOpen(false)} />
+                            <MobileNavLink to="#about" label="About" onClick={() => setIsMobileMenuOpen(false)} />
+                            <div className='py-2 px-4 text-xs font-bold text-gray-400 uppercase tracking-widest'>Our Services</div>
+                            <div className='grid grid-cols-2 gap-3 pb-4'>
+                                <div onClick={() => { navigate("/parent"); setIsMobileMenuOpen(false); }} className='flex flex-col items-center gap-2 p-4 bg-blue-50 rounded-2xl text-[#1057EC] font-bold'>
+                                    <RiParentFill size={24} /> <span className='text-xs'>Parents</span>
+                                </div>
+                                <div onClick={() => { navigate("/docter"); setIsMobileMenuOpen(false); }} className='flex flex-col items-center gap-2 p-4 bg-blue-50 rounded-2xl text-[#1057EC] font-bold'>
+                                    <CiHospital1 size={24} /> <span className='text-xs'>Hospitals</span>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </nav>
+    );
+};
+
+const ServiceItem = ({ icon, label, onClick }) => (
+    <div onClick={onClick} className='flex items-center gap-3 p-3 hover:bg-blue-50 rounded-xl cursor-pointer text-gray-700 font-medium transition-colors group'>
+        <span className='p-2 bg-blue-100 text-[#1057EC] rounded-lg group-hover:bg-[#1057EC] group-hover:text-white transition-colors'>{icon}</span>
+        {label}
+    </div>
+);
+
+const MobileNavLink = ({ to, label, onClick }) => (
+    <Link to={to} onClick={onClick} className='w-full py-3 px-4 text-lg font-bold text-[#1057EC] hover:bg-blue-50 rounded-xl transition'>{label}</Link>
+);
+
+export default Navbar;
