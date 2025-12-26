@@ -16,7 +16,7 @@ export const AuthContextProvider = ({ children }) => {
   };
   const auth = useCallback( async()=>{   
     try {
-      const {data} = await axios.get("http://localhost:3010/api/Auth")
+      const {data} = await axios.get("/Auth")
       if(data.success){
         setUser(data.userData)
       }

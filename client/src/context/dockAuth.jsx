@@ -13,7 +13,7 @@ export const DocAuthContextProvider = ({ children }) => {
   axios.defaults.withCredentials = true
 
  const auth = async()=>{
-    const {data} = await axios.get("http://localhost:3010/api/authdocter")
+    const {data} = await axios.get("/authdocter")
     if(data.success){
      setDockterData(data.userData)
     }

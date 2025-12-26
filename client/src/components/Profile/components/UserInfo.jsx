@@ -11,7 +11,7 @@ const UserInfo = () => {
 
     const logout = async () => {
         try {
-            const { data } = await axios.get("http://localhost:3010/api/logout")
+            const { data } = await axios.get("/logout")
             if (data.success) {
                 toast.success(data.message)
                 setUser(null)
