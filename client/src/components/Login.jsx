@@ -49,8 +49,12 @@ const Login = () => {
   const handleRequestOtp = async (e) => {
     e.preventDefault();
     setLoad(true);
+    if(!email){
+      return toast.error("Please Enter Email Firts");
+    }
     try {
       const { data } = await axios.post("/signin", { email });
+      console.log(data)
       if (data.success) {
         toast.success("OTP sent to your email");
         setShowOtpInput(true);
