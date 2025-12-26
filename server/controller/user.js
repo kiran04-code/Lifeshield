@@ -23,9 +23,9 @@ export const signup = async (req, res) => {
 
             const token = createToken(data)
             res.cookie("token_user", token, {
-                httpOnly: true,       // Prevents client-side JavaScript from accessing the cookie
-                secure: true,         // Ensures cookie is sent only over HTTPS
-                sameSite: "none",
+                httpOnly: true,
+                secure: true,       // REQUIRED on Render
+                sameSite: "none",   // REQUIRED for cross-sit
             }).json({
                 success: true,
                 message: "User Login successfully!",
@@ -68,7 +68,7 @@ export const login = async (req, res) => {
         console.error("Login Error:", error.message);
         return res.status(500).json({
             success: false,
-            message: "Server error. Please try again.",
+            message: `Email failed, but user is created: ${err.message}`
         });
     }
 };
